@@ -1,0 +1,140 @@
+{
+  "carnalEquipment": [
+    {
+      "id": "silk-rope",
+      "name": "Silk Rope (50 ft)",
+      "cost": "15 gp",
+      "weight": "5 lb",
+      "description": "Soft, strong silk rope. Grants +2 bonus to Bondage checks and Restraint DCs.",
+      "category": "Restraint"
+    },
+    {
+      "id": "aphrodisiac-oil",
+      "name": "Aphrodisiac Oil",
+      "cost": "50 gp",
+      "weight": "—",
+      "description": "When applied to skin or a weapon, the next pleasure attack imposes the Aroused condition (DC 13 Con save).",
+      "category": "Consumable"
+    },
+    {
+      "id": "lubricant-vial",
+      "name": "Lubricant Vial",
+      "cost": "5 gp",
+      "weight": "—",
+      "description": "Reduces Anal penetration DC by 3. One vial has 10 uses.",
+      "category": "Consumable"
+    },
+    {
+      "id": "vibrating-tongue-ring",
+      "name": "Vibrating Tongue Ring",
+      "cost": "40 gp",
+      "weight": "—",
+      "description": "When worn, Lingus or Erogeny checks deal an extra 1d4 thunder pleasure damage.",
+      "category": "Jewelry"
+    },
+    {
+      "id": "chastity-belt",
+      "name": "Chastity Belt or Cage",
+      "cost": "25 gp",
+      "weight": "2 lb",
+      "description": "Prevents penetration. Can only be removed with the key or a DC 20 Dexterity (thieves' tools) check.",
+      "category": "Restraint"
+    },
+    {
+      "id": "massage-oils",
+      "name": "Massage Oils Kit",
+      "cost": "25 gp",
+      "weight": "3 lb",
+      "description": "Grants advantage on Erogeny checks when used for sensual massage. Heals 1d4 + Wis mod PP on a short rest.",
+      "category": "Consumable"
+    },
+    {
+      "id": "feather-tease-set",
+      "name": "Feather Tease Set",
+      "cost": "10 gp",
+      "weight": "—",
+      "description": "Cold foreplay deals maximum Sex Die pleasure. Grants advantage on Anticipation checks.",
+      "category": "Tool"
+    },
+    {
+      "id": "erotic-grimoire",
+      "name": "Erotic Grimoire",
+      "cost": "50 gp",
+      "weight": "3 lb",
+      "description": "Grants advantage on Erotica checks. Can hold up to 50 erotic spells or techniques.",
+      "category": "Tool"
+    },
+    {
+      "id": "prophylactics",
+      "name": "Prophylactics (3 pack)",
+      "cost": "10 gp",
+      "weight": "—",
+      "description": "Prevents conception and reduces risk of disease. One use per encounter.",
+      "category": "Consumable"
+    },
+    {
+      "id": "nullification-salts",
+      "name": "Nullification Salts",
+      "cost": "15 gp",
+      "weight": "—",
+      "description": "When ingested, prevents conception for 24 hours. One vial has 5 doses.",
+      "category": "Consumable"
+    },
+    {
+      "id": "ceremonial-oil",
+      "name": "Consecrated / Ceremonial Oil",
+      "cost": "30 gp",
+      "weight": "—",
+      "description": "Functions as lubricant and holy/unholy water. Grants +1d4 radiant or necrotic pleasure damage when used in ritual sex.",
+      "category": "Consumable"
+    },
+    {
+      "id": "sheer-silk-lingerie",
+      "name": "Sheer Silk Lingerie",
+      "cost": "45 gp",
+      "weight": "1 lb",
+      "description": "Revealing and elegant. +2 to Beauty Class. Advantage on Seduction and Exhibitionism checks while worn.",
+      "category": "Erotic Garment"
+    },
+    {
+      "id": "leather-harness",
+      "name": "Reinforced Leather Harness",
+      "cost": "60 gp",
+      "weight": "3 lb",
+      "description": "Sturdy and provocative. +1 to Beauty Class and +2 to Restraint and Dominance checks.",
+      "category": "Erotic Garment"
+    },
+    {
+      "id": "translucent-veil-set",
+      "name": "Translucent Veil Set",
+      "cost": "35 gp",
+      "weight": "1 lb",
+      "description": "Delicate and teasing. +3 to Beauty Class when performing slow reveals or dances. Advantage on Anticipation checks.",
+      "category": "Erotic Garment"
+    },
+    {
+      "id": "ceremonial-body-paint",
+      "name": "Ceremonial Body Paint (set)",
+      "cost": "20 gp",
+      "weight": "—",
+      "description": "Sacred or profane markings. +2 to Beauty Class during ritual or ceremonial sex. Lasts 8 hours or until washed off.",
+      "category": "Erotic Garment"
+    },
+    {
+      "id": "golden-chain-lingerie",
+      "name": "Golden Chain Lingerie",
+      "cost": "80 gp",
+      "weight": "2 lb",
+      "description": "Luxurious and restrictive. +2 to Beauty Class and +1 to Submission and Restraint checks.",
+      "category": "Erotic Garment"
+    },
+    {
+      "id": "pleasure-collar",
+      "name": "Pleasure Collar",
+      "cost": "30 gp",
+      "weight": "1 lb",
+      "description": "Decorative collar with bell or charm. +1 to Beauty Class. Wearer has advantage on Submission checks but disadvantage on resisting Seduction from the owner.",
+      "category": "Erotic Garment"
+    }
+  ]
+}

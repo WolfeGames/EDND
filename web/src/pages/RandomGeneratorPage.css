@@ -1,0 +1,52 @@
+.random-generator {
+  max-width: 38rem;
+}
+
+.roll-filters {
+  margin: 1rem 0 0.25rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card-bg);
+}
+
+.roll-filters summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--text-h);
+  list-style-position: outside;
+}
+
+.roll-filters[open] summary {
+  margin-bottom: 0.75rem;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0.75rem 1rem;
+}
+
+.filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.filter-field span:first-child {
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.filter-field input,
+.filter-field select {
+  font: inherit;
+  font-size: 0.92rem;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text-h);
+}

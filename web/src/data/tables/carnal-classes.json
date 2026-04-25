@@ -1,0 +1,91 @@
+{
+  "carnalClasses": [
+    {
+      "id": "courtesan",
+      "name": "Courtesan",
+      "description": "A master of social seduction, professional charm, and turning desire into power, influence, and wealth. You have honed the art of making others crave your company — and paying dearly for it.",
+      "hitDie": 8,
+      "features": {
+        "level1": "Courtesan's Allure: You may attempt Seduction to move a willing target toward Attracted without requiring them to already be Aroused (subject to consent and immunities). Courtesan's Coin: During downtime you earn additional wealth from intimate services as if your lifestyle tier were one step higher; the DM sets gp or perks based on local rates and complications.",
+        "level6": "Graceful Climax – When you climax, you may remove one level of exhaustion from yourself or a willing partner.",
+        "level10": "Guild Mastery – You gain advantage on all social and Charisma-based checks when dealing with high society, pleasure districts, or influential clients.",
+        "level14": "Paramour's Grace – Once per long rest, an ally who witnesses or shares in your climax gains the benefits of a Transcendent result on their next Orgasm Table roll.",
+        "level18": "Courtly Ecstasy – You may use Mass Allure to cast Mass Suggestion (save DC = 8 + SEX + Cha) immediately after a group climax.",
+        "level20": "Legendary Courtesan – Your Beauty Class becomes 20. Once per month, a single night of work grants you significant wealth and powerful long-term contacts."
+      },
+      "subclasses": ["Guild Paramour", "Royal Favorite", "Street Sovereign"]
+    },
+    {
+      "id": "divine-consort",
+      "name": "Divine Consort",
+      "description": "The Divine Consort is no mere lover, but someone touched by the divine. While seeking the favor of their deity, the Divine Consort was visited directly by their god or goddess, or by an emissary thereof, for a life-changing intimate encounter that bestowed upon them gifts directly from the divine. While the Divine Consort is typically the product of the favor of a deity of love, passion, lust, or such like, any deity can make a Divine Consort from a mortal follower.",
+      "hitDie": 8,
+      "eroticArts": ["Erotica", "Erogeny"],
+      "positionProficiencies": {
+        "tiers": ["Basic", "Advanced"],
+        "specific": ["Altar Offering", "Divine Union"]
+      },
+      "features": {
+        "level1": "Intimate Domain + Innate Divinity",
+        "level6": "Divine Vessel",
+        "level10": "Sexual Healing",
+        "level14": "Greater Innate Divinity",
+        "level18": "Divine Congress",
+        "level20": "Ascended Lover"
+      },
+      "subclasses": [
+        {
+          "name": "Fertility Priest",
+          "description": "Focus on conception, life-giving, and lineage"
+        },
+        {
+          "name": "Ecstatic Mystic",
+          "description": "Focus on overwhelming pleasure and spiritual transcendence"
+        },
+        {
+          "name": "Forbidden Lover",
+          "description": "Focus on dark gods, taboo rites, and corrupted divinity"
+        }
+      ],
+      "domainSpells": {
+        "Lust": {
+          "level1": "Provoke Desire",
+          "level2": "Lustberry",
+          "level3": "Incite Lust",
+          "level4": "Wanton Aura",
+          "level5": "Demanding Desire"
+        },
+        "Love": {
+          "level1": "Sense Orientation",
+          "level2": "Arrow of Adoration",
+          "level3": "Emotional Bond",
+          "level4": "Sirensong",
+          "level5": "Love Nest"
+        },
+        "Pleasure": {
+          "level1": "Sensation",
+          "level2": "Gloryportal",
+          "level3": "Burst of Bliss",
+          "level4": "Stunning Orgasm",
+          "level5": "Euphoria"
+        },
+        "Beauty": {
+          "level1": "Animate Clothing",
+          "level2": "Alter Flesh",
+          "level3": "Aura of Attraction",
+          "level4": "Glamour",
+          "level5": "Resplendence"
+        }
+      },
+      "fullFeatures": {
+        "level1_IntimateDomain": "Being taken as a Divine Consort opens a mortal to intimate divine domains. Choose from Pleasure, Lust, Beauty, or Love. You gain access to spells at levels specified in the Intimate Domain Spells table.",
+        "level1_InnateDivinity": "Your encounter with the divine has altered you in profound ways. Your god’s divine essence is infused into your very soul. You gain resistance to radiant damage and advantage on saving throws to resist contracting sexually conveyed diseases and curses. Your Beauty Class increases by half your Sexuality bonus.",
+        "level6_DivineVessel": "Your body becomes a living vessel of your deity’s favor. When a spell calls for a holy symbol, your body can replace it. Additionally, when you cast a spell or perform a ritual while engaged in sexual contact with a willing creature (or with yourself), your Spell Save DC and Spell Attack Bonus increase by half your Sexuality bonus. While you are Aroused, you may reroll one damage or healing die and use either result.",
+        "level10_SexualHealing": "You are infused with divine energy. Creatures engaged in sexual activity with you regenerate 1 hit point per round so long as they maintain the Aroused condition. When you cause a creature to climax, or when the creature causes you to climax, they regain hit points equal to your pleasure die roll + your Sexuality bonus.",
+        "level14_GreaterInnateDivinity": "Your Beauty Class bonus is now equal to your full Sexuality bonus. You are immune to sexually conveyed diseases.",
+        "level18_DivineCongress": "To love you is to love the gods themselves. When you are joined with another in intimate activity, you and all involved gain the benefits of a short rest. Any Hit Dice expended during this time restore the maximum number of hit points possible.",
+        "level20_AscendedLover": "At level 20, your access to your divine lover’s domain of influence is unparalleled. Once per week when you complete a sexual encounter, you may grant your partner a Divine Boon."
+      }
+    }
+  ]
+}

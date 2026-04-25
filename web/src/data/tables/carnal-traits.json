@@ -1,0 +1,69 @@
+{
+  "carnalTraits": [
+    {
+      "id": "accommodating",
+      "name": "Accommodating",
+      "description": "You are particularly accommodating to larger partners or objects. Ignore 1 size penalty when receiving penetration. Add your Sexuality bonus to any Con save required by extreme size differences."
+    },
+    {
+      "id": "divine-beauty",
+      "name": "Divine Beauty",
+      "description": "While you have at least one unexpended spell slot, your Beauty Class increases by 2. You may expend one slot to dazzle creatures in 30 ft (Cha save or become Attracted for 1 hour; opposing alignment immune)."
+    },
+    {
+      "id": "endowed",
+      "name": "Endowed",
+      "description": "When determining phallic length or bust size, add +1d4 to the roll (or use Con mod +4 for bust size, whichever is higher)."
+    },
+    {
+      "id": "erogenous-body",
+      "name": "Erogenous Body",
+      "description": "You have twice your Sexuality bonus in erogenous zones. Your touch deals 1 non-orgasmic pleasure to any creature that is at least Piqued by you."
+    },
+    {
+      "id": "fertile",
+      "name": "Fertile",
+      "description": "Your Fertility bonus is twice your Constitution modifier. Conception occurs on a roll of 19–20."
+    },
+    {
+      "id": "group-harmony",
+      "name": "Group Harmony",
+      "description": "You have advantage on Seduction checks when at least two other willing participants are involved."
+    },
+    {
+      "id": "high-class",
+      "name": "High Class",
+      "description": "+2 to Seduction rolls. Once per day, you may spend a short rest refining your appearance to gain a Beauty bonus equal to your Sexuality bonus for 24 hours."
+    },
+    {
+      "id": "never-enough",
+      "name": "Never Enough",
+      "description": "You have advantage on all Orgasm Saving Throws and on Sexuality checks to end Refractory."
+    },
+    {
+      "id": "party-animal",
+      "name": "Party Animal",
+      "description": "You have advantage on Seduction checks made during or immediately after any social gathering, revel, or hunt for new partners."
+    },
+    {
+      "id": "taboo-free",
+      "name": "Taboo-Free",
+      "description": "You are immune to social penalties or embarrassment from Exhibitionism or public sexual acts."
+    },
+    {
+      "id": "tantric-mastery",
+      "name": "Tantric Mastery",
+      "description": "As a reaction, you may increase or decrease incoming pleasure by your Wisdom modifier. If increased, add your Wisdom modifier to Orgasm saves this turn."
+    },
+    {
+      "id": "trained-refractory",
+      "name": "Trained Refractory",
+      "description": "You have advantage on Sexuality checks made to end the Refractory period."
+    },
+    {
+      "id": "virtuous",
+      "name": "Virtuous",
+      "description": "Creatures of evil alignment have –10 effective Beauty Class to you. You are Disinterested in evil-aligned partners."
+    }
+  ]
+}

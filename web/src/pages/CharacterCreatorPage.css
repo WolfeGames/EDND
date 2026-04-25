@@ -1,0 +1,112 @@
+.creator {
+  max-width: 36rem;
+}
+
+.creator-progress {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin: 0 0 1.25rem;
+  padding: 0;
+  list-style: none;
+}
+
+.creator-progress li {
+  font-size: 0.8rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  background: var(--code-bg);
+  color: var(--text-muted);
+}
+
+.creator-progress li.done {
+  color: var(--text-h);
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+}
+
+.creator-progress li.current {
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.creator-step-title {
+  font-family: var(--heading);
+  font-size: 1.2rem;
+  margin: 0 0 0.75rem;
+  color: var(--text-h);
+}
+
+.creator-subheading {
+  font-family: var(--heading);
+  font-size: 1rem;
+  margin: 0 0 0.5rem;
+  color: var(--text-h);
+}
+
+.creator-inline-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.creator-inline-row select {
+  flex: 1 1 12rem;
+  min-width: 0;
+}
+
+.creator-field--inline-actions .creator-inline-row .btn {
+  flex: 0 0 auto;
+}
+
+.creator-field {
+  margin-bottom: 1rem;
+}
+
+.creator-field label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  color: var(--text-h);
+}
+
+.creator-field .hint {
+  font-weight: 400;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.creator-field input[type='text'],
+.creator-field input[type='number'],
+.creator-field select,
+.creator-field textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--card-bg);
+  color: var(--text-h);
+  font: inherit;
+}
+
+.creator-field textarea {
+  min-height: 5rem;
+  resize: vertical;
+}
+
+.creator-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  align-items: center;
+}
+
+.creator-actions .spacer {
+  flex: 1;
+  min-width: 0.5rem;
+}

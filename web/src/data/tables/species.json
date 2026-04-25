@@ -1,0 +1,104 @@
+{
+  "species": [
+    {
+      "id": "aasimar",
+      "name": "Aasimar",
+      "size": "Medium",
+      "speed": 30,
+      "carnalTrait": "Divine Seed",
+      "carnalTraitDescription": "When you bring a willing partner to climax, you may channel celestial power: grant both of you temporary hit points equal to a roll on your Orgasm Table (or a fixed value your table specifies), or end one level of exhaustion on them. Once per long rest you may treat a Seduction check made in a sacred or intimate context as if you had rolled a 10 on the d20 before modifiers.",
+      "eroticGrants": ["Seduction"],
+      "description": "Celestial-blooded beings whose climaxes can heal and bless partners."
+    },
+    {
+      "id": "dragonborn",
+      "name": "Dragonborn",
+      "size": "Medium",
+      "speed": 30,
+      "carnalTrait": "Draconic Presence",
+      "carnalTraitDescription": "Once per short rest, when you begin foreplay or a pleasure exchange, you may exhale subtle draconic pheromones in a 10-foot cone; willing creatures who breathe them gain advantage on the next Seduction or Coital check against you or from you before the end of the scene. Your draconic anatomy (ridges, tail, claws used gently) counts as an improvised erotic tool with a +2 bonus to relevant Manual or Coital checks unless your table uses another bonus.",
+      "eroticGrants": ["Coital"],
+      "description": "Their pheromone breath and ridged anatomy make them formidable lovers."
+    },
+    {
+      "id": "dwarf",
+      "name": "Dwarf",
+      "size": "Medium",
+      "speed": 25,
+      "carnalTrait": "Forged Stamina",
+      "carnalTraitDescription": "You ignore the first level of exhaustion caused solely by carnal marathons (multiple climaxes or extended scenes) until you finish a long rest. You have advantage on Constitution saves to resist fatigue, cramping, or forced refractory from prolonged activity. Your refractory period (if your table uses one) is reduced by one round or one minute, whichever your rules use.",
+      "eroticGrants": ["Endurance"],
+      "description": "Exceptional endurance and resistance to exhaustion during long sessions."
+    },
+    {
+      "id": "elf",
+      "name": "Elf",
+      "size": "Medium",
+      "speed": 30,
+      "carnalTrait": "Fey Allure",
+      "carnalTraitDescription": "During a short rest that includes intimate contact or mutual pleasure, you regain additional Pleasure Points (PP) equal to your proficiency bonus if your table tracks PP on rests. Once per long rest, you may impose disadvantage on a creature's save to resist being Charmed or Attracted by you for one scene if they have seen you unclothed or heard your sincere invitation.",
+      "eroticGrants": ["Seduction"],
+      "description": "Graceful and alluring; short rests restore extra Pleasure Points."
+    },
+    {
+      "id": "gnome",
+      "name": "Gnome",
+      "size": "Small",
+      "speed": 25,
+      "carnalTrait": "Gnomish Ingenuity",
+      "carnalTraitDescription": "You have proficiency with artisan erotic tools you personally maintain (whips, clockwork toys, puzzle locks on restraints, etc.). When you use a carnal tool or toy, you may add your Intelligence modifier once per scene to the pleasure dealt or to the DC to escape a restraint you designed. You can stabilize a broken toy or sabotaged restraint as an action if the object is Small or smaller.",
+      "eroticGrants": ["Manual"],
+      "description": "Clever with toys and erogenous engineering."
+    },
+    {
+      "id": "goliath",
+      "name": "Goliath",
+      "size": "Large",
+      "speed": 35,
+      "carnalTrait": "Giant's Vigor",
+      "carnalTraitDescription": "When you are the penetrating partner in a Coital or related exchange, increase the penetration DC your partner must meet by +1 (or grant yourself +1 on the controlling roll, per your table). Your size and reach can be used to grant advantage on Athletics or grapple-for-position checks during consensual rough play once per rest.",
+      "eroticGrants": ["Seduction"],
+      "description": "Raw power and size; +1 to penetration DC when penetrating."
+    },
+    {
+      "id": "halfling",
+      "name": "Halfling",
+      "size": "Small",
+      "speed": 25,
+      "carnalTrait": "Playful Tease",
+      "carnalTraitDescription": "You have advantage on Conception checks or fertility rolls your table ties to luck. Once per long rest, when you would roll a natural 1 on a Seduction or Exhibitionism check, you may reroll; you must use the new roll. You may use your reaction to grant a willing partner advantage on their next Orgasm save if you just used a teasing action that dealt no orgasmic pleasure.",
+      "eroticGrants": ["Exhibitionism"],
+      "description": "Lucky and playful; advantage on Conception rolls."
+    },
+    {
+      "id": "human",
+      "name": "Human",
+      "size": "Medium",
+      "speed": 30,
+      "carnalTrait": "Versatile Lovers",
+      "carnalTraitDescription": "When you choose your Sexual History, you learn one additional Erotic Art from that history's list (if any remain you don't already have) and you gain one additional Carnal Trait name from that history's carnal trait list (resolve with your DM if it exceeds normal limits). This stacks with any similar human feature your table already uses.",
+      "eroticGrants": [],
+      "description": "Gain one extra Erotic Art and one Carnal Trait from their Sexual History."
+    },
+    {
+      "id": "orc",
+      "name": "Orc",
+      "size": "Medium",
+      "speed": 30,
+      "carnalTrait": "Primal Surge",
+      "carnalTraitDescription": "When you climax, each willing creature within 10 feet who is not Disinterested in you takes psychic or empathic pleasure damage equal to half your character level (rounded up) or a die step your table defines, and may roll a flat Charisma save to avoid gaining one stage of Aroused. You are immune to this splash from your own climax.",
+      "eroticGrants": [],
+      "description": "Climax causes psychic pleasure splash to nearby creatures."
+    },
+    {
+      "id": "tiefling",
+      "name": "Tiefling",
+      "size": "Medium",
+      "speed": 30,
+      "carnalTrait": "Infernal Temptation",
+      "carnalTraitDescription": "You know the Sensual Caress cantrip (or your table's equivalent touch cantrip). When a creature deals you orgasmic pleasure or causes you to climax without consent in a scene, you may use a reaction to lash them with hellish rebuke styled as pleasure backlash (fire or necrotic, your choice at character creation). You have advantage on saves against charm from fiends who attempt to seduce you.",
+      "eroticGrants": ["Lingus"],
+      "description": "Sensual Caress cantrip and hellish rebuke as pleasure damage."
+    }
+  ]
+}
