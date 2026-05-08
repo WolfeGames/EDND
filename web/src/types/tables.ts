@@ -36,6 +36,7 @@ export interface SexualHistoryRow {
   description: string
   eroticArts: string[]
   positionProficiencies: SexualHistoryPositionProficiencies
+  toolProficiencies?: string[]
   carnalTraits: string[]
   /** Keys vary by row (e.g. level1, level3, level5). */
   features: Record<string, string>
@@ -54,15 +55,36 @@ export interface CarnalClassSubclassRow {
   description?: string
 }
 
+export interface CarnalClassFeatureObject {
+  name: string
+  description: string
+}
+
+export interface CarnalEntityRow {
+  name: string
+  features: string[]
+}
+
 export interface CarnalClassRow {
   id: string
   name: string
   description: string
   hitDie: number
+  primarySexualAbility?: string
+  sexDie?: string
+  startingPleasurePoints?: string
+  savingThrowProficiencies?: string[]
+  stimulationProficiencies?: string[]
+  eroticAptitude?: string
   eroticArts?: string[]
   positionProficiencies?: SexualHistoryPositionProficiencies
+  toolProficiencies?: string[]
+  startingEquipment?: Record<string, string>
   /** Keys vary by class (e.g. level1, level6, level10). */
-  features: Record<string, string>
+  features: Record<string, string | CarnalClassFeatureObject>
+  drives?: Record<string, Record<string, string>>
+  carnalEntities?: Record<string, CarnalEntityRow>
+  carnalBoons?: Record<string, string[]>
   subclasses: Array<string | CarnalClassSubclassRow>
   domainSpells?: Record<string, Record<string, string>>
   fullFeatures?: Record<string, string>

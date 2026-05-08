@@ -1,0 +1,90 @@
+{
+  "id": "erotic-disciple",
+  "name": "Erotic Disciple",
+  "description": "You dedicated yourself to the disciplined study and practice of erotic arts under a master or tradition.",
+  "eroticArts": [
+    "Erogeny",
+    "Anticipation"
+  ],
+  "positionProficiencies": {
+    "tiers": [
+      "Basic",
+      "Advanced"
+    ],
+    "specific": [
+      "Lotus",
+      "Tantric Chair",
+      "Sensory Overload"
+    ]
+  },
+  "carnalTraits": [
+    "Tantric Mastery",
+    "Erogenous Body"
+  ],
+  "features": {
+    "level1": "Disciple's Devotion",
+    "level3": "Perfect Technique",
+    "level5": "Master's Touch"
+  },
+  "equipment": [
+    "Fine robe",
+    "Erogenous jewelry",
+    "3 prophylactics",
+    "2 amorous oils",
+    "1 sensation oil"
+  ],
+  "personality": {
+    "traits": [
+      "Intimacy is an art that is best expressed over long periods of time and with great attention to detail.",
+      "I treat my body as a sacred vessel, and do the same for my lovers.",
+      "I take great pride in being able to provide pleasure to my lovers.",
+      "I am patient in all things, especially sex, for the journey is as indulgent and gratifying as the destination.",
+      "I attempt to achieve higher states of awareness and enlightenment through pleasure.",
+      "I use my sexuality as a means of providing healing, physical and emotional.",
+      "I am obsessive about my craft and may spend hours perfecting a single technique on many different lovers.",
+      "I surround myself with erotic lore in hopes of finding ancient, forgotten techniques to bring higher states of pleasure to my lovers."
+    ],
+    "ideals": [
+      {
+        "text": "Enlightenment. I believe that pleasure can heal and enlighten those that partake with an uninhibited mind.",
+        "alignment": "Good"
+      },
+      {
+        "text": "Self-Expression. We can most wholly express our innermost self through giving and receiving pleasure.",
+        "alignment": "Neutral"
+      },
+      {
+        "text": "Healing. Love heals all wounds, whether it is sexual or not.",
+        "alignment": "Good"
+      },
+      {
+        "text": "Patience. To rush through intimacy is to forego the most exquisite of experiences.",
+        "alignment": "Any"
+      },
+      {
+        "text": "Pleasure. Pleasure is nothing to be ashamed of, no matter how you achieve it.",
+        "alignment": "Chaotic"
+      },
+      {
+        "text": "Hedonism. There is nothing more important than the pursuit of pleasure.",
+        "alignment": "Evil"
+      }
+    ],
+    "bonds": [
+      "I am happy to teach others my craft, especially if they learn through experience.",
+      "I learned the benefits of healing through intimacy from a parental figure that I grew to love as a partner.",
+      "My life is a sexual and emotional journey that is a never-ending search for new experiences.",
+      "I feel responsible for the sexual journeys of others and eagerly seek to guide anyone on their own quest.",
+      "I seek not only personal exploration but social exploration through sexuality.",
+      "I long for a partner who yearns for a deeply erotic and personal journey like I do."
+    ],
+    "flaws": [
+      "I have been known to neglect other aspects of my life in pursuit of sexual and erotic exploration.",
+      "I often feel guilty when I indulge too much in the pleasures of the flesh.",
+      "I am overly critical of my partners if I feel they are not as skillful as I am.",
+      "I sometimes forget the emotional and spiritual side of sexuality.",
+      "I see everything through a lens of sexuality that makes me feel perverse in the eyes of others.",
+      "My moral compass is the first sacrifice in my pursuit of novel carnal thrills."
+    ]
+  }
+}

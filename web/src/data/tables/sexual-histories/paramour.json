@@ -1,0 +1,89 @@
+{
+  "id": "paramour",
+  "name": "Paramour",
+  "description": "You were the secret lover — the hidden paramour — of someone powerful, dangerous, or influential.",
+  "eroticArts": [
+    "Seduction",
+    "Anticipation"
+  ],
+  "positionProficiencies": {
+    "tiers": [
+      "Basic",
+      "Advanced"
+    ],
+    "specific": [
+      "Stolen Moments",
+      "Hidden Embrace"
+    ]
+  },
+  "carnalTraits": [
+    "Distracting",
+    "Self-Control"
+  ],
+  "features": {
+    "level1": "Secret Flame",
+    "level3": "Stolen Ecstasy",
+    "level5": "Lingering Bond"
+  },
+  "equipment": [
+    "Elegant clothing suitable for quick changes",
+    "Sensual lingerie that can be worn underneath",
+    "Non-magical token of affection",
+    "Vial of fine perfume",
+    "40 gp in small untraceable coins"
+  ],
+  "personality": {
+    "traits": [
+      "I am very good at keeping secrets, to the point of enjoying it.",
+      "I will always seize the moment, even if there is great risk in doing so.",
+      "I often give hidden signals of my desires and needs.",
+      "The danger is almost as thrilling as the touch.",
+      "I am loyal to my lover, and only my lover.",
+      "The thrill of almost being caught is orgasmic.",
+      "My outward facade is a carefully constructed mask that hides my true feelings.",
+      "I long for a day when I no longer have to hide who and what I am."
+    ],
+    "ideals": [
+      {
+        "text": "Passion. True desire is always worth the risk.",
+        "alignment": "Chaotic"
+      },
+      {
+        "text": "Loyalty. I will keep my word, even at my own peril.",
+        "alignment": "Lawful"
+      },
+      {
+        "text": "Secrecy. My feelings, and yours, are too precious to be shared with the world.",
+        "alignment": "Neutral"
+      },
+      {
+        "text": "Freedom. I yearn only to be able to freely speak my heart.",
+        "alignment": "Good"
+      },
+      {
+        "text": "Power. Intimacy is my favorite path to power over others.",
+        "alignment": "Evil"
+      },
+      {
+        "text": "Connection. Hidden love can be greater than any public display.",
+        "alignment": "Good"
+      }
+    ],
+    "bonds": [
+      "My lover's reputation would be ruined if our relationship were discovered.",
+      "I carry a gift from my paramour that I can never be seen wearing openly.",
+      "I am still in love with the person I was forbidden to have.",
+      "My family would disown me if they knew the truth.",
+      "I owe my lover a great debt that goes beyond mere affection.",
+      "I fear the day my paramour must choose between me and their duty."
+    ],
+    "flaws": [
+      "Jealousy eats me alive when I see my Secret Flame with their public partner.",
+      "I put myself in harm's way just for a moment with my lover.",
+      "I cannot trust my lover, no matter what they do.",
+      "Danger and forbidden love are more romantic to me than a healthy relationship.",
+      "I push boundaries that might sabotage my lover's public image just for the thrill of being exposed.",
+      "I will go to any lengths to feel useful so that I won't be abandoned."
+    ]
+  }
+}

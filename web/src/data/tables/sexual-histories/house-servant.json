@@ -1,0 +1,83 @@
+{
+  "id": "house-servant",
+  "name": "House Servant",
+  "description": "You served as a domestic attendant where intimacy was part of your duties.",
+  "eroticArts": [
+    "Erogeny"
+  ],
+  "positionProficiencies": {
+    "tiers": [
+      "Basic",
+      "Improvised"
+    ]
+  },
+  "carnalTraits": [
+    "Accommodating",
+    "Self-Control"
+  ],
+  "features": {
+    "level1": "Discreet Service",
+    "level3": "Master's Pleasure",
+    "level5": "Perfect Attendant"
+  },
+  "equipment": [
+    "Revealing uniform",
+    "Feather duster (tease tool)",
+    "Hidden oil",
+    "15 gp"
+  ],
+  "personality": {
+    "traits": [
+      "I know exactly how my master likes to be touched.",
+      "Service is its own kind of intimacy.",
+      "I am discreet to a fault.",
+      "I take quiet pride in making someone's day better.",
+      "I have learned to read desire in the smallest gestures.",
+      "I am loyal, even when it is not returned.",
+      "I find satisfaction in being useful.",
+      "I hide my own desires behind perfect service."
+    ],
+    "ideals": [
+      {
+        "text": "Duty. A good servant anticipates every need.",
+        "alignment": "Lawful"
+      },
+      {
+        "text": "Care. Everyone deserves to feel cared for.",
+        "alignment": "Good"
+      },
+      {
+        "text": "Pleasure. Even service can be pleasurable.",
+        "alignment": "Neutral"
+      },
+      {
+        "text": "Discretion. Some things should never be spoken of.",
+        "alignment": "Lawful"
+      },
+      {
+        "text": "Ambition. Service is a path to greater things.",
+        "alignment": "Any"
+      },
+      {
+        "text": "Freedom. One day I will serve no one but myself.",
+        "alignment": "Chaotic"
+      }
+    ],
+    "bonds": [
+      "My current master is the only one who truly sees me.",
+      "I owe my skills to the person who trained me.",
+      "I have a secret lover among the household staff.",
+      "I am saving money to buy my freedom.",
+      "I fear what will happen if my master discovers my true feelings.",
+      "I have sworn to protect the family I serve."
+    ],
+    "flaws": [
+      "I sometimes forget my own needs while serving others.",
+      "I become jealous when my master favors someone else.",
+      "I have difficulty saying no to requests.",
+      "I judge other servants harshly if they are sloppy.",
+      "I hide my own desires so well that even I forget them.",
+      "I fear being replaced."
+    ]
+  }
+}

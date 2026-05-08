@@ -1,0 +1,87 @@
+{
+  "id": "awakened",
+  "name": "Awakened",
+  "description": "You were once ordinary until a single, overwhelming sexual experience permanently transformed you.",
+  "eroticArts": [
+    "Erotica",
+    "Ritual"
+  ],
+  "positionProficiencies": {
+    "tiers": [
+      "Basic",
+      "Advanced"
+    ],
+    "specific": [
+      "Vessel"
+    ]
+  },
+  "carnalTraits": [
+    "Erogenous Body",
+    "Sensitive"
+  ],
+  "features": {
+    "level1": "Awakened Senses",
+    "level3": "Echoes of Ecstasy",
+    "level5": "Transcendent Awakening"
+  },
+  "equipment": [
+    "Clothing that feels especially good against hypersensitive skin",
+    "Small keepsake from the being or event that awakened you",
+    "Vial of sense-dulling oil",
+    "35 gp"
+  ],
+  "personality": {
+    "traits": [
+      "Ordinary sensations feel dull compared to what I now experience.",
+      "I am terrified of the being that awoke my sexuality.",
+      "I am both fascinated and frightened by my new sensitivity.",
+      "I enjoy losing myself completely in the intensity of pleasure.",
+      "I want to give others at least a fraction of the otherworldly pleasure I experienced.",
+      "My body reacts strongly to stimulation, and I can't hide it.",
+      "My awakening is both a gift and a curse.",
+      "I constantly yearn for touch, but I fear how deeply it affects me."
+    ],
+    "ideals": [
+      {
+        "text": "Discovery. I've become something different and I must find out what.",
+        "alignment": "Any"
+      },
+      {
+        "text": "Sensation. Life is best lived seeking deeper and more complete sensations.",
+        "alignment": "Chaotic"
+      },
+      {
+        "text": "Control. I must master what I've become before it masters me.",
+        "alignment": "Lawful"
+      },
+      {
+        "text": "Sharing. Everyone should experience what I've experienced.",
+        "alignment": "Any"
+      },
+      {
+        "text": "Power. This awakening must be harnessed to elevate me above other mortals.",
+        "alignment": "Evil"
+      },
+      {
+        "text": "Acceptance. I must embrace who I am now, no matter the cost.",
+        "alignment": "Any"
+      }
+    ],
+    "bonds": [
+      "I am haunted by the entity that awakened me.",
+      "I need to find others that experienced what I did.",
+      "I must hide my sexual nature for fear of what people may think.",
+      "I owe a debt to the person or people that witnessed my awakening.",
+      "I want nothing more than to recreate my awakening moment.",
+      "I worry that I am no longer fully mortal."
+    ],
+    "flaws": [
+      "I tend to lose sense of reality when experiencing even basic sensations.",
+      "I push my body too far just for the sensations.",
+      "I am addicted to intense pleasure and will always be chasing the next \"high.\"",
+      "I feel that normal lovers are insufficient for me.",
+      "I will let the intensity of my pleasure kill me.",
+      "I won't let anybody see my true nature."
+    ]
+  }
+}

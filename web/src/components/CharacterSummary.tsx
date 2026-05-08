@@ -1,8 +1,14 @@
 import { useMemo } from 'react'
 import { getCarnalClass, getSexualHistory, getSpecies } from '../data/registry'
+import {
+  coerceEndowmentForBiologicalSex,
+  ENDOWMENT_SIZE_RULE,
+  formatEndowmentLines,
+} from '../lib/endowment'
 import { formatRuleKey } from '../lib/formatRuleKey'
 import { parseFeatureLevelRequirement } from '../lib/parseFeatureLevelRequirement'
 import { resolveCarnalTraitLabels } from '../lib/resolveCarnalTraitLabels'
+import { highestAbilityModifier } from '../lib/abilityScores'
 import type { EdndCharacter } from '../types/character'
 import './CharacterSummary.css'
 
@@ -60,6 +66,13 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
     () => resolveCarnalTraitLabels(historyRow?.carnalTraits ?? []),
     [historyRow],
   )
+  const endowmentReadout = useMemo(() => {
+    const e = coerceEndowmentForBiologicalSex(
+      character.genderIdentity,
+      character.endowment,
+    )
+    return formatEndowmentLines(e)
+  }, [character.genderIdentity, character.endowment])
 
   return (
     <div className="character-summary">
@@ -74,9 +87,26 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
             <strong>Pronouns:</strong> {character.pronouns || '—'}
           </li>
           <li>
-            <strong>Gender:</strong> {character.genderIdentity || '—'}
+            <strong>Biological sex:</strong> {character.genderIdentity || '—'}
+          </li>
+          <li>
+            <strong>Endowment</strong>
+            <div style={{ marginTop: '0.25rem', lineHeight: 1.5 }}>
+              {endowmentReadout.map((line, i) => (
+                <div key={`endo-${i}`}>{line}</div>
+              ))}
+            </div>
+            <p className="muted" style={{ fontSize: '0.85rem', margin: '0.35rem 0 0' }}>
+              {ENDOWMENT_SIZE_RULE}
+            </p>
           </li>
           {character.background && <li>Background: {character.background}</li>}
+          <li>
+            <strong>Ability scores:</strong> STR {character.abilityScores.strength}, DEX{' '}
+            {character.abilityScores.dexterity}, CON {character.abilityScores.constitution},
+            INT {character.abilityScores.intelligence}, WIS {character.abilityScores.wisdom},
+            CHA {character.abilityScores.charisma}
+          </li>
         </ul>
       </div>
 
@@ -210,7 +240,7 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
               <FeatureRuleBlock
                 key={k}
                 ruleKey={k}
-                text={v}
+                text={typeof v === 'string' ? v : `${v.name}: ${v.description}`}
                 characterLevel={character.level}
               />
             ))}
@@ -231,7 +261,11 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
       <div className="review-section">
         <h3>Erotic profile</h3>
         <ul className="review-list">
-          <li>Beauty class: {character.eroticTraits.beautyClass || '—'}</li>
+          <li>
+            Beauty class: {character.eroticTraits.beautyClass} (10 + highest mod{' '}
+            {highestAbilityModifier(character.abilityScores)} + other{' '}
+            {character.eroticTraits.beautyModifier})
+          </li>
           <li>Sexuality bonus: {character.eroticTraits.sexualityBonus}</li>
           {character.eroticTraits.attraction && (
             <li>Attraction: {character.eroticTraits.attraction}</li>

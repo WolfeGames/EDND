@@ -86,6 +86,187 @@
         "level18_DivineCongress": "To love you is to love the gods themselves. When you are joined with another in intimate activity, you and all involved gain the benefits of a short rest. Any Hit Dice expended during this time restore the maximum number of hit points possible.",
         "level20_AscendedLover": "At level 20, your access to your divine lover’s domain of influence is unparalleled. Once per week when you complete a sexual encounter, you may grant your partner a Divine Boon."
       }
+    },
+    {
+      "id": "ravager",
+      "name": "Ravager",
+      "description": "A Ravager is someone beholden only to their most primal instincts. The voice from deep within that quickens their blood to rut, to breed, and to devour their lover is barely controlled — and in many cases, not controlled at all. A Ravager is not often found in civilized lands. They thrive in tribal settings and wild places where survival depends on breeding strong offspring. When a Ravager enters civilized society, their raw sexuality is often overwhelming and intimidating.",
+      "hitDie": 12,
+      "primarySexualAbility": "Constitution",
+      "sexDie": "d12",
+      "startingPleasurePoints": "12 + Constitution modifier",
+      "savingThrowProficiencies": ["Constitution", "Strength"],
+      "stimulationProficiencies": ["Vaginal", "Phallic"],
+      "eroticAptitude": "Athletics",
+      "positionProficiencies": {
+        "tiers": ["Basic"]
+      },
+      "toolProficiencies": ["Restraints Kit", "Breeding Kit", "Husbandry Kit"],
+      "startingEquipment": {
+        "optionA": "Simple clothing, two vials of lubrication oil, tribal totem or clan symbol, set of restraints",
+        "optionB": "15 gold pieces"
+      },
+      "features": {
+        "level1": {
+          "name": "Need to Breed",
+          "description": "When within 10 feet of a creature, you may use a Sexual Action to sense their Fertility bonus. If it is equal to or greater than yours, you are Attracted to them. When using Mating Press, Hound, Stallion, or Missionary positions, you double your Sexuality Bonus on checks. Your passive Sexuality score is modified by your Strength or Constitution modifier (whichever is higher). You may use this passive score instead of rolling a Seduction check. After using this ability, it cannot be used again until you finish a long rest."
+        },
+        "level1b": {
+          "name": "Lust",
+          "description": "As a bonus action, enter a state of pure Lust for up to 10 minutes. You gain a bonus to pleasure dealt equal to your Lust Bonus, reduce pleasure received by your Lust Bonus (minimum 1), and have advantage on Strength, Constitution checks, and Orgasm Saving Throws. You lose Lust if you go more than 1 round without stimulation unless you use a bonus action to maintain it. While in Lust, you cannot cast or concentrate on Eromancy spells."
+        },
+        "level2": {
+          "name": "Primal Mate",
+          "description": "Your passive Sexuality score is 10 + Strength modifier + Constitution modifier while wearing immodest clothing."
+        },
+        "level3": {
+          "name": "Ravager's Drive",
+          "description": "Choose one Drive: Drive of the Primal Mate, Drive of the Monstrous Beast, or Drive of the Packlord."
+        },
+        "level6": {
+          "name": "Frenzied Lover",
+          "description": "When you take the Stimulate action, you may do so twice instead of once. If performing coital stimulation, both uses must target the same area."
+        },
+        "level10": {
+          "name": "Feral",
+          "description": "Fey creatures are Attracted to you. You may perform Husbandry checks using your Sexuality Bonus + Wisdom modifier (minimum 1) even without proficiency in Medicine. When making an Insight check on a creature, you instinctively know where they are in their fertility cycle."
+        },
+        "level14": {
+          "name": "Unending Lust",
+          "description": "When you climax, you no longer enter Refractory as long as you maintain Lust. You must expend at least 1 Sex Die to regain Pleasure Points and gain resistance to all pleasure. Lust ends when its duration expires or you expend all Sex Dice. Upon ending Lust, you suffer Overstimulation equal to the number of climaxes after the first."
+        },
+        "level20": {
+          "name": "Primal Lust",
+          "description": "If you spend an entire Long Rest engaged in sexual activity and climax at least once, you gain the full benefits of a Long Rest. Your Lust feature has unlimited uses and can last until you reach climax. You may extend Lust by succeeding on a DC 10 Constitution saving throw each time it would end. On failure, Lust ends and cannot restart for 10 minutes minus your Constitution modifier. Your Fertility bonus does not diminish with successive climaxes."
+        }
+      },
+      "drives": {
+        "primalMate": {
+          "name": "Drive of the Primal Mate",
+          "description": "You choose one lover and mate for life.",
+          "level3": "Feral Heart – Designate one willing creature as your Mate through a 10-minute bonding ritual. Your Mate uses your Fertility bonus if higher. You both gain extra pleasure during coital actions. The Mate bond lasts until successful procreation.",
+          "level7": "Mating Bond – Advantage on Conception rolls with your Mate and disadvantage with others. Upon successful procreation, both increase HP and Pleasure Point maximum by 1 Sex Die. Long Rests spent with your Mate grant inspiration dice.",
+          "level11": "Sense Heat – Detect ovulation/heat/estrus within 60 feet and determine breeding compatibility.",
+          "level15": "Feral Seed – Offspring gain one of: Touch of the Fey, Primal Resolve, or Beastial Senses."
+        },
+        "monstrousBeast": {
+          "name": "Drive of the Monstrous Beast",
+          "description": "You grow beyond normal size, capable of bedding both massive and tiny lovers.",
+          "level3": "Great Size – Genitals or breasts increase by one size category. Deal +1d6 pleasure and count as one size larger for penetration checks.",
+          "level7": "Monstrous Rut – Ignore resistance to pleasure in Tower, Mount, or Hound positions. Advantage on size-difference penetration checks.",
+          "level11": "Monstrous Growth – Increase your size category by one (up to Huge).",
+          "level15": "Titanic Lover – Proficiency in all Exotic size-difference positions. Half damage to creatures too small for you."
+        },
+        "packlord": {
+          "name": "Drive of the Packlord",
+          "description": "You lead and satisfy a group of lovers, ensuring collective fulfillment and synchronized breeding.",
+          "level3": "Pack of Lovers – Gain the Multilover trait. With two or more lovers, gain resistance to pleasure and advantage on Orgasm Saving Throws.",
+          "level7": "Communal Breeding – Synchronize breeding cycles of lovers after two weeks together. Pregnancy in one may trigger sympathetic conception in others within 24 hours.",
+          "level11": "Mutual Pleasure – Pleasure dealt to one lover is shared at half value with other present lovers (if they are Attracted).",
+          "level15": "Undeniable Urges – Halve refractory periods for your lovers. Your own refractory only begins when all lovers are also in refractory."
+        }
+      },
+      "subclasses": ["Drive of the Primal Mate", "Drive of the Monstrous Beast", "Drive of the Packlord"]
+    },
+    {
+      "id": "lustbound",
+      "name": "Lustbound",
+      "description": "The Lustbound are mortals who have been contracted by otherworldly entities specifically for sexual purposes. What ends these mysterious and often unknowable entities may be pursuing by using mortals in this way are often beyond understanding.",
+      "hitDie": 8,
+      "primarySexualAbility": "Charisma",
+      "sexDie": "d8",
+      "startingPleasurePoints": "8 + Charisma modifier",
+      "savingThrowProficiencies": ["Charisma", "Wisdom"],
+      "eroticArts": ["Seduction", "Anticipation", "Erotica", "Erogeny"],
+      "positionProficiencies": {
+        "tiers": ["Basic"],
+        "specific": ["Otherworldly Congress"]
+      },
+      "features": {
+        "level1": {
+          "name": "Otherworldly Lust",
+          "description": "You gain the Xenophilic trait. When making Erogeny or Seduction checks against creatures of a different species, you do not suffer disadvantage. Creatures with the Aberrant or Monstrous trait do not suffer disadvantage on Seduction checks made against you."
+        },
+        "level2": {
+          "name": "Carnal Boons",
+          "description": "You gain Carnal Boons according to the Lustbound Features table."
+        },
+        "level3": {
+          "name": "Carnal Pact",
+          "description": "You make a pact with an otherworldly entity. Choose one Carnal Entity and gain its associated features. You also gain access to Eromancy spells following the same progression and rules as a Warlock of the same level."
+        },
+        "level6": {
+          "name": "Indulge Entity",
+          "description": "You can call upon your patron to slake your lusts. Your patron is obliged to obey your summons at least once per seven days. After the first summon, you must roll a d20 lower than your Lustbound level + Sexuality bonus for the entity to appear."
+        },
+        "level10": {
+          "name": "Erotic Arcanum",
+          "description": "Choose one Eromancy spell. You may cast it once per day without expending a spell slot. You gain additional uses at levels 13 (7th), 15 (8th), and 17 (9th). You may replace one Arcanum spell when you gain a level."
+        },
+        "level18": {
+          "name": "Carnal Manifestation",
+          "description": "At the end of a long rest, you may manifest physical aspects of your Carnal Entity. Any offspring you conceive will contain traits associated with your entity type."
+        },
+        "level20": {
+          "name": "Erotic Embodiment",
+          "description": "You are considered the same carnal type as your entity. Creatures with innate attraction to your type are automatically Attracted to you, and you have advantage on Charisma checks made to seduce them. Your offspring are associated with your Carnal Entity's bloodline."
+        }
+      },
+      "carnalEntities": {
+        "nymph": {
+          "name": "Nymph (Fey)",
+          "features": ["Overwhelming Beauty", "Blissful Presence", "Flowing Sensuality", "Orgasmic Magic"]
+        },
+        "succubus": {
+          "name": "Succubus/Incubus (Infernal)",
+          "features": ["Draining Pleasure", "Forbidden Carnal Knowledge", "Hellish Allure", "Kiss of the Hells"]
+        },
+        "velvetShade": {
+          "name": "Velvet Shade (Undead)",
+          "features": ["Vampiric Kiss", "Shadow Heart", "Necrotic Libido", "Embrace of the Night"]
+        },
+        "alienOrgan": {
+          "name": "Alien Organ (Aberrant)",
+          "features": ["Psychosexual", "Clairvoyant Lover", "Alien Anatomy", "Aberrant Slave"]
+        }
+      },
+      "carnalBoons": {
+        "basic": [
+          "Orgasmic Bliss",
+          "Conception Armor",
+          "Pleasure Pocket",
+          "Lustful Mind",
+          "Lascivya's Spear",
+          "Entity's Whisper",
+          "Blissmark"
+        ],
+        "intermediate": [
+          "Erotic Smite",
+          "Eldritch Vigor",
+          "Joined in Lust",
+          "Gift of Fertility",
+          "Pact of the Gilded Olisbos",
+          "Pact of the Fervent Loins",
+          "Pact of the Silken Cord"
+        ],
+        "advanced": [
+          "Living Olisbos",
+          "Endless Lust",
+          "Web of Ecstasy",
+          "Succubus Kiss",
+          "Fey Allure",
+          "Undying Ecstasy",
+          "Pact of the Breeding Queen",
+          "Eldritch Orgasm",
+          "Tentacles of the Void"
+        ],
+        "capstone": [
+          "Apotheosis of Lust",
+          "Patron's Avatar",
+          "Eternal Ecstasy"
+        ]
+      },
+      "subclasses": ["Nymph (Fey)", "Succubus/Incubus (Infernal)", "Velvet Shade (Undead)", "Alien Organ (Aberrant)"]
     }
   ]
 }

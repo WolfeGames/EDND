@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useLayoutEffect, useMemo, useState } from 'react'
 import { ADVENTURING_CLASSES } from '../data/adventuringClasses'
 import { GENDERS } from '../data/identityOptions'
 import {
@@ -16,6 +16,18 @@ import {
   emptySexualHistoryPersonality,
   rollSexualHistoryPersonality,
 } from '../lib/rollSexualHistoryPersonality'
+import {
+  deriveBeautyClass,
+  rollAllAbilityScores,
+  rollStat4d6DropLowest,
+} from '../lib/abilityScores'
+import {
+  coerceEndowmentForBiologicalSex,
+  ENDOWMENT_SIZE_RULE,
+  formatEndowmentLines,
+  getAllowedAnatomiesForBiologicalSex,
+  rollEndowmentSize,
+} from '../lib/endowment'
 import { createEmptyCharacter, type EdndCharacter, type SexualHistoryPersonality } from '../types/character'
 import './CharacterCreatorPage.css'
 
@@ -28,15 +40,112 @@ const STEP_LABELS = [
   'Review',
 ] as const
 
+const ATTRACTION_OPTIONS = [
+  'Male',
+  'Female',
+  'Brawny',
+  'Lithe',
+  'Thick',
+  'Voluptuous',
+  'Homospecies',
+  'Heterospecies',
+  'Xenospecies',
+  'Lawful',
+  'Neutral',
+  'Chaotic',
+  'Good',
+  'Evil',
+] as const
+
+const SEXUAL_MORALITY_OPTIONS = [
+  'Lawful Good',
+  'Neutral Good',
+  'Chaotic Good',
+  'Lawful Neutral',
+  'Neutral',
+  'Chaotic Neutral',
+  'Lawful Evil',
+  'Neutral Evil',
+  'Chaotic Evil',
+] as const
+
+const ORIENTATION_OPTIONS = [
+  'Homosexual',
+  'Heterosexual',
+  'Bisexual',
+  'Pansexual',
+  'Omnisexual',
+  'Sapiosexual',
+  'Asexual',
+  'Demisexual',
+] as const
+
+const ABILITY_LABELS: Array<[keyof EdndCharacter['abilityScores'], string]> = [
+  ['strength', 'Strength'],
+  ['dexterity', 'Dexterity'],
+  ['constitution', 'Constitution'],
+  ['intelligence', 'Intelligence'],
+  ['wisdom', 'Wisdom'],
+  ['charisma', 'Charisma'],
+]
+
+const ENDOWMENT_ANATOMY_OPTIONS: Array<{
+  value: EdndCharacter['endowment']['anatomy']
+  label: string
+}> = [
+  { value: 'neither', label: 'Neither' },
+  { value: 'breasts', label: 'Breasts' },
+  { value: 'phallus', label: 'Phallus' },
+  { value: 'both', label: 'Both' },
+]
+
+function sexualityBonusForLevel(level: number): number {
+  if (level < 5) return 2
+  if (level < 10) return 3
+  if (level < 14) return 4
+  if (level < 18) return 5
+  return 6
+}
+
+function splitCsvTags(value: string): string[] {
+  return value
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean)
+}
+
+function joinCsvTags(items: string[]): string {
+  return items.join(', ')
+}
+
 export function CharacterCreatorPage() {
   const [character, setCharacter] = useState<EdndCharacter>(() => createEmptyCharacter())
   const [step, setStep] = useState(0)
   const [copyHint, setCopyHint] = useState<string | null>(null)
 
-  const withMergedProficiencies = (c: EdndCharacter): EdndCharacter => ({
-    ...c,
-    eroticTraits: mergeTableProficiencies(c.species, c.sexualHistory ?? '', c.eroticTraits),
-  })
+  const applyRules = (c: EdndCharacter): EdndCharacter => {
+    const sexualityBonus = sexualityBonusForLevel(c.level)
+    const beautyClass = deriveBeautyClass(c.abilityScores, c.eroticTraits.beautyModifier)
+    return {
+      ...c,
+      eroticTraits: {
+        ...c.eroticTraits,
+        sexualityBonus,
+        beautyClass,
+      },
+    }
+  }
+
+  const withMergedProficiencies = (c: EdndCharacter): EdndCharacter =>
+    applyRules({
+      ...c,
+      eroticTraits: mergeTableProficiencies(
+        c.species,
+        c.sexualHistory ?? '',
+        c.carnalClass,
+        c.eroticTraits,
+      ),
+    })
 
   const speciesRow = useMemo(
     () => (character.species ? getSpecies(character.species) : undefined),
@@ -51,6 +160,41 @@ export function CharacterCreatorPage() {
     () => (character.carnalClass ? getCarnalClass(character.carnalClass) : undefined),
     [character.carnalClass],
   )
+  const selectedAttractions = useMemo(
+    () => new Set(splitCsvTags(character.eroticTraits.attraction)),
+    [character.eroticTraits.attraction],
+  )
+  const selectedRepulsions = useMemo(
+    () => new Set(splitCsvTags(character.eroticTraits.repulsion)),
+    [character.eroticTraits.repulsion],
+  )
+
+  const allowedEndowmentAnatomies = useMemo(
+    () => getAllowedAnatomiesForBiologicalSex(character.genderIdentity),
+    [character.genderIdentity],
+  )
+
+  const endowmentReadout = useMemo(
+    () =>
+      formatEndowmentLines(
+        coerceEndowmentForBiologicalSex(character.genderIdentity, character.endowment),
+      ),
+    [character.genderIdentity, character.endowment],
+  )
+
+  useLayoutEffect(() => {
+    setCharacter((c) => {
+      const next = coerceEndowmentForBiologicalSex(c.genderIdentity, c.endowment)
+      if (
+        next.anatomy === c.endowment.anatomy &&
+        next.breastsSize === c.endowment.breastsSize &&
+        next.phallusSize === c.endowment.phallusSize
+      ) {
+        return c
+      }
+      return { ...c, endowment: next }
+    })
+  }, [character.genderIdentity])
 
   const canProceed = (): boolean => {
     switch (step) {
@@ -91,10 +235,34 @@ export function CharacterCreatorPage() {
   }
 
   const updateErotic = (patch: Partial<EdndCharacter['eroticTraits']>) => {
-    setCharacter((c) => ({
-      ...c,
-      eroticTraits: { ...c.eroticTraits, ...patch },
-    }))
+    setCharacter((c) =>
+      applyRules({
+        ...c,
+        eroticTraits: { ...c.eroticTraits, ...patch },
+      }),
+    )
+  }
+
+  const toggleCsvTag = (field: 'attraction' | 'repulsion', tag: string) => {
+    const current = new Set(splitCsvTags(character.eroticTraits[field]))
+    if (current.has(tag)) current.delete(tag)
+    else current.add(tag)
+    updateErotic({ [field]: joinCsvTags([...current]) })
+  }
+
+  const updateAbilityScore = (
+    key: keyof EdndCharacter['abilityScores'],
+    next: number,
+  ) => {
+    setCharacter((c) =>
+      applyRules({
+        ...c,
+        abilityScores: {
+          ...c.abilityScores,
+          [key]: Math.max(1, Math.min(30, next || 1)),
+        },
+      }),
+    )
   }
 
   const patchSexualHistoryPersonality = (patch: Partial<SexualHistoryPersonality>) => {
@@ -106,6 +274,30 @@ export function CharacterCreatorPage() {
         ...patch,
       },
     }))
+  }
+
+  const setEndowmentAnatomy = (anatomy: EdndCharacter['endowment']['anatomy']) => {
+    setCharacter((c) => {
+      if (anatomy === 'neither') return { ...c, endowment: { anatomy } }
+      if (anatomy === 'breasts')
+        return {
+          ...c,
+          endowment: { anatomy, breastsSize: c.endowment.breastsSize },
+        }
+      if (anatomy === 'phallus')
+        return {
+          ...c,
+          endowment: { anatomy, phallusSize: c.endowment.phallusSize },
+        }
+      return {
+        ...c,
+        endowment: {
+          anatomy,
+          breastsSize: c.endowment.breastsSize,
+          phallusSize: c.endowment.phallusSize,
+        },
+      }
+    })
   }
 
   return (
@@ -155,7 +347,7 @@ export function CharacterCreatorPage() {
             />
           </div>
           <div className="creator-field">
-            <label htmlFor="char-gender">Gender</label>
+            <label htmlFor="char-gender">Biological sex</label>
             <select
               id="char-gender"
               value={character.genderIdentity}
@@ -170,6 +362,11 @@ export function CharacterCreatorPage() {
                 </option>
               ))}
             </select>
+            <p className="hint">
+              Which primary sex traits can appear on the body for rules purposes (e.g. a phallus
+              is only an option for Male or Transgender). Identity and pronouns are separate—set
+              pronouns above.
+            </p>
           </div>
           <div className="creator-field">
             <label htmlFor="char-level">Level</label>
@@ -179,13 +376,51 @@ export function CharacterCreatorPage() {
               min={1}
               max={20}
               value={character.level}
-              onChange={(e) =>
-                setCharacter((c) => ({
-                  ...c,
-                  level: Math.min(20, Math.max(1, Number(e.target.value) || 1)),
-                }))
-              }
+              onChange={(e) => {
+                const nextLevel = Math.min(20, Math.max(1, Number(e.target.value) || 1))
+                setCharacter((c) => applyRules({ ...c, level: nextLevel }))
+              }}
             />
+          </div>
+          <div className="creator-field">
+            <label>Ability scores</label>
+            <div className="creator-ability-grid">
+              {ABILITY_LABELS.map(([key, label]) => (
+                <div key={key} className="creator-ability-row">
+                  <span className="creator-ability-label">{label}</span>
+                  <input
+                    type="number"
+                    min={1}
+                    max={30}
+                    value={character.abilityScores[key]}
+                    onChange={(e) => updateAbilityScore(key, Number(e.target.value) || 1)}
+                  />
+                  <button
+                    type="button"
+                    className="btn"
+                    onClick={() => updateAbilityScore(key, rollStat4d6DropLowest())}
+                  >
+                    Roll
+                  </button>
+                </div>
+              ))}
+            </div>
+            <div style={{ marginTop: '0.5rem' }}>
+              <button
+                type="button"
+                className="btn"
+                onClick={() =>
+                  setCharacter((c) =>
+                    applyRules({
+                      ...c,
+                      abilityScores: rollAllAbilityScores(),
+                    }),
+                  )
+                }
+              >
+                Roll all abilities (4d6 drop lowest)
+              </button>
+            </div>
           </div>
           <div className="creator-field">
             <label htmlFor="char-class">
@@ -221,6 +456,114 @@ export function CharacterCreatorPage() {
               placeholder="Sage, Soldier, homebrew…"
             />
           </div>
+          <div className="creator-field">
+            <label htmlFor="endowment-anatomy">Breasts &amp; phallus</label>
+            <select
+              id="endowment-anatomy"
+              value={character.endowment.anatomy}
+              onChange={(e) =>
+                setEndowmentAnatomy(
+                  e.target.value as EdndCharacter['endowment']['anatomy'],
+                )
+              }
+            >
+              {ENDOWMENT_ANATOMY_OPTIONS.filter((opt) =>
+                allowedEndowmentAnatomies.includes(opt.value),
+              ).map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+            <p className="hint">
+              Vagina traits come later. {ENDOWMENT_SIZE_RULE} Female and Nonbinary characters
+              cannot have a phallus (only breasts and/or neither).
+            </p>
+            <div className="hint" style={{ marginTop: '0.35rem' }}>
+              <strong>Sheet readout:</strong>
+              <ul style={{ margin: '0.35rem 0 0', paddingLeft: '1.25rem' }}>
+                {endowmentReadout.map((line, i) => (
+                  <li key={`${i}-${line}`}>{line}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          {(character.endowment.anatomy === 'breasts' ||
+            character.endowment.anatomy === 'both') && (
+            <div className="creator-field creator-field--inline-actions">
+              <label>Breasts endowment (1d6)</label>
+              <div className="creator-inline-row">
+                <input
+                  type="text"
+                  readOnly
+                  value={character.endowment.breastsSize ?? 'Not rolled'}
+                />
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={() =>
+                    setCharacter((c) => ({
+                      ...c,
+                      endowment: {
+                        ...c.endowment,
+                        breastsSize: rollEndowmentSize(),
+                      },
+                    }))
+                  }
+                >
+                  Roll breasts
+                </button>
+              </div>
+            </div>
+          )}
+          {(character.endowment.anatomy === 'phallus' ||
+            character.endowment.anatomy === 'both') && (
+            <div className="creator-field creator-field--inline-actions">
+              <label>Phallus endowment (1d6)</label>
+              <div className="creator-inline-row">
+                <input
+                  type="text"
+                  readOnly
+                  value={character.endowment.phallusSize ?? 'Not rolled'}
+                />
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={() =>
+                    setCharacter((c) => ({
+                      ...c,
+                      endowment: {
+                        ...c.endowment,
+                        phallusSize: rollEndowmentSize(),
+                      },
+                    }))
+                  }
+                >
+                  Roll phallus
+                </button>
+              </div>
+            </div>
+          )}
+          {character.endowment.anatomy === 'both' && (
+            <div className="creator-field">
+              <button
+                type="button"
+                className="btn"
+                onClick={() =>
+                  setCharacter((c) => ({
+                    ...c,
+                    endowment: {
+                      ...c.endowment,
+                      breastsSize: rollEndowmentSize(),
+                      phallusSize: rollEndowmentSize(),
+                    },
+                  }))
+                }
+              >
+                Roll both endowments
+              </button>
+            </div>
+          )}
         </section>
       )}
 
@@ -462,10 +805,12 @@ export function CharacterCreatorPage() {
               id="char-carnal-class"
               value={character.carnalClass ?? ''}
               onChange={(e) =>
-                setCharacter((c) => ({
-                  ...c,
-                  carnalClass: e.target.value || undefined,
-                }))
+                setCharacter((c) =>
+                  withMergedProficiencies({
+                    ...c,
+                    carnalClass: e.target.value || undefined,
+                  }),
+                )
               }
             >
               <option value="">None</option>
@@ -494,10 +839,28 @@ export function CharacterCreatorPage() {
             <input
               id="beauty"
               type="text"
-              value={character.eroticTraits.beautyClass}
-              onChange={(e) => updateErotic({ beautyClass: e.target.value })}
-              placeholder="Tier, score, or notes"
+              value={String(character.eroticTraits.beautyClass)}
+              readOnly
+              placeholder="10"
             />
+            <p className="hint">
+              Computed as 10 + highest ability modifier + other modifiers.
+            </p>
+          </div>
+          <div className="creator-field">
+            <label htmlFor="beauty-mod">Other beauty modifiers</label>
+            <input
+              id="beauty-mod"
+              type="number"
+              value={character.eroticTraits.beautyModifier}
+              onChange={(e) =>
+                updateErotic({ beautyModifier: Number(e.target.value) || 0 })
+              }
+            />
+            <p className="hint">
+              Species/history/class traits, carnal traits, equipment, magic, and temporary
+              effects.
+            </p>
           </div>
           <div className="creator-field">
             <label htmlFor="sex-bonus">Sexuality bonus</label>
@@ -505,62 +868,100 @@ export function CharacterCreatorPage() {
               id="sex-bonus"
               type="number"
               value={character.eroticTraits.sexualityBonus}
-              onChange={(e) =>
-                updateErotic({ sexualityBonus: Number(e.target.value) || 0 })
-              }
+              readOnly
             />
+            <p className="hint">
+              Auto by level: +2 (1-4), +3 (5-9), +4 (10-13), +5 (14-17), +6 (18-20).
+            </p>
           </div>
           <div className="creator-field">
             <label htmlFor="attraction">Attraction</label>
-            <textarea
+            <div className="creator-tags">
+              {ATTRACTION_OPTIONS.map((opt) => (
+                <label key={`att-${opt}`} className="creator-tag-pill">
+                  <input
+                    type="checkbox"
+                    checked={selectedAttractions.has(opt)}
+                    onChange={() => toggleCsvTag('attraction', opt)}
+                  />
+                  <span>{opt}</span>
+                </label>
+              ))}
+            </div>
+            <input
               id="attraction"
+              type="text"
               value={character.eroticTraits.attraction}
               onChange={(e) => updateErotic({ attraction: e.target.value })}
-              placeholder="Who or what they are drawn to"
+              placeholder="Add/remove custom tags, comma-separated"
             />
           </div>
           <div className="creator-field">
             <label htmlFor="repulsion">Repulsion</label>
-            <textarea
+            <div className="creator-tags">
+              {ATTRACTION_OPTIONS.map((opt) => (
+                <label key={`rep-${opt}`} className="creator-tag-pill">
+                  <input
+                    type="checkbox"
+                    checked={selectedRepulsions.has(opt)}
+                    onChange={() => toggleCsvTag('repulsion', opt)}
+                  />
+                  <span>{opt}</span>
+                </label>
+              ))}
+            </div>
+            <input
               id="repulsion"
+              type="text"
               value={character.eroticTraits.repulsion}
               onChange={(e) => updateErotic({ repulsion: e.target.value })}
-              placeholder="Turn-offs, boundaries, disinterest"
+              placeholder="Add/remove custom tags, comma-separated"
             />
           </div>
           <div className="creator-field">
             <label htmlFor="morality">Sexual morality</label>
-            <textarea
+            <select
               id="morality"
               value={character.eroticTraits.sexualMorality}
               onChange={(e) => updateErotic({ sexualMorality: e.target.value })}
-            />
+            >
+              <option value="">Choose…</option>
+              {SEXUAL_MORALITY_OPTIONS.map((m) => (
+                <option key={m} value={m}>
+                  {m}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="creator-field">
             <label htmlFor="orientation">Orientation</label>
-            <textarea
+            <select
               id="orientation"
               value={character.eroticTraits.orientation}
               onChange={(e) => updateErotic({ orientation: e.target.value })}
-            />
+            >
+              <option value="">Choose…</option>
+              {ORIENTATION_OPTIONS.map((o) => (
+                <option key={o} value={o}>
+                  {o}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="creator-field">
-            <label htmlFor="tools">
-              Erotic tool proficiencies{' '}
-              <span className="hint">(one per line)</span>
-            </label>
-            <textarea
-              id="tools"
-              value={character.eroticTraits.eroticToolProficiencies.join('\n')}
-              onChange={(e) =>
-                updateErotic({
-                  eroticToolProficiencies: e.target.value
-                    .split('\n')
-                    .map((l) => l.trim())
-                    .filter(Boolean),
-                })
-              }
-            />
+            <label>Erotic tool proficiencies</label>
+            {character.eroticTraits.eroticToolProficiencies.length > 0 ? (
+              <ul className="review-list">
+                {character.eroticTraits.eroticToolProficiencies.map((tool) => (
+                  <li key={tool}>{tool}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="muted">
+                None auto-filled yet. These are derived from selected class/history when
+                available in table data.
+              </p>
+            )}
           </div>
         </section>
       )}

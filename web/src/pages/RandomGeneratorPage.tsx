@@ -80,8 +80,8 @@ export function RandomGeneratorPage() {
     <div className="page random-generator">
       <h1 className="page-title">Random character</h1>
       <p className="lede">
-        Constrain the roll with the filters below (all optional). Gender is rolled or fixed
-        to Male, Female, Nonbinary, or Transgender. Pronouns are never auto-filled: type them
+        Constrain the roll with the filters below (all optional). Biological sex is rolled or
+        fixed to Male, Female, Nonbinary, or Transgender. Pronouns are never auto-filled: type them
         in the filter if you want them on the sheet. Sexual history and carnal class features
         highlight when your rolled level meets the printed level gate.
       </p>
@@ -176,7 +176,7 @@ export function RandomGeneratorPage() {
             </select>
           </label>
           <label className="filter-field">
-            <span>Gender</span>
+            <span>Biological sex</span>
             <select
               value={filterForm.genderIdentity ?? ''}
               onChange={(e) =>

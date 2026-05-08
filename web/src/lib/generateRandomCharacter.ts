@@ -11,6 +11,8 @@ import {
   sexualHistories,
 } from '../data/registry'
 import { createEmptyCharacter, createEmptyEroticTraits, type EdndCharacter } from '../types/character'
+import { deriveBeautyClass, rollAllAbilityScores } from './abilityScores'
+import { rollRandomEndowmentForBiologicalSex } from './endowment'
 import { mergeTableProficiencies } from './mergeEroticProficiencies'
 import { rollSexualHistoryPersonality } from './rollSexualHistoryPersonality'
 
@@ -64,15 +66,6 @@ const LAST_NAMES = [
   'Fair',
   'Grim',
   'Sable',
-] as const
-
-const BEAUTY_NOTES = [
-  'Striking presence',
-  'Understated charm',
-  'Unearthly poise',
-  'Rugged appeal',
-  'Soft-spoken allure',
-  'Commanding gaze',
 ] as const
 
 const ATTRACTIONS = [
@@ -168,6 +161,7 @@ export function generateRandomCharacter(
 ): EdndCharacter {
   const f = options.filters
   const carnalChance = options.carnalClassChance ?? 0.55
+  const level = rollLevel(f)
 
   const sp =
     f?.species && getSpecies(f.species) ? getSpecies(f.species)! : pickRandom(species)!
@@ -192,12 +186,15 @@ export function generateRandomCharacter(
   }
 
   const { genderIdentity, pronouns } = rollIdentity(f)
+  const abilityScores = rollAllAbilityScores()
 
   const baseTraits = createEmptyEroticTraits()
-  const merged = mergeTableProficiencies(sp.id, hist.id, {
+  const merged = mergeTableProficiencies(sp.id, hist.id, carnalCl?.id, {
     ...baseTraits,
-    beautyClass: pickRandom(BEAUTY_NOTES)!,
-    sexualityBonus: Math.floor(Math.random() * 9) - 3,
+    beautyModifier: 0,
+    beautyClass: deriveBeautyClass(abilityScores, 0),
+    sexualityBonus:
+      level < 5 ? 2 : level < 10 ? 3 : level < 14 ? 4 : level < 18 ? 5 : 6,
     attraction: pickRandom(ATTRACTIONS)!,
     repulsion: pickRandom(REPULSIONS)!,
     sexualMorality: pickRandom(MORALITIES)!,
@@ -210,7 +207,9 @@ export function generateRandomCharacter(
     name: randomName(),
     pronouns,
     genderIdentity,
-    level: rollLevel(f),
+    level,
+    abilityScores,
+    endowment: rollRandomEndowmentForBiologicalSex(genderIdentity),
     adventuringClass: adv,
     background: bg,
     species: sp.id,

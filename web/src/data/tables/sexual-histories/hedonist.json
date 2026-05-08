@@ -1,0 +1,86 @@
+{
+  "id": "hedonist",
+  "name": "Hedonist",
+  "description": "You have lived a life devoted to the unrestrained pursuit of pleasure, chasing every sensation and experience without shame.",
+  "eroticArts": [
+    "Seduction",
+    "Exhibitionism",
+    "Erogeny"
+  ],
+  "positionProficiencies": {
+    "tiers": [
+      "Basic",
+      "Advanced",
+      "Improvised"
+    ]
+  },
+  "carnalTraits": [
+    "Party Animal",
+    "Never Enough"
+  ],
+  "features": {
+    "level1": "Stranger's Welcome",
+    "level3": "Crowd Igniter",
+    "level5": "Legendary Night"
+  },
+  "equipment": [
+    "Flashy clothes",
+    "3 prophylactics",
+    "30 gp",
+    "Engraved tankard"
+  ],
+  "personality": {
+    "traits": [
+      "Life's a party and I'm the guest of honor.",
+      "I never met a stranger—only lovers I haven't bedded yet.",
+      "I collect stories the way others collect scars.",
+      "If it's worth doing, it's worth doing loudly.",
+      "Tomorrow's for regrets; tonight is for pleasure.",
+      "I live for the moment someone's eyes light up when they see me.",
+      "Rules are for people who don't know how to have fun.",
+      "My reputation arrives ten minutes before I do."
+    ],
+    "ideals": [
+      {
+        "text": "Freedom. No chains, no shame, no regrets.",
+        "alignment": "Chaotic"
+      },
+      {
+        "text": "Joy. The world is better when everyone's smiling and satisfied.",
+        "alignment": "Good"
+      },
+      {
+        "text": "Legend. I want my name whispered in every tavern from here to the horizon.",
+        "alignment": "Any"
+      },
+      {
+        "text": "Connection. Every body is a new story, every heart a new friend.",
+        "alignment": "Neutral"
+      },
+      {
+        "text": "Excess. Moderation is for monks.",
+        "alignment": "Chaotic"
+      },
+      {
+        "text": "Selfishness. I'm here for a good time; not for you, just for me.",
+        "alignment": "Evil"
+      }
+    ],
+    "bonds": [
+      "There's one tavern that will always have my back—and my tab running.",
+      "A former lover swore they'd kill me if they ever saw me again… worth the risk.",
+      "My crew of drinking and bedding buddies would follow me into any party.",
+      "I'm searching for the partner who finally made me feel something deeper.",
+      "I owe a dangerous crime lord for one too many \"free\" nights.",
+      "My family thinks I'm dead; I like it that way."
+    ],
+    "flaws": [
+      "I can't say no to a pretty face or a dare.",
+      "I forget names five minutes after the clothes come off.",
+      "I'll risk everything for one more thrill.",
+      "My mouth starts parties my body can't always finish.",
+      "I leave a trail of broken hearts and jealous lovers wherever I go.",
+      "Hangovers? What hangovers? I just keep going."
+    ]
+  }
+}

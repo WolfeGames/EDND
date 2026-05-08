@@ -1,0 +1,87 @@
+{
+  "id": "breeding-stock",
+  "name": "Breeding Stock",
+  "description": "You were kept as a source of strong breeding or sought out to enrich bloodlines.",
+  "eroticArts": [
+    "Husbandry"
+  ],
+  "positionProficiencies": {
+    "tiers": [
+      "Basic",
+      "Advanced"
+    ],
+    "specific": [
+      "Stud Mount",
+      "Breeder's Press"
+    ]
+  },
+  "carnalTraits": [
+    "Fertile",
+    "Endowed"
+  ],
+  "features": {
+    "level1": "Prized Seed",
+    "level3": "Virility Surge",
+    "level5": "Legacy Eternal"
+  },
+  "equipment": [
+    "Ornamental robe accentuating physique",
+    "Symbol of ownership",
+    "2 erotic oils",
+    "50 gp in jewelry/coin"
+  ],
+  "personality": {
+    "traits": [
+      "I take great pleasure in providing my body to further my bloodline of greatness.",
+      "I provide my body for breeding out of necessity, knowing it keeps me safe in some way.",
+      "I breed offspring to raise as followers for my grand design.",
+      "Breeding is an expression of love for the world, my lover, or my family.",
+      "I have no choice. This is my lot. I am resigned to it.",
+      "I have a distinct desire to constantly breed, and I can't control it.",
+      "I am very selective in who I breed with. Only the finest mates will do.",
+      "Despite my station, I have a deep love interest, and I would only give my body to them if it were possible."
+    ],
+    "ideals": [
+      {
+        "text": "Life. To bring and give life is the ultimate calling.",
+        "alignment": "Good"
+      },
+      {
+        "text": "Family. My body for my family. Nothing else matters.",
+        "alignment": "Any"
+      },
+      {
+        "text": "Influence. The more of my offspring in the world, the more power I will inevitably gain.",
+        "alignment": "Evil"
+      },
+      {
+        "text": "Duty. It is my duty to provide life for my family, whether in the bedchamber or the nursery.",
+        "alignment": "Lawful"
+      },
+      {
+        "text": "Purity. I keep my bloodline pure by ensuring those I breed with are of the highest quality.",
+        "alignment": "Neutral"
+      },
+      {
+        "text": "Glory. I earned my place as the finest breeding stock in the land, and I will enjoy my reward.",
+        "alignment": "Chaotic"
+      }
+    ],
+    "bonds": [
+      "My position cements my family's alliance with another.",
+      "Nothing is greater to me than my familial duty.",
+      "My loyalty to my owner is unwavering.",
+      "I will break free from this station, one way or another.",
+      "I am in love with someone that I am not permitted to breed with.",
+      "I will further my glorious bloodline by any means necessary."
+    ],
+    "flaws": [
+      "I hate the process of breeding, despite loving the outcome.",
+      "I cannot perform unless I am partially intoxicated.",
+      "My self-worth revolves around the number of suitors wanting to breed with me.",
+      "I would rather masturbate than be forced to have sex with other people.",
+      "My station is shameful in the eyes of those I look up to.",
+      "I will never breed with a different species than me for fear of dirtying my bloodline."
+    ]
+  }
+}

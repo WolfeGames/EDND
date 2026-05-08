@@ -1,0 +1,88 @@
+{
+  "id": "chaste-virgin",
+  "name": "Chaste Virgin",
+  "description": "You have taken a solemn vow of chastity. Your virginity remains intact while indulging others through teasing and non-penetrative acts.",
+  "eroticArts": [
+    "Erotica",
+    "Anticipation"
+  ],
+  "positionProficiencies": {
+    "tiers": [
+      "Basic",
+      "Advanced"
+    ],
+    "specific": [
+      "Tease Mount",
+      "Denial Lotus"
+    ]
+  },
+  "carnalTraits": [
+    "Virtuous",
+    "Distracting"
+  ],
+  "features": {
+    "level1": "Chaste Bliss + Vow of Chastity",
+    "level3": "Edge Mastery",
+    "level5": "Greater Vow"
+  },
+  "equipment": [
+    "Plain white robe/tunic",
+    "Symbol of vow",
+    "Chastity belt/cage",
+    "Vial of nullification salts"
+  ],
+  "personality": {
+    "traits": [
+      "I'm fiercely protective of my chastity, even if it means violence.",
+      "I have great pride in maintaining my chastity in a world that gives it away so freely.",
+      "I blush and become flustered when sexual topics are broached, but I try to maintain my composure.",
+      "I have strong feelings concerning the sanctity of love and relationships, and I judge others strongly based on their feelings thereof.",
+      "I'm deeply curious about intimacy and long to discuss it openly.",
+      "I idealize romance and sexuality, believing it should be pure and untainted.",
+      "I use my limits to tease and titillate others, knowing I'll never give them what they desire.",
+      "I am anxious about physical affection, despite how good it may feel."
+    ],
+    "ideals": [
+      {
+        "text": "Purity. I believe in preserving the body, and thereby the soul, for the right person.",
+        "alignment": "Good"
+      },
+      {
+        "text": "Patience. I want love to come naturally, without rushing into physical affection.",
+        "alignment": "Neutral"
+      },
+      {
+        "text": "Faith. My faith keeps me grounded and safe from breaking my vow of chastity.",
+        "alignment": "Lawful"
+      },
+      {
+        "text": "Self-Discipline. I control my desires and actions. Resisting temptation strengthens me.",
+        "alignment": "Lawful"
+      },
+      {
+        "text": "Temptation. I use my temptation to tempt others, knowing I will never give them what they desire.",
+        "alignment": "Chaotic"
+      },
+      {
+        "text": "Romanticism. I believe in love as something sacred, to be shared only with the perfect companion.",
+        "alignment": "Any"
+      }
+    ],
+    "bonds": [
+      "I am saving myself for the return of my long-lost love.",
+      "My chastity is for my deity, and I may never break it for fear of losing my connection to the divine.",
+      "My family expects me to remain pure, and I do not want to disappoint them.",
+      "I am waiting for someone who will value me for things beyond what my flesh can offer.",
+      "I will give my virginity to whomever proves the strongest and most capable.",
+      "My chastity is ordained by the church, and only the church can take it from me."
+    ],
+    "flaws": [
+      "I am often curious about the feelings I experience when aroused.",
+      "I don't trust the interest others show for me. I believe they only want my body.",
+      "I get a thrill showing off for those that want me, knowing I will never give them what they desire.",
+      "My taste for intoxicants will likely end my chastity.",
+      "I have a hard time connecting with others due to my rigid belief system.",
+      "I judge people harshly while also yearning for their personal freedom."
+    ]
+  }
+}

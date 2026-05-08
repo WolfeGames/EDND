@@ -1,0 +1,89 @@
+{
+  "id": "harem-tender",
+  "name": "Harem Tender",
+  "description": "You served as caretaker, coordinator, or favored intimate within a harem, managing pleasure and harmony among multiple partners.",
+  "eroticArts": [
+    "Seduction",
+    "Erogeny",
+    "Restraint"
+  ],
+  "positionProficiencies": {
+    "tiers": [
+      "Basic",
+      "Advanced"
+    ],
+    "specific": [
+      "Harem Pile",
+      "Shared Throne"
+    ]
+  },
+  "carnalTraits": [
+    "Group Harmony",
+    "Trained Refractory"
+  ],
+  "features": {
+    "level1": "Harem Network",
+    "level3": "Shared Ecstasy",
+    "level5": "Sovereign's Favor"
+  },
+  "equipment": [
+    "Sheer silks",
+    "Golden anklets",
+    "Scented oils",
+    "60 gp"
+  ],
+  "personality": {
+    "traits": [
+      "I read a room's desires before anyone speaks.",
+      "Jealousy is a poison I neutralize with a smile and a touch.",
+      "I take quiet pride in making everyone feel like the favorite.",
+      "Harmony among lovers is the most beautiful music.",
+      "I remember every preference of every lover I've tended.",
+      "I am discreet to a fault – secrets die with me.",
+      "I orchestrate pleasure the way a conductor leads an orchestra.",
+      "I find deep satisfaction in service, even when unseen."
+    ],
+    "ideals": [
+      {
+        "text": "Harmony. Many hearts can beat as one with the right guidance.",
+        "alignment": "Lawful"
+      },
+      {
+        "text": "Pleasure. Everyone deserves to feel desired and satisfied.",
+        "alignment": "Good"
+      },
+      {
+        "text": "Order. A well-run harem is a masterpiece of civilization.",
+        "alignment": "Lawful"
+      },
+      {
+        "text": "Devotion. True loyalty is shown through care for all, not just one.",
+        "alignment": "Neutral"
+      },
+      {
+        "text": "Excess. Why choose one when many can share bliss?",
+        "alignment": "Chaotic"
+      },
+      {
+        "text": "Power. Controlling desire is the ultimate control.",
+        "alignment": "Evil"
+      }
+    ],
+    "bonds": [
+      "The sovereign I once served still holds my heart – or my contract.",
+      "I swore to protect the other members of my former harem with my life.",
+      "A rival tender seeks to ruin my reputation out of jealousy.",
+      "I search for the one lover who saw me as more than a servant.",
+      "My current patron demands absolute exclusivity – a vow I struggle to keep.",
+      "I owe a life-debt to the harem that raised and trained me."
+    ],
+    "flaws": [
+      "I become anxious when attention is focused on only one person.",
+      "I manipulate emotions without realizing it, even among friends.",
+      "I judge monogamous relationships as inefficient or selfish.",
+      "Old jealousies from the harem still haunt my dreams.",
+      "I keep score of favors and pleasures owed.",
+      "I struggle to form deep bonds with only one partner."
+    ]
+  }
+}

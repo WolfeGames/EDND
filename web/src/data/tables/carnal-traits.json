@@ -1,24 +1,164 @@
 {
   "carnalTraits": [
     {
+      "id": "erogenous-body",
+      "name": "Erogenous Body",
+      "description": "Your body was built for sensuality and pleasure. +1 Beauty Class. +1 Erogenous Zone. Your erogenous zones cause you to receive +1 pleasure when stimulated."
+    },
+    {
       "id": "accommodating",
       "name": "Accommodating",
-      "description": "You are particularly accommodating to larger partners or objects. Ignore 1 size penalty when receiving penetration. Add your Sexuality bonus to any Con save required by extreme size differences."
+      "description": "You've been called a lot of things: size queen, spear swallower, hollowed out. You can handle a lot more than the average of your kind. Reduce difficulty of size-difference penetration checks by 2."
+    },
+    {
+      "id": "endowed",
+      "name": "Endowed",
+      "description": "Your primary sexual organs are noticeably larger than average. Increase your genital or bust size by 1 size category, up to gargantuan."
+    },
+    {
+      "id": "petite-frame",
+      "name": "Petite Frame",
+      "description": "You are particularly dainty in build. You count as one size smaller for penetration purposes when receiving. You grant advantage on checks made for Advanced positions that require holding you aloft."
+    },
+    {
+      "id": "robust-build",
+      "name": "Robust Build",
+      "description": "You have a hardy, healthy-looking body. Checks made for positions that require holding you aloft are made at disadvantage, but you have advantage on Position checks made to pin or restrain your partner."
+    },
+    {
+      "id": "graceful",
+      "name": "Graceful",
+      "description": "You move with natural poise and sensuality. You have advantage on Acrobatics or Performance checks made with your Sexuality bonus. If you use your Dexterity modifier for your Beauty Class, increase your Beauty Class by 1."
+    },
+    {
+      "id": "hyper-sensitive",
+      "name": "Hyper-Sensitive",
+      "description": "You are sensitive to touch...and to any other form of pleasure. You gain +1 Pleasure Point whenever you would take pleasure, but you have disadvantage on Orgasm Saving Throws."
+    },
+    {
+      "id": "resilient-flesh",
+      "name": "Resilient Flesh",
+      "description": "You are inured to the ravages of pleasure. Reduce pleasure taken by 1, to a minimum of 1."
+    },
+    {
+      "id": "high-libido",
+      "name": "High Libido",
+      "description": "Your lust burns bright, day in and day out. When you recover pleasure points, you recover 1 additional pleasure point per die rolled."
+    },
+    {
+      "id": "low-libido",
+      "name": "Low Libido",
+      "description": "It's not that you don't love sex, it's just that you can't get your blood going for it very easily. When you roll to resist Arousal, you always roll twice and use the highest result. You can still gain disadvantage on this roll from other effects."
+    },
+    {
+      "id": "tease",
+      "name": "Tease",
+      "description": "You are naturally skilled at building anticipation. Advantage on checks to apply the Aroused condition without climaxing. +1 Beauty Class."
+    },
+    {
+      "id": "prude",
+      "name": "Prude",
+      "description": "+2 to saving throws against unwanted Arousal, but -2 to sexual initiative."
+    },
+    {
+      "id": "voyeur",
+      "name": "Voyeur",
+      "description": "You gain +1d4 non-orgasmic pleasure when watching others engage in sexual activity and automatically apply the Aroused condition when sensual activity occurs where you can perceive it."
+    },
+    {
+      "id": "exhibitionist",
+      "name": "Exhibitionist",
+      "description": "You love being observed during sexual activity. +1 Beauty Class, and when you deal or receive pleasure while others are watching, you deal and receive 1 additional pleasure per die rolled."
+    },
+    {
+      "id": "service-oriented",
+      "name": "Service-Oriented",
+      "description": "You gain +1 to all checks made while pleasuring someone else."
+    },
+    {
+      "id": "dominant",
+      "name": "Dominant",
+      "description": "You naturally take control of the situation at hand. You have advantage on checks to apply the Restrained condition during sex, and may apply your Sexuality bonus to any Intimidation check made during sex, even if you are not proficient in it."
+    },
+    {
+      "id": "submissive",
+      "name": "Submissive",
+      "description": "You love being at the mercy of someone else. Choose the Restrained, Feared, Stunned, Sleep, or Grappled condition. When you gain one of those conditions, you also gain the Aroused condition. You may take this trait more than once."
+    },
+    {
+      "id": "taboo-breaker",
+      "name": "Taboo Breaker",
+      "description": "You suffer no penalties when engaging in taboos or fetishes."
+    },
+    {
+      "id": "specialist",
+      "name": "Specialist",
+      "description": "Choose one specific fetish or act. You gain +2 to all checks involving that act."
+    },
+    {
+      "id": "monstrous-attraction",
+      "name": "Monstrous Attraction",
+      "description": "You treat monstrous and aberrant creatures as normal for attraction purposes."
+    },
+    {
+      "id": "xenophile",
+      "name": "Xenophile",
+      "description": "Ignore racial/species-based aversion penalties to Beauty Class and Attraction."
+    },
+    {
+      "id": "size-queen-king",
+      "name": "Size Queen / King",
+      "description": "You are particularly attracted to creatures one or more size categories larger or smaller than yourself. Creatures have increased Beauty Class by 1 per size category larger than you they are."
+    },
+    {
+      "id": "sapiosexual-carnal",
+      "name": "Sapiosexual",
+      "description": "You are attracted to particularly intelligent people. Creatures with Intelligence score higher than yours have advantage on Charisma checks against you."
+    },
+    {
+      "id": "quick-recovery",
+      "name": "Quick Recovery",
+      "description": "You recharge fast. Reduce Refractory period duration by half."
+    },
+    {
+      "id": "marathon-lover",
+      "name": "Marathon Lover",
+      "description": "You have advantage on all checks made to maintain pace during long sexual encounters."
+    },
+    {
+      "id": "one-shot-wonder",
+      "name": "One-Shot Wonder",
+      "description": "Your first climax in an encounter is especially powerful (roll Orgasm Table with advantage). Your Refractory period is increased by a number of minutes equal to twice the roll on the Orgasm table."
+    },
+    {
+      "id": "edged-expert",
+      "name": "Edged Expert",
+      "description": "You love being on the edge of climax and thrive in that place. Advantage on all skill checks made while Edged."
+    },
+    {
+      "id": "striking-features",
+      "name": "Striking Features",
+      "description": "You have features that cause you to stand out in a crowd. +2 Beauty Class."
+    },
+    {
+      "id": "exotic-beauty",
+      "name": "Exotic Beauty",
+      "description": "+1 Beauty Class. You count as both your own species and one other species for attraction purposes."
+    },
+    {
+      "id": "androgynous",
+      "name": "Androgynous",
+      "description": "You combine the aesthetics of both genders, or no gender, and ignore aversions based on gender. However, you do not gain any benefit of attraction based on gender."
+    },
+    {
+      "id": "tattooed-scarred",
+      "name": "Tattooed / Scarred",
+      "description": "Your tattoos or scars are noteworthy and impressive to those who appreciate them. +1 Beauty Class to those who appreciate body modifications or battle scars."
     },
     {
       "id": "divine-beauty",
       "name": "Divine Beauty",
       "description": "While you have at least one unexpended spell slot, your Beauty Class increases by 2. You may expend one slot to dazzle creatures in 30 ft (Cha save or become Attracted for 1 hour; opposing alignment immune)."
-    },
-    {
-      "id": "endowed",
-      "name": "Endowed",
-      "description": "When determining phallic length or bust size, add +1d4 to the roll (or use Con mod +4 for bust size, whichever is higher)."
-    },
-    {
-      "id": "erogenous-body",
-      "name": "Erogenous Body",
-      "description": "You have twice your Sexuality bonus in erogenous zones. Your touch deals 1 non-orgasmic pleasure to any creature that is at least Piqued by you."
     },
     {
       "id": "fertile",
@@ -44,6 +184,11 @@
       "id": "party-animal",
       "name": "Party Animal",
       "description": "You have advantage on Seduction checks made during or immediately after any social gathering, revel, or hunt for new partners."
+    },
+    {
+      "id": "sensitive",
+      "name": "Sensitive",
+      "description": "You pick up on subtle shifts in mood and desire; you have advantage on Wisdom (Insight) checks to read a willing partner's comfort or arousal during intimate contact."
     },
     {
       "id": "taboo-free",

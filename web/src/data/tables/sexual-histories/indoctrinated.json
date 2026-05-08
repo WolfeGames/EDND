@@ -1,0 +1,87 @@
+{
+  "id": "indoctrinated",
+  "name": "Indoctrinated",
+  "description": "You were raised in a sexually open, free-love society or commune where taboos were minimal and group intimacy was normalized from a young age.",
+  "eroticArts": [
+    "Erogeny",
+    "Seduction"
+  ],
+  "positionProficiencies": {
+    "tiers": [
+      "Basic",
+      "Advanced"
+    ],
+    "specific": [
+      "Communal Circle"
+    ]
+  },
+  "carnalTraits": [
+    "Taboo-Free",
+    "Group Harmony"
+  ],
+  "features": {
+    "level1": "Communal Bonds",
+    "level3": "Shared Ecstasy",
+    "level5": "Collective Climax"
+  },
+  "equipment": [
+    "Communal tattoo",
+    "Shared silk sheets",
+    "Communal oil",
+    "20 gp"
+  ],
+  "personality": {
+    "traits": [
+      "Love is meant to be shared, not hoarded.",
+      "I see nothing shameful in pleasure.",
+      "I am comfortable with my body and the bodies of others.",
+      "Touch is the most honest form of communication.",
+      "I judge people by how freely they give and receive pleasure.",
+      "I believe jealousy is a poison that destroys joy.",
+      "I am open about my desires and expect the same from others.",
+      "Sex is celebration, not something to be hidden."
+    ],
+    "ideals": [
+      {
+        "text": "Freedom. No one should be ashamed of their desires.",
+        "alignment": "Chaotic"
+      },
+      {
+        "text": "Community. Pleasure is best when shared with many.",
+        "alignment": "Good"
+      },
+      {
+        "text": "Equality. All bodies and desires are valid.",
+        "alignment": "Neutral"
+      },
+      {
+        "text": "Openness. Honesty about desire builds stronger bonds.",
+        "alignment": "Good"
+      },
+      {
+        "text": "Joy. Life is too short for repressed pleasure.",
+        "alignment": "Chaotic"
+      },
+      {
+        "text": "Harmony. When everyone is satisfied, the group thrives.",
+        "alignment": "Lawful"
+      }
+    ],
+    "bonds": [
+      "The commune that raised me is still my true family.",
+      "I have many lovers from my upbringing whom I still care for.",
+      "I want to create a new community based on the same principles.",
+      "I carry the teachings of my mentors in my heart.",
+      "I fear returning to a world of shame and repression.",
+      "I am searching for others who were raised like I was."
+    ],
+    "flaws": [
+      "I sometimes forget that not everyone is as open as I am.",
+      "I can be dismissive of monogamous relationships.",
+      "I struggle with possessiveness when I care deeply for someone.",
+      "I judge people who are sexually repressed.",
+      "I have difficulty understanding jealousy.",
+      "I can be too casual about intimacy with new people."
+    ]
+  }
+}

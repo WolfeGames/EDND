@@ -1,0 +1,87 @@
+{
+  "id": "cult-seducer",
+  "name": "Cult Seducer",
+  "description": "You used sex as a tool to lure, convert, and bind others into a forbidden cult or cause.",
+  "eroticArts": [
+    "Seduction",
+    "Erotica"
+  ],
+  "positionProficiencies": {
+    "tiers": [
+      "Basic"
+    ],
+    "specific": [
+      "Ritual Altar",
+      "Binding Circle"
+    ]
+  },
+  "carnalTraits": [
+    "Sexual Indoctrination",
+    "Forbidden Knowledge"
+  ],
+  "features": {
+    "level1": "Dark Reputation",
+    "level3": "Mesmerizing Rite",
+    "level5": "Carnal Conjuration"
+  },
+  "equipment": [
+    "Black ceremonial robes",
+    "Disguised unholy symbol",
+    "Aphrodisiac incense",
+    "40 gp strange coins"
+  ],
+  "personality": {
+    "traits": [
+      "My smile is warm; my eyes are hungry.",
+      "I always speak as though the listener already belongs to me.",
+      "Every secret you tell me becomes a prayer.",
+      "I taste forbidden knowledge on everyone's skin.",
+      "My sighs and moans echo with distant chanting when I am aroused.",
+      "I collect devotees the way others collect coins.",
+      "I never break eye contact during the act.",
+      "People say my voice lingers in their dreams for weeks."
+    ],
+    "ideals": [
+      {
+        "text": "Revelation. The truth is only found in surrender.",
+        "alignment": "Any"
+      },
+      {
+        "text": "Dominion. Mortal souls are clay for the chosen.",
+        "alignment": "Evil"
+      },
+      {
+        "text": "Transcendence. Pain and pleasure open the same gate.",
+        "alignment": "Chaotic"
+      },
+      {
+        "text": "Obedience. True freedom lies in surrender to one capable of command.",
+        "alignment": "Lawful"
+      },
+      {
+        "text": "Knowledge. Some truths can only be learned naked and screaming.",
+        "alignment": "Neutral"
+      },
+      {
+        "text": "Ascension. I will birth a great evil (or great good) with my body.",
+        "alignment": "Chaotic"
+      }
+    ],
+    "bonds": [
+      "My original cult still hunts me for the secrets I stole.",
+      "I am bound by blood-oath to a demon I once summoned in ecstasy.",
+      "I seek the one acolyte who saw through my lies and embraced the cause…and my flesh.",
+      "Secret taboos are etched into my flesh; I want to add more.",
+      "I must corrupt or redeem the paladin who once spared my life.",
+      "My child was taken by the cult at birth; I will get them back."
+    ],
+    "flaws": [
+      "I cannot resist converting those that resist me.",
+      "I sometimes speak vile and erotic thoughts, but do not remember them afterward.",
+      "Betrayal excites me more than loyalty.",
+      "I keep trophies from every soul I break.",
+      "I crave the burn of something sacred on my profane flesh.",
+      "I'm never sure whether I serve the power or the power serves me."
+    ]
+  }
+}

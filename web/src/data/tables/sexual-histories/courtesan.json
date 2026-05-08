@@ -1,0 +1,90 @@
+{
+  "id": "courtesan",
+  "name": "Courtesan",
+  "description": "You worked professionally as a companion, rising from dockside work to guild recognition.",
+  "eroticArts": [
+    "Seduction",
+    "Exhibitionism",
+    "Erogeny"
+  ],
+  "positionProficiencies": {
+    "tiers": [
+      "Basic",
+      "Advanced"
+    ],
+    "specific": [
+      "Lotus",
+      "Suspension"
+    ]
+  },
+  "carnalTraits": [
+    "High Class",
+    "Carnal Talents",
+    "Cosmopolitan"
+  ],
+  "features": {
+    "level1": "Courtesan's Coin and Courtesan's Allure",
+    "level3": "Guild Contacts & Houses of Ill Repute",
+    "level5": "Mass Allure"
+  },
+  "equipment": [
+    "Fine silk robe",
+    "Perfume",
+    "Silk rope (50 ft)",
+    "50 gp jewelry"
+  ],
+  "personality": {
+    "traits": [
+      "I can find something beautiful in everyone.",
+      "Every conversation is a performance, and I am always on stage.",
+      "I never forget a face—or any body part.",
+      "I prefer innuendo to open communication.",
+      "My laughter is a shield and refuge.",
+      "I collect secrets the way others collect coin.",
+      "I dress to be remembered.",
+      "I am generous to those who please me and merciless to those who don't."
+    ],
+    "ideals": [
+      {
+        "text": "Freedom. My body, my rules.",
+        "alignment": "Chaotic"
+      },
+      {
+        "text": "Power. Desire is the true currency of the world.",
+        "alignment": "Any"
+      },
+      {
+        "text": "Beauty. Life is too short for anything less than exquisite.",
+        "alignment": "Neutral"
+      },
+      {
+        "text": "Sisterhood. Every harlot is kin to me, and I protect my own.",
+        "alignment": "Lawful"
+      },
+      {
+        "text": "Pleasure. The pursuit of ecstasy is the highest calling.",
+        "alignment": "Chaotic"
+      },
+      {
+        "text": "Redemption. Even the coldest heart can be warmed by the right touch.",
+        "alignment": "Good"
+      }
+    ],
+    "bonds": [
+      "I owe my life to the madam who bought my contract.",
+      "A powerful noble keeps my true name in a locked box; I will do anything to retrieve it.",
+      "My family needs every coin I earn, and I work hard to support them.",
+      "I am secretly in love with a client who can never return my feelings.",
+      "I owe the guild too much, and I will be working off my debt until I die.",
+      "I seek the one patron who saw the real me beneath the paint and perfume."
+    ],
+    "flaws": [
+      "I fall in love far too easily.",
+      "I can't resist a dangerous liaison.",
+      "My pride will not let me accept charity, even when I'm starving.",
+      "I keep trophies from every lover; some are dangerous to possess.",
+      "I am addicted to the thrill of being desired.",
+      "I trust nobody."
+    ]
+  }
+}

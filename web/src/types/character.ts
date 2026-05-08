@@ -18,6 +18,31 @@ export type CarnalClassId = string
 
 export type SexualHistoryId = string
 
+export interface AbilityScores {
+  strength: number
+  dexterity: number
+  constitution: number
+  intelligence: number
+  wisdom: number
+  charisma: number
+}
+
+export type EndowmentSize =
+  | 'Tiny'
+  | 'Small'
+  | 'Medium'
+  | 'Large'
+  | 'Huge'
+  | 'Gargantuan'
+
+export type EndowmentAnatomy = 'neither' | 'breasts' | 'phallus' | 'both'
+
+export interface EndowmentProfile {
+  anatomy: EndowmentAnatomy
+  breastsSize?: EndowmentSize
+  phallusSize?: EndowmentSize
+}
+
 
 
 /** Chosen or rolled from the active sexual history's personality tables. */
@@ -46,9 +71,11 @@ export interface EroticTraits {
 
   eroticToolProficiencies: string[]
 
-  /** Narrative or mechanical tier — align with your Beauty Class rules later. */
+  /** Calculated: 10 + highest ability mod + modifiers. */
+  beautyClass: number
 
-  beautyClass: string
+  /** Other modifiers from features, gear, magic, etc. */
+  beautyModifier: number
 
   /** Numeric or rules-defined bonus; keep flexible until mechanics are wired. */
 
@@ -84,7 +111,10 @@ export interface EdndCharacter {
 
   pronouns: string
 
-  /** Gender and gender identity (preset label or custom text). */
+  /**
+   * Biological sex for body/endowment rules (Male, Female, Nonbinary, Transgender).
+   * Pronouns and social identity are separate; phallus endowment is only for Male or Transgender.
+   */
 
   genderIdentity: string
 
@@ -93,6 +123,8 @@ export interface EdndCharacter {
   adventuringClass: AdventuringClassId
 
   level: number
+  abilityScores: AbilityScores
+  endowment: EndowmentProfile
 
   background: BackgroundId
 
@@ -124,9 +156,10 @@ export function createEmptyEroticTraits(): EroticTraits {
 
     eroticToolProficiencies: [],
 
-    beautyClass: '',
+    beautyClass: 10,
+    beautyModifier: 0,
 
-    sexualityBonus: 0,
+    sexualityBonus: 2,
 
     attraction: '',
 
@@ -159,6 +192,17 @@ export function createEmptyCharacter(): EdndCharacter {
     adventuringClass: '',
 
     level: 1,
+    abilityScores: {
+      strength: 10,
+      dexterity: 10,
+      constitution: 10,
+      intelligence: 10,
+      wisdom: 10,
+      charisma: 10,
+    },
+    endowment: {
+      anatomy: 'neither',
+    },
 
     background: '',
 
