@@ -1,5 +1,6 @@
 import { createEmptyCharacter, type EdndCharacter } from '../types/character'
 import { applyDerivedCharacterRules } from './applyCharacterRules'
+import { normalizedEndowment } from './endowment'
 import { mergeTableProficiencies } from './mergeEroticProficiencies'
 import { clearDraft, getFromLibrary, loadDraft } from './characterStorage'
 
@@ -34,6 +35,7 @@ export function hydrateCharacterFromBrowserLocation(): EdndCharacter {
   )
   return applyDerivedCharacterRules({
     ...raw,
+    endowment: normalizedEndowment(raw.genderIdentity, raw.endowment),
     eroticTraits: mergedTraits,
   })
 }

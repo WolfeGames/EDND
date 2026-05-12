@@ -41,6 +41,9 @@ export interface EndowmentProfile {
   anatomy: EndowmentAnatomy
   breastsSize?: EndowmentSize
   phallusSize?: EndowmentSize
+  /** Same 1d6 size categories as breasts/phallus; not used for biological Male in this app. */
+  vaginaPresent?: boolean
+  vaginaSize?: EndowmentSize
 }
 
 

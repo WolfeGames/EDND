@@ -27,11 +27,12 @@ import {
 } from '../lib/characterStorage'
 import { rollAllAbilityScores, rollStat4d6DropLowest } from '../lib/abilityScores'
 import {
-  coerceEndowmentForBiologicalSex,
   ENDOWMENT_SIZE_RULE,
   formatEndowmentLines,
   getAllowedAnatomiesForBiologicalSex,
+  normalizedEndowment,
   rollEndowmentSize,
+  vaginaAllowedForBiologicalSex,
 } from '../lib/endowment'
 import { createEmptyCharacter, type EdndCharacter, type SexualHistoryPersonality } from '../types/character'
 import './CharacterCreatorPage.css'
@@ -165,18 +166,28 @@ export function CharacterCreatorPage() {
   const endowmentReadout = useMemo(
     () =>
       formatEndowmentLines(
-        coerceEndowmentForBiologicalSex(character.genderIdentity, character.endowment),
+        normalizedEndowment(character.genderIdentity, character.endowment),
       ),
     [character.genderIdentity, character.endowment],
   )
 
+  const vaginaAllowed = useMemo(
+    () => vaginaAllowedForBiologicalSex(character.genderIdentity),
+    [character.genderIdentity],
+  )
+
+  const vaginaChecked =
+    character.endowment.vaginaPresent ?? character.genderIdentity.trim() === 'Female'
+
   useLayoutEffect(() => {
     setCharacter((c) => {
-      const next = coerceEndowmentForBiologicalSex(c.genderIdentity, c.endowment)
+      const next = normalizedEndowment(c.genderIdentity, c.endowment)
       if (
         next.anatomy === c.endowment.anatomy &&
         next.breastsSize === c.endowment.breastsSize &&
-        next.phallusSize === c.endowment.phallusSize
+        next.phallusSize === c.endowment.phallusSize &&
+        next.vaginaPresent === c.endowment.vaginaPresent &&
+        next.vaginaSize === c.endowment.vaginaSize
       ) {
         return c
       }
@@ -530,8 +541,8 @@ export function CharacterCreatorPage() {
               ))}
             </select>
             <p className="hint">
-              Vagina traits come later. {ENDOWMENT_SIZE_RULE} Female and Nonbinary characters
-              cannot have a phallus (only breasts and/or neither).
+              {ENDOWMENT_SIZE_RULE} Female and Nonbinary characters cannot have a phallus (only
+              breasts and/or neither). When vagina applies to your biological sex, set it below.
             </p>
             <div className="hint" style={{ marginTop: '0.35rem' }}>
               <strong>Sheet readout:</strong>
@@ -616,6 +627,62 @@ export function CharacterCreatorPage() {
               >
                 Roll both endowments
               </button>
+            </div>
+          )}
+          {vaginaAllowed && (
+            <div className="creator-field">
+              <label className="creator-checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={vaginaChecked}
+                  onChange={(e) =>
+                    setCharacter((c) => ({
+                      ...c,
+                      endowment: {
+                        ...c.endowment,
+                        vaginaPresent: e.target.checked,
+                        vaginaSize: e.target.checked ? c.endowment.vaginaSize : undefined,
+                      },
+                    }))
+                  }
+                />
+                Has vagina (same 1d6 size categories)
+              </label>
+              <p className="hint" style={{ marginTop: '0.35rem' }}>
+                Not modeled for biological Male. For Female, this defaults to on until you turn it
+                off. Roll size when you are ready.
+              </p>
+              {vaginaChecked && (
+                <div
+                  className="creator-field creator-field--inline-actions"
+                  style={{ marginTop: '0.5rem' }}
+                >
+                  <label>Vagina endowment (1d6)</label>
+                  <div className="creator-inline-row">
+                    <input
+                      type="text"
+                      readOnly
+                      value={character.endowment.vaginaSize ?? 'Not rolled'}
+                    />
+                    <button
+                      type="button"
+                      className="btn"
+                      onClick={() =>
+                        setCharacter((c) => ({
+                          ...c,
+                          endowment: {
+                            ...c.endowment,
+                            vaginaPresent: true,
+                            vaginaSize: rollEndowmentSize(),
+                          },
+                        }))
+                      }
+                    >
+                      Roll vagina
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </section>

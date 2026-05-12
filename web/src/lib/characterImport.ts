@@ -65,6 +65,19 @@ export function parseCharacterJson(json: unknown): EdndCharacter {
     endowment.phallusSize = phallusSize as EdndCharacter['endowment']['phallusSize']
   }
 
+  const vp = endRaw.vaginaPresent
+  if (vp !== undefined && typeof vp !== 'boolean') {
+    throw new Error('Invalid endowment.vaginaPresent (must be boolean if set).')
+  }
+  if (vp !== undefined) endowment.vaginaPresent = vp
+  const vaginaSize = endRaw.vaginaSize
+  if (vaginaSize !== undefined) {
+    if (typeof vaginaSize !== 'string' || !SIZES.has(vaginaSize)) {
+      throw new Error(`Invalid endowment.vaginaSize: ${String(vaginaSize)}`)
+    }
+    endowment.vaginaSize = vaginaSize as EdndCharacter['endowment']['vaginaSize']
+  }
+
   const etRaw = json.eroticTraits
   if (!isRecord(etRaw)) throw new Error('Character JSON is missing "eroticTraits".')
   const emptyEt = createEmptyEroticTraits()

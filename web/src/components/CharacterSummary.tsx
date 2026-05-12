@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import { getCarnalClass, getSexualHistory, getSpecies } from '../data/registry'
 import {
-  coerceEndowmentForBiologicalSex,
   ENDOWMENT_SIZE_RULE,
   formatEndowmentLines,
+  normalizedEndowment,
 } from '../lib/endowment'
 import { formatRuleKey } from '../lib/formatRuleKey'
 import { parseFeatureLevelRequirement } from '../lib/parseFeatureLevelRequirement'
@@ -67,10 +67,7 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
     [historyRow],
   )
   const endowmentReadout = useMemo(() => {
-    const e = coerceEndowmentForBiologicalSex(
-      character.genderIdentity,
-      character.endowment,
-    )
+    const e = normalizedEndowment(character.genderIdentity, character.endowment)
     return formatEndowmentLines(e)
   }, [character.genderIdentity, character.endowment])
 
