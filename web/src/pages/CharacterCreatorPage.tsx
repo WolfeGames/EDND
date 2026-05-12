@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ChangeEventHandler } from 'react'
 import { ADVENTURING_CLASSES } from '../data/adventuringClasses'
 import { GENDERS } from '../data/identityOptions'
 import {
@@ -16,11 +16,16 @@ import {
   emptySexualHistoryPersonality,
   rollSexualHistoryPersonality,
 } from '../lib/rollSexualHistoryPersonality'
+import { applyDerivedCharacterRules } from '../lib/applyCharacterRules'
+import { hydrateCharacterFromBrowserLocation } from '../lib/characterBootstrap'
+import { parseCharacterJson } from '../lib/characterImport'
 import {
-  deriveBeautyClass,
-  rollAllAbilityScores,
-  rollStat4d6DropLowest,
-} from '../lib/abilityScores'
+  clearDraft,
+  downloadCharacterJson,
+  saveDraft,
+  upsertLibrary,
+} from '../lib/characterStorage'
+import { rollAllAbilityScores, rollStat4d6DropLowest } from '../lib/abilityScores'
 import {
   coerceEndowmentForBiologicalSex,
   ENDOWMENT_SIZE_RULE,
@@ -99,14 +104,6 @@ const ENDOWMENT_ANATOMY_OPTIONS: Array<{
   { value: 'both', label: 'Both' },
 ]
 
-function sexualityBonusForLevel(level: number): number {
-  if (level < 5) return 2
-  if (level < 10) return 3
-  if (level < 14) return 4
-  if (level < 18) return 5
-  return 6
-}
-
 function splitCsvTags(value: string): string[] {
   return value
     .split(',')
@@ -119,25 +116,16 @@ function joinCsvTags(items: string[]): string {
 }
 
 export function CharacterCreatorPage() {
-  const [character, setCharacter] = useState<EdndCharacter>(() => createEmptyCharacter())
+  const [character, setCharacter] = useState<EdndCharacter>(() =>
+    hydrateCharacterFromBrowserLocation(),
+  )
   const [step, setStep] = useState(0)
   const [copyHint, setCopyHint] = useState<string | null>(null)
-
-  const applyRules = (c: EdndCharacter): EdndCharacter => {
-    const sexualityBonus = sexualityBonusForLevel(c.level)
-    const beautyClass = deriveBeautyClass(c.abilityScores, c.eroticTraits.beautyModifier)
-    return {
-      ...c,
-      eroticTraits: {
-        ...c.eroticTraits,
-        sexualityBonus,
-        beautyClass,
-      },
-    }
-  }
+  const [persistHint, setPersistHint] = useState<string | null>(null)
+  const importInputRef = useRef<HTMLInputElement>(null)
 
   const withMergedProficiencies = (c: EdndCharacter): EdndCharacter =>
-    applyRules({
+    applyDerivedCharacterRules({
       ...c,
       eroticTraits: mergeTableProficiencies(
         c.species,
@@ -196,6 +184,13 @@ export function CharacterCreatorPage() {
     })
   }, [character.genderIdentity])
 
+  useEffect(() => {
+    const t = window.setTimeout(() => {
+      saveDraft(character)
+    }, 500)
+    return () => window.clearTimeout(t)
+  }, [character])
+
   const canProceed = (): boolean => {
     switch (step) {
       case 0:
@@ -218,9 +213,43 @@ export function CharacterCreatorPage() {
   }
 
   const handleStartOver = () => {
-    setCharacter(createEmptyCharacter())
+    if (
+      !window.confirm(
+        'Discard this sheet (including the autosaved draft on this device) and start fresh?',
+      )
+    ) {
+      return
+    }
+    clearDraft()
+    setCharacter(withMergedProficiencies(createEmptyCharacter()))
     setStep(0)
     setCopyHint(null)
+    setPersistHint(null)
+  }
+
+  const handleSaveToLibrary = () => {
+    upsertLibrary(character)
+    setPersistHint('Saved to this device.')
+    window.setTimeout(() => setPersistHint(null), 2500)
+  }
+
+  const handleImportJsonFile: ChangeEventHandler<HTMLInputElement> = async (e) => {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file) return
+    try {
+      const text = await file.text()
+      const parsed: unknown = JSON.parse(text)
+      const next = parseCharacterJson(parsed)
+      setCharacter(withMergedProficiencies(next))
+      setStep(0)
+      setPersistHint('Imported character JSON.')
+      window.setTimeout(() => setPersistHint(null), 2500)
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Invalid file'
+      setPersistHint(`Import failed: ${msg}`)
+      window.setTimeout(() => setPersistHint(null), 4000)
+    }
   }
 
   const handleCopyJson = async () => {
@@ -236,7 +265,7 @@ export function CharacterCreatorPage() {
 
   const updateErotic = (patch: Partial<EdndCharacter['eroticTraits']>) => {
     setCharacter((c) =>
-      applyRules({
+      applyDerivedCharacterRules({
         ...c,
         eroticTraits: { ...c.eroticTraits, ...patch },
       }),
@@ -255,7 +284,7 @@ export function CharacterCreatorPage() {
     next: number,
   ) => {
     setCharacter((c) =>
-      applyRules({
+      applyDerivedCharacterRules({
         ...c,
         abilityScores: {
           ...c.abilityScores,
@@ -303,6 +332,31 @@ export function CharacterCreatorPage() {
   return (
     <div className="page creator">
       <h1 className="page-title">Create character</h1>
+
+      <div className="creator-persist-toolbar" role="region" aria-label="Save and export">
+        <button type="button" className="btn" onClick={handleSaveToLibrary}>
+          Save to this device
+        </button>
+        <button type="button" className="btn" onClick={() => downloadCharacterJson(character)}>
+          Download JSON file
+        </button>
+        <button type="button" className="btn" onClick={() => importInputRef.current?.click()}>
+          Import JSON file
+        </button>
+        <input
+          ref={importInputRef}
+          type="file"
+          accept="application/json,.json"
+          className="creator-file-input-hidden"
+          aria-hidden
+          onChange={handleImportJsonFile}
+        />
+        <p className="hint" style={{ margin: 0, flex: '1 1 12rem' }}>
+          Your work autosaves as a draft on this browser. Use <strong>Save to this device</strong>{' '}
+          to pin a copy in the saved list.
+        </p>
+        {persistHint && <span className="muted">{persistHint}</span>}
+      </div>
 
       <ol className="creator-progress" aria-label="Creation steps">
         {STEP_LABELS.map((label, i) => (
@@ -378,7 +432,7 @@ export function CharacterCreatorPage() {
               value={character.level}
               onChange={(e) => {
                 const nextLevel = Math.min(20, Math.max(1, Number(e.target.value) || 1))
-                setCharacter((c) => applyRules({ ...c, level: nextLevel }))
+                setCharacter((c) => applyDerivedCharacterRules({ ...c, level: nextLevel }))
               }}
             />
           </div>
@@ -411,7 +465,7 @@ export function CharacterCreatorPage() {
                 className="btn"
                 onClick={() =>
                   setCharacter((c) =>
-                    applyRules({
+                    applyDerivedCharacterRules({
                       ...c,
                       abilityScores: rollAllAbilityScores(),
                     }),

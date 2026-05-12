@@ -23,7 +23,7 @@ export function mergeTableProficiencies(
   for (const p of cls?.positionProficiencies?.tiers ?? []) positions.push(p)
   for (const p of cls?.positionProficiencies?.specific ?? []) positions.push(p)
   const tools = new Set<string>()
-  for (const t of base.eroticToolProficiencies) tools.add(t)
+  for (const t of base.eroticToolProficiencies ?? []) tools.add(t)
   for (const t of hist?.toolProficiencies ?? []) tools.add(t)
   for (const t of cls?.toolProficiencies ?? []) tools.add(t)
   return {

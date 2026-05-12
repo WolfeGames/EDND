@@ -10,6 +10,12 @@ export function Layout() {
         </NavLink>
         <nav className="nav" aria-label="Main">
           <NavLink
+            to="/characters"
+            className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+          >
+            Saved
+          </NavLink>
+          <NavLink
             to="/create"
             className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
           >

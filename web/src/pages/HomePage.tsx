@@ -10,6 +10,14 @@ export function HomePage() {
       </p>
       <ul className="action-list">
         <li>
+          <Link to="/characters" className="card-link">
+            <span className="card-link-title">Saved on this device</span>
+            <span className="card-link-desc">
+              Open, export, or delete characters stored in this browser.
+            </span>
+          </Link>
+        </li>
+        <li>
           <Link to="/create" className="card-link">
             <span className="card-link-title">Character creation</span>
             <span className="card-link-desc">
