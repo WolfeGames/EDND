@@ -1,0 +1,248 @@
+.sheet-page {
+  min-height: 100vh;
+  background: var(--page-bg, #0f1115);
+  color: var(--text, #e8eaef);
+}
+
+.sheet-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.12));
+  background: var(--header-bg, #141820);
+}
+
+.sheet-toolbar a {
+  color: var(--accent, #8ab4ff);
+  text-decoration: none;
+}
+
+.sheet-toolbar a:hover {
+  text-decoration: underline;
+}
+
+.sheet-missing {
+  max-width: 40rem;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  line-height: 1.6;
+}
+
+.sheet {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.25rem 1.25rem 2rem;
+}
+
+.sheet-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 2px solid var(--text-h, #f0f2f7);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.sheet-char-name {
+  font-family: var(--heading, Georgia, serif);
+  font-size: 1.75rem;
+  margin: 0;
+  color: var(--text-h, #f0f2f7);
+}
+
+.sheet-sub {
+  font-size: 0.95rem;
+  color: var(--text-muted, #a8b0bf);
+  margin-top: 0.25rem;
+}
+
+.sheet-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(8rem, 1fr));
+  gap: 0.5rem 1rem;
+  font-size: 0.85rem;
+}
+
+.sheet-meta-label {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.7rem;
+  color: var(--text-muted, #a8b0bf);
+}
+
+.sheet-meta-value {
+  display: block;
+  min-height: 1.25rem;
+  border-bottom: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.15));
+}
+
+.sheet-section {
+  margin-bottom: 1.25rem;
+}
+
+.sheet-section-title {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted, #a8b0bf);
+  border-bottom: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.12));
+  padding-bottom: 0.25rem;
+  margin: 0 0 0.5rem;
+}
+
+.sheet-abilities {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.35rem;
+}
+
+.sheet-ability-box {
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.2));
+  border-radius: 4px;
+  text-align: center;
+  padding: 0.35rem 0.2rem;
+  background: var(--code-bg, rgba(255, 255, 255, 0.04));
+}
+
+.sheet-ability-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-muted, #a8b0bf);
+}
+
+.sheet-ability-score {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.sheet-ability-mod {
+  font-size: 0.8rem;
+  color: var(--text-muted, #a8b0bf);
+}
+
+.sheet-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 720px) {
+  .sheet-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .sheet-abilities {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.sheet-block {
+  margin-bottom: 0.75rem;
+}
+
+.sheet-block-title {
+  font-size: 0.8rem;
+  margin: 0 0 0.2rem;
+  color: var(--text-h, #f0f2f7);
+}
+
+.sheet-block-body,
+.sheet-prose {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--text, #e8eaef);
+}
+
+.sheet-list {
+  margin: 0.25rem 0 0;
+  padding-left: 1.2rem;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.sheet-list-locked {
+  opacity: 0.55;
+}
+
+.sheet-fine-print {
+  font-size: 0.75rem;
+  color: var(--text-muted, #a8b0bf);
+  margin: 0.35rem 0 0;
+  line-height: 1.4;
+}
+
+.sheet-trait-callout {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.65rem;
+  border-left: 3px solid var(--accent-border, rgba(138, 180, 255, 0.5));
+  background: var(--accent-bg, rgba(138, 180, 255, 0.08));
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.sheet-personality {
+  margin-bottom: 0.75rem;
+}
+
+.sheet-notes-lines {
+  min-height: 6rem;
+  margin-top: 0.35rem;
+  background: repeating-linear-gradient(
+    transparent,
+    transparent 1.35rem,
+    rgba(255, 255, 255, 0.08) 1.35rem,
+    rgba(255, 255, 255, 0.08) calc(1.35rem + 1px)
+  );
+  border: 1px dashed var(--border-subtle, rgba(255, 255, 255, 0.2));
+  border-radius: 4px;
+}
+
+@media print {
+  .sheet-no-print {
+    display: none !important;
+  }
+
+  .sheet-page {
+    background: #fff;
+    color: #111;
+  }
+
+  .sheet {
+    max-width: none;
+    padding: 0;
+  }
+
+  .sheet-char-name,
+  .sheet-section-title,
+  .sheet-block-title,
+  .sheet-block-body,
+  .sheet-prose,
+  .sheet-list,
+  .sheet-trait-callout,
+  .sheet-fine-print {
+    color: #111;
+  }
+
+  .sheet-meta-label {
+    color: #444;
+  }
+
+  .sheet-ability-box {
+    background: #f7f7f7;
+    border-color: #ccc;
+  }
+
+  .sheet-section {
+    break-inside: avoid;
+  }
+}
+
+@page {
+  margin: 0.5in;
+}

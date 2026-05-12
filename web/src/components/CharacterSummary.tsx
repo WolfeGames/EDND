@@ -1,9 +1,12 @@
 import { useMemo } from 'react'
 import { getCarnalClass, getSexualHistory, getSpecies } from '../data/registry'
 import {
+  characterHasEndowedTrait,
+  getSheetEndowmentProfile,
+} from '../lib/endowedTrait'
+import {
   ENDOWMENT_SIZE_RULE,
   formatEndowmentLines,
-  normalizedEndowment,
 } from '../lib/endowment'
 import { formatRuleKey } from '../lib/formatRuleKey'
 import { parseFeatureLevelRequirement } from '../lib/parseFeatureLevelRequirement'
@@ -67,9 +70,11 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
     [historyRow],
   )
   const endowmentReadout = useMemo(() => {
-    const e = normalizedEndowment(character.genderIdentity, character.endowment)
+    const e = getSheetEndowmentProfile(character)
     return formatEndowmentLines(e)
-  }, [character.genderIdentity, character.endowment])
+  }, [character])
+
+  const endowedActive = useMemo(() => characterHasEndowedTrait(character), [character])
 
   return (
     <div className="character-summary">
@@ -95,6 +100,13 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
             </div>
             <p className="muted" style={{ fontSize: '0.85rem', margin: '0.35rem 0 0' }}>
               {ENDOWMENT_SIZE_RULE}
+              {endowedActive && (
+                <span>
+                  {' '}
+                  <strong>Endowed</strong> is applied here: bust and/or phallus sizes are shown one
+                  tier larger (max Gargantuan) than stored on the JSON export.
+                </span>
+              )}
             </p>
           </li>
           {character.background && <li>Background: {character.background}</li>}

@@ -26,6 +26,15 @@ export function HomePage() {
           </Link>
         </li>
         <li>
+          <Link to="/sheet" className="card-link">
+            <span className="card-link-title">Printable character sheet</span>
+            <span className="card-link-desc">
+              5e-inspired one-page layout for print or PDF. Open from Create or Saved with a
+              character loaded.
+            </span>
+          </Link>
+        </li>
+        <li>
           <Link to="/random" className="card-link">
             <span className="card-link-title">Random generator</span>
             <span className="card-link-desc">

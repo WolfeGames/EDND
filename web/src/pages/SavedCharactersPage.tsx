@@ -87,6 +87,15 @@ export function SavedCharactersPage() {
                 <button
                   type="button"
                   className="btn"
+                  onClick={() =>
+                    navigate(`/sheet?id=${encodeURIComponent(character.id)}`)
+                  }
+                >
+                  Printable sheet
+                </button>
+                <button
+                  type="button"
+                  className="btn"
                   onClick={() => downloadCharacterJson(character)}
                 >
                   Download JSON

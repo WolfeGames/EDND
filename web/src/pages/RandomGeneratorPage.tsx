@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { ADVENTURING_CLASSES } from '../data/adventuringClasses'
 import { GENDERS } from '../data/identityOptions'
 import { CharacterSummary } from '../components/CharacterSummary'
@@ -7,7 +8,7 @@ import {
   type RandomCharacterFilters,
 } from '../lib/generateRandomCharacter'
 import { carnalClasses, species, sexualHistories } from '../data/registry'
-import { downloadCharacterJson, upsertLibrary } from '../lib/characterStorage'
+import { downloadCharacterJson, stashCharacterForSheet, upsertLibrary } from '../lib/characterStorage'
 import type { EdndCharacter } from '../types/character'
 import './RandomGeneratorPage.css'
 
@@ -44,6 +45,7 @@ function buildFiltersFromForm(f: RandomCharacterFilters): RandomCharacterFilters
 }
 
 export function RandomGeneratorPage() {
+  const navigate = useNavigate()
   const [character, setCharacter] = useState<EdndCharacter | null>(null)
   const [copyHint, setCopyHint] = useState<string | null>(null)
   const [saveHint, setSaveHint] = useState<string | null>(null)
@@ -268,6 +270,16 @@ export function RandomGeneratorPage() {
             </button>
             <button type="button" className="btn" onClick={() => downloadCharacterJson(character)}>
               Download JSON
+            </button>
+            <button
+              type="button"
+              className="btn"
+              onClick={() => {
+                stashCharacterForSheet(character)
+                navigate('/sheet')
+              }}
+            >
+              Printable sheet
             </button>
             <button type="button" className="btn" onClick={handleCopyJson}>
               Copy JSON

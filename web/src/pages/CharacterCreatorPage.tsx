@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ChangeEventHandler } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { ADVENTURING_CLASSES } from '../data/adventuringClasses'
 import { GENDERS } from '../data/identityOptions'
 import {
@@ -23,6 +24,7 @@ import {
   clearDraft,
   downloadCharacterJson,
   saveDraft,
+  stashCharacterForSheet,
   upsertLibrary,
 } from '../lib/characterStorage'
 import { rollAllAbilityScores, rollStat4d6DropLowest } from '../lib/abilityScores'
@@ -34,6 +36,7 @@ import {
   rollEndowmentSize,
   vaginaAllowedForBiologicalSex,
 } from '../lib/endowment'
+import { getSheetEndowmentProfile } from '../lib/endowedTrait'
 import { createEmptyCharacter, type EdndCharacter, type SexualHistoryPersonality } from '../types/character'
 import './CharacterCreatorPage.css'
 
@@ -117,6 +120,7 @@ function joinCsvTags(items: string[]): string {
 }
 
 export function CharacterCreatorPage() {
+  const navigate = useNavigate()
   const [character, setCharacter] = useState<EdndCharacter>(() =>
     hydrateCharacterFromBrowserLocation(),
   )
@@ -164,11 +168,8 @@ export function CharacterCreatorPage() {
   )
 
   const endowmentReadout = useMemo(
-    () =>
-      formatEndowmentLines(
-        normalizedEndowment(character.genderIdentity, character.endowment),
-      ),
-    [character.genderIdentity, character.endowment],
+    () => formatEndowmentLines(getSheetEndowmentProfile(character)),
+    [character],
   )
 
   const vaginaAllowed = useMemo(
@@ -318,23 +319,45 @@ export function CharacterCreatorPage() {
 
   const setEndowmentAnatomy = (anatomy: EdndCharacter['endowment']['anatomy']) => {
     setCharacter((c) => {
-      if (anatomy === 'neither') return { ...c, endowment: { anatomy } }
-      if (anatomy === 'breasts')
+      const e = c.endowment
+      if (anatomy === 'neither') {
         return {
           ...c,
-          endowment: { anatomy, breastsSize: c.endowment.breastsSize },
+          endowment: {
+            ...e,
+            anatomy: 'neither',
+            breastsSize: undefined,
+            phallusSize: undefined,
+          },
         }
-      if (anatomy === 'phallus')
+      }
+      if (anatomy === 'breasts') {
         return {
           ...c,
-          endowment: { anatomy, phallusSize: c.endowment.phallusSize },
+          endowment: {
+            ...e,
+            anatomy: 'breasts',
+            phallusSize: undefined,
+          },
         }
+      }
+      if (anatomy === 'phallus') {
+        return {
+          ...c,
+          endowment: {
+            ...e,
+            anatomy: 'phallus',
+            breastsSize: undefined,
+          },
+        }
+      }
       return {
         ...c,
         endowment: {
+          ...e,
           anatomy,
-          breastsSize: c.endowment.breastsSize,
-          phallusSize: c.endowment.phallusSize,
+          breastsSize: e.breastsSize,
+          phallusSize: e.phallusSize,
         },
       }
     })
@@ -353,6 +376,16 @@ export function CharacterCreatorPage() {
         </button>
         <button type="button" className="btn" onClick={() => importInputRef.current?.click()}>
           Import JSON file
+        </button>
+        <button
+          type="button"
+          className="btn"
+          onClick={() => {
+            stashCharacterForSheet(character)
+            navigate('/sheet')
+          }}
+        >
+          Printable sheet
         </button>
         <input
           ref={importInputRef}

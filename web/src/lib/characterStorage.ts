@@ -1,4 +1,5 @@
 import type { EdndCharacter } from '../types/character'
+import { parseCharacterJson } from './characterImport'
 
 /** Autosave draft while editing on /create */
 export const DRAFT_STORAGE_KEY = 'ednd.characterDraft.v1'
@@ -108,4 +109,25 @@ export function downloadCharacterJson(character: EdndCharacter): void {
   a.rel = 'noopener'
   a.click()
   URL.revokeObjectURL(url)
+}
+
+/** Ephemeral payload for the printable sheet (sessionStorage). */
+export const SHEET_STASH_KEY = 'ednd.sheetCharacter.v1'
+
+export function stashCharacterForSheet(character: EdndCharacter): void {
+  try {
+    sessionStorage.setItem(SHEET_STASH_KEY, JSON.stringify(character))
+  } catch {
+    /* private mode */
+  }
+}
+
+export function peekCharacterFromSheetStash(): EdndCharacter | null {
+  try {
+    const raw = sessionStorage.getItem(SHEET_STASH_KEY)
+    if (!raw) return null
+    return parseCharacterJson(JSON.parse(raw) as unknown)
+  } catch {
+    return null
+  }
 }
