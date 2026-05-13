@@ -1,0 +1,190 @@
+.rules-root {
+  max-width: 52rem;
+}
+
+.rules-lede {
+  margin-bottom: 1rem;
+}
+
+.rules-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.rules-nav a {
+  display: inline-block;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  text-decoration: none;
+  font-size: 0.88rem;
+  color: var(--text-h);
+  background: var(--card-bg);
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+}
+
+.rules-nav a:hover {
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
+}
+
+.rules-nav a.active {
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
+  font-weight: 600;
+}
+
+.rules-hub {
+  margin-top: 0.25rem;
+}
+
+.rules-section-title {
+  font-family: var(--heading);
+  font-size: 1.15rem;
+  margin: 0 0 0.75rem;
+  color: var(--text-h);
+}
+
+.rules-prose {
+  margin: 0 0 1rem;
+  line-height: 1.55;
+  max-width: 48rem;
+}
+
+.rules-prose + .rules-prose {
+  margin-top: -0.35rem;
+}
+
+.rules-block {
+  margin: 0 0 1.25rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card-bg);
+  box-shadow: var(--shadow);
+}
+
+.rules-block h2 {
+  font-family: var(--heading);
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem;
+  color: var(--text-h);
+}
+
+.rules-block h3 {
+  font-family: var(--heading);
+  font-size: 0.98rem;
+  margin: 1rem 0 0.4rem;
+  color: var(--text-h);
+}
+
+.rules-block h3:first-child {
+  margin-top: 0;
+}
+
+.rules-list {
+  margin: 0;
+  padding-left: 1.2rem;
+  line-height: 1.55;
+}
+
+.rules-list li + li {
+  margin-top: 0.35rem;
+}
+
+.rules-table-wrap {
+  overflow-x: auto;
+  margin: 0.5rem 0 0;
+}
+
+.rules-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.rules-table th,
+.rules-table td {
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.65rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.rules-table th {
+  font-family: var(--heading);
+  font-weight: 600;
+  color: var(--text-h);
+  background: var(--code-bg);
+}
+
+.rules-table td:first-child {
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--text-h);
+}
+
+.rules-callout {
+  margin: 1rem 0 0;
+  padding: 0.75rem 1rem;
+  border-left: 3px solid var(--accent-border);
+  border-radius: 0 8px 8px 0;
+  background: var(--accent-bg);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.rules-spell-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.rules-spell-class {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  background: var(--card-bg);
+}
+
+.rules-spell-class h3 {
+  margin: 0 0 0.65rem;
+  font-family: var(--heading);
+  font-size: 1rem;
+  color: var(--text-h);
+}
+
+.rules-spell-domain {
+  margin-top: 0.65rem;
+}
+
+.rules-spell-domain:first-of-type {
+  margin-top: 0;
+}
+
+.rules-spell-domain strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.88rem;
+  color: var(--text-h);
+}
+
+.rules-spell-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.rules-empty-spells {
+  margin: 0.5rem 0 0;
+  font-size: 0.92rem;
+  color: var(--text-muted);
+}

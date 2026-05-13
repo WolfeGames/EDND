@@ -43,6 +43,15 @@ export function HomePage() {
             </span>
           </Link>
         </li>
+        <li>
+          <Link to="/rules" className="card-link">
+            <span className="card-link-title">Rules reference</span>
+            <span className="card-link-desc">
+              Ecstasy table after climax, orgasm saves, spell names as data fills in, and
+              consent-first guidance for sexual content at the table.
+            </span>
+          </Link>
+        </li>
       </ul>
     </div>
   )

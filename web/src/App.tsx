@@ -5,6 +5,11 @@ import { CharacterCreatorPage } from './pages/CharacterCreatorPage'
 import { HomePage } from './pages/HomePage'
 import { RandomGeneratorPage } from './pages/RandomGeneratorPage'
 import { SavedCharactersPage } from './pages/SavedCharactersPage'
+import { RulesEcstasyPage } from './pages/rules/RulesEcstasyPage'
+import { RulesHubPage } from './pages/rules/RulesHubPage'
+import { RulesLayout } from './pages/rules/RulesLayout'
+import { RulesSexInPlayPage } from './pages/rules/RulesSexInPlayPage'
+import { RulesSpellsPage } from './pages/rules/RulesSpellsPage'
 import './App.css'
 
 function CreateCharacterRoute() {
@@ -22,6 +27,13 @@ export default function App() {
           <Route path="/create" element={<CreateCharacterRoute />} />
           <Route path="/characters" element={<SavedCharactersPage />} />
           <Route path="/random" element={<RandomGeneratorPage />} />
+          <Route path="/rules" element={<RulesLayout />}>
+            <Route index element={<RulesHubPage />} />
+            <Route path="ecstasy" element={<RulesEcstasyPage />} />
+            <Route path="spells" element={<RulesSpellsPage />} />
+            <Route path="play" element={<RulesSexInPlayPage />} />
+            <Route path="*" element={<Navigate to="/rules" replace />} />
+          </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

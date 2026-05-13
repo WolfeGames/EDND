@@ -27,6 +27,12 @@ export function Layout() {
           >
             Random
           </NavLink>
+          <NavLink
+            to="/rules"
+            className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+          >
+            Rules
+          </NavLink>
         </nav>
       </header>
       <main className="app-main">
