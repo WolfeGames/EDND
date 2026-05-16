@@ -115,8 +115,8 @@ export interface EdndCharacter {
   pronouns: string
 
   /**
-   * Biological sex for body/endowment rules (Male, Female, Nonbinary, Transgender).
-   * Pronouns and social identity are separate; phallus endowment is only for Male or Transgender.
+   * Biological sex for portraits and endowment rules: Male or Female only (see endowment for anatomy).
+   * Pronouns and social identity are separate fields.
    */
 
   genderIdentity: string

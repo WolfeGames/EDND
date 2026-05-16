@@ -50,3 +50,50 @@
   background: var(--bg);
   color: var(--text-h);
 }
+
+.random-empty-preview {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.random-empty-preview__img {
+  width: 6.5rem;
+  height: 8rem;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.random-empty-preview__text {
+  flex: 1 1 12rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.random-species-callout {
+  margin: 1rem 0 0;
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 160, 220, 0.35);
+  background: rgba(255, 100, 180, 0.08);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.random-species-callout__label {
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.random-species-callout__value {
+  font-weight: 700;
+  color: var(--text-h);
+}

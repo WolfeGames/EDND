@@ -185,3 +185,30 @@
   border: 0;
 }
 
+.creator-species-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-top: 0.75rem;
+}
+
+.creator-species-layout__portrait {
+  flex: 0 0 auto;
+}
+
+.creator-species-layout__img {
+  display: block;
+  width: 6.5rem;
+  height: 8rem;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.creator-species-layout .character-summary--embed {
+  flex: 1 1 14rem;
+  min-width: 0;
+}
+

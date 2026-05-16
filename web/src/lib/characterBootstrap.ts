@@ -1,6 +1,6 @@
 import { createEmptyCharacter, type EdndCharacter } from '../types/character'
 import { applyDerivedCharacterRules } from './applyCharacterRules'
-import { normalizedEndowment } from './endowment'
+import { normalizeCharacterBiology } from './biologicalSex'
 import { mergeTableProficiencies } from './mergeEroticProficiencies'
 import { clearDraft, getFromLibrary, loadDraft } from './characterStorage'
 
@@ -27,15 +27,15 @@ export function hydrateCharacterFromBrowserLocation(): EdndCharacter {
     }
   }
 
+  const normalized = normalizeCharacterBiology(raw)
   const mergedTraits = mergeTableProficiencies(
-    raw.species,
-    raw.sexualHistory ?? '',
-    raw.carnalClass,
-    raw.eroticTraits,
+    normalized.species,
+    normalized.sexualHistory ?? '',
+    normalized.carnalClass,
+    normalized.eroticTraits,
   )
   return applyDerivedCharacterRules({
-    ...raw,
-    endowment: normalizedEndowment(raw.genderIdentity, raw.endowment),
+    ...normalized,
     eroticTraits: mergedTraits,
   })
 }

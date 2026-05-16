@@ -8,36 +8,37 @@ import {
   vaginaAllowedForBiologicalSex,
 } from './endowment'
 
+const FULL = ['neither', 'breasts', 'phallus', 'both'] as const
+
 describe('endowment biology rules', () => {
-  it('phallus allowed only for Male and Transgender', () => {
+  it('phallus allowed for Male, Female, and unset biology', () => {
     expect(phallusAllowedForBiologicalSex('Male')).toBe(true)
-    expect(phallusAllowedForBiologicalSex('Transgender')).toBe(true)
-    expect(phallusAllowedForBiologicalSex('Female')).toBe(false)
-    expect(phallusAllowedForBiologicalSex('Nonbinary')).toBe(false)
+    expect(phallusAllowedForBiologicalSex('Female')).toBe(true)
     expect(phallusAllowedForBiologicalSex('')).toBe(true)
   })
 
-  it('vagina allowed except for biological Male', () => {
-    expect(vaginaAllowedForBiologicalSex('Male')).toBe(false)
+  it('vagina allowed for Male, Female, and unset biology', () => {
+    expect(vaginaAllowedForBiologicalSex('Male')).toBe(true)
     expect(vaginaAllowedForBiologicalSex('Female')).toBe(true)
-    expect(vaginaAllowedForBiologicalSex('Nonbinary')).toBe(true)
-    expect(vaginaAllowedForBiologicalSex('Transgender')).toBe(true)
     expect(vaginaAllowedForBiologicalSex('')).toBe(true)
   })
 
-  it('getAllowedAnatomiesForBiologicalSex restricts Female and Nonbinary', () => {
-    expect(getAllowedAnatomiesForBiologicalSex('Female')).toEqual(['neither', 'breasts'])
-    expect(getAllowedAnatomiesForBiologicalSex('Nonbinary')).toEqual(['neither', 'breasts'])
-    expect(getAllowedAnatomiesForBiologicalSex('Male').sort()).toEqual(
-      ['both', 'breasts', 'neither', 'phallus'].sort(),
-    )
+  it('getAllowedAnatomiesForBiologicalSex is full set for Male and Female', () => {
+    expect(getAllowedAnatomiesForBiologicalSex('Female').sort()).toEqual([...FULL].sort())
+    expect(getAllowedAnatomiesForBiologicalSex('Male').sort()).toEqual([...FULL].sort())
+    expect(getAllowedAnatomiesForBiologicalSex('').sort()).toEqual([...FULL].sort())
   })
 
-  it('coerceEndowmentForBiologicalSex strips phallus for Female', () => {
-    expect(coerceEndowmentForBiologicalSex('Female', { anatomy: 'phallus', phallusSize: 'Large' })).toEqual({
-      anatomy: 'neither',
-      phallusSize: undefined,
+  it('coerceEndowmentForBiologicalSex preserves phallus for Female', () => {
+    expect(
+      coerceEndowmentForBiologicalSex('Female', { anatomy: 'phallus', phallusSize: 'Large' }),
+    ).toEqual({
+      anatomy: 'phallus',
+      phallusSize: 'Large',
     })
+  })
+
+  it('coerce preserves both anatomy for Female', () => {
     expect(
       coerceEndowmentForBiologicalSex('Female', {
         anatomy: 'both',
@@ -45,13 +46,13 @@ describe('endowment biology rules', () => {
         phallusSize: 'Large',
       }),
     ).toEqual({
-      anatomy: 'breasts',
+      anatomy: 'both',
       breastsSize: 'Medium',
-      phallusSize: undefined,
+      phallusSize: 'Large',
     })
   })
 
-  it('coerce preserves vagina when stripping phallus from both', () => {
+  it('coerce preserves vagina when present on Female both', () => {
     expect(
       coerceEndowmentForBiologicalSex('Female', {
         anatomy: 'both',
@@ -61,15 +62,15 @@ describe('endowment biology rules', () => {
         vaginaSize: 'Tiny',
       }),
     ).toEqual({
-      anatomy: 'breasts',
+      anatomy: 'both',
       breastsSize: 'Small',
-      phallusSize: undefined,
+      phallusSize: 'Large',
       vaginaPresent: true,
       vaginaSize: 'Tiny',
     })
   })
 
-  it('normalizedEndowment clears vagina for Male', () => {
+  it('normalizedEndowment keeps vagina for Male when set', () => {
     expect(
       normalizedEndowment('Male', {
         anatomy: 'phallus',
@@ -80,8 +81,16 @@ describe('endowment biology rules', () => {
     ).toEqual({
       anatomy: 'phallus',
       phallusSize: 'Medium',
+      vaginaPresent: true,
+      vaginaSize: 'Large',
+    })
+  })
+
+  it('normalizedEndowment defaults Male vagina absent when unset', () => {
+    expect(normalizedEndowment('Male', { anatomy: 'phallus', phallusSize: 'Medium' })).toEqual({
+      anatomy: 'phallus',
+      phallusSize: 'Medium',
       vaginaPresent: false,
-      vaginaSize: undefined,
     })
   })
 
@@ -100,9 +109,6 @@ describe('endowment biology rules', () => {
         vaginaPresent: true,
         vaginaSize: 'Huge',
       }),
-    ).toEqual([
-      'No breast or phallus size category (neither).',
-      'Vagina: Huge.',
-    ])
+    ).toEqual(['No breast or phallus size category (neither).', 'Vagina: Huge.'])
   })
 })
