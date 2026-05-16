@@ -1,7 +1,5 @@
 import racialBundle from '../data/tables/racial-sexual-traits.json'
 import type { RacialSexualTraitEntry, RacialSexualTraitsGroup } from '../types/tables'
-import { resolveSpeciesTableId } from './speciesAliases'
-
 type BundleMap = Record<string, RacialSexualTraitsGroup>
 
 const BUNDLE: BundleMap = racialBundle.racialSexualTraits as BundleMap
@@ -19,7 +17,7 @@ export type RacialSexualTraitSection = {
  * then subrace-only blocks (Duergar, Drow). Non-playable or unknown ids yield [].
  */
 export function getRacialSexualTraitSections(speciesId: string): RacialSexualTraitSection[] {
-  const id = resolveSpeciesTableId(speciesId.trim())
+  const id = speciesId.trim()
   if (!id) return []
 
   const out: RacialSexualTraitSection[] = []

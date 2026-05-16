@@ -19,6 +19,11 @@ describe('getRacialSexualTraitSections', () => {
     expect(s.map((x) => x.groupId)).toEqual(['elf', 'drow'])
   })
 
+  it('shows grouped elf traits for legacy elf id without subrace alias', () => {
+    const s = getRacialSexualTraitSections('elf')
+    expect(s.map((x) => x.groupId)).toEqual(['elf'])
+  })
+
   it('returns empty for species without bundle', () => {
     expect(getRacialSexualTraitSections('tabaxi')).toEqual([])
   })
