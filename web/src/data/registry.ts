@@ -64,7 +64,7 @@ export const playableSpecies: SpeciesRow[] = PLAYABLE_SPECIES_IDS.map((id) => {
 })
 
 export function isPlayableSpeciesId(id: string): boolean {
-  return playableSpeciesIdSet.has(resolveSpeciesTableId(id.trim()))
+  return playableSpeciesIdSet.has(id.trim())
 }
 
 const sexualHistoriesById = byId(sexualHistories)

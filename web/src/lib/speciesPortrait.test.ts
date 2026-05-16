@@ -9,15 +9,26 @@ describe('getDefaultSpeciesPortraitSrc', () => {
     )
   })
 
+  it('returns subrace-specific elf portraits', () => {
+    expect(getDefaultSpeciesPortraitSrc('drow', 'Male')).toBe('/portraits/drow-male.png')
+    expect(getDefaultSpeciesPortraitSrc('woodelf', 'Female')).toBe(
+      '/portraits/woodelf-female.png',
+    )
+    expect(getDefaultSpeciesPortraitSrc('highelf', 'Male')).toBe('/portraits/highelf-male.png')
+  })
+
   it('returns unisex art for satyr', () => {
     expect(getDefaultSpeciesPortraitSrc('satyr', 'Female')).toBe('/portraits/satyr.jpg')
     expect(getDefaultSpeciesPortraitSrc('satyr', 'Male')).toBe('/portraits/satyr.jpg')
   })
 
-  it('resolves legacy dwarf id to hilldwarf portraits', () => {
-    expect(getDefaultSpeciesPortraitSrc('dwarf', 'Female')).toBe(
-      '/portraits/hilldwarf-female.png',
-    )
+  it('does not map ambiguous legacy elf to high elf portraits', () => {
+    expect(getDefaultSpeciesPortraitSrc('elf', 'Female')).toBeNull()
+    expect(getDefaultSpeciesPortraitSrc('elf', 'Male')).toBeNull()
+  })
+
+  it('does not map ambiguous legacy dwarf to hill dwarf portraits', () => {
+    expect(getDefaultSpeciesPortraitSrc('dwarf', 'Female')).toBeNull()
   })
 
   it('returns null for unknown species', () => {

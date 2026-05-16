@@ -18,7 +18,6 @@ import {
   highestAbilityModifier,
 } from '../lib/abilityScores'
 import { isCanonicalBiologicalSex } from '../lib/biologicalSex'
-import { resolveSpeciesTableId } from '../lib/speciesAliases'
 import { getDefaultSpeciesPortraitSrc } from '../lib/speciesPortrait'
 import type { AbilityScores, EdndCharacter } from '../types/character'
 import type { CarnalClassRow } from '../types/tables'
@@ -172,10 +171,6 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
     () => (character.species ? getSpecies(character.species) : undefined),
     [character.species],
   )
-  const resolvedSpeciesId = useMemo(
-    () => (character.species ? resolveSpeciesTableId(character.species) : ''),
-    [character.species],
-  )
   const historyRow = useMemo(
     () =>
       character.sexualHistory ? getSexualHistory(character.sexualHistory) : undefined,
@@ -233,11 +228,11 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
   const speciesDisplayName = speciesRow?.name ?? (character.species?.trim() || '—')
 
   const heroPortraitSrc = useMemo(() => {
-    if (!resolvedSpeciesId || !isCanonicalBiologicalSex(character.genderIdentity)) {
+    if (!character.species?.trim() || !isCanonicalBiologicalSex(character.genderIdentity)) {
       return null
     }
-    return getDefaultSpeciesPortraitSrc(resolvedSpeciesId, character.genderIdentity)
-  }, [resolvedSpeciesId, character.genderIdentity])
+    return getDefaultSpeciesPortraitSrc(character.species, character.genderIdentity)
+  }, [character.species, character.genderIdentity])
 
   const portraitAlt = speciesDisplayName !== '—' ? `${speciesDisplayName} portrait` : ''
 
@@ -288,9 +283,9 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
             : 'immersive-hero'
         }
       >
-        {heroPortraitSrc && resolvedSpeciesId ? (
+        {heroPortraitSrc ? (
           <SpeciesPortrait
-            speciesId={resolvedSpeciesId}
+            speciesId={character.species}
             genderIdentity={character.genderIdentity}
             alt={portraitAlt}
             className="immersive-hero__portrait"

@@ -1,5 +1,5 @@
 import { isCanonicalBiologicalSex, sanitizeBiologicalSexForApp } from './biologicalSex'
-import { resolveSpeciesTableId } from './speciesAliases'
+import { resolveSpeciesPortraitId } from './speciesAliases'
 
 /** Portrait paths under `public/portraits/`; keys are species table ids (see species.json). */
 const PAIRED: Record<string, { male: string; female: string }> = {
@@ -42,7 +42,7 @@ export function getDefaultSpeciesPortraitSrc(
   speciesId: string,
   genderIdentity: string,
 ): string | null {
-  const id = resolveSpeciesTableId(speciesId.trim())
+  const id = resolveSpeciesPortraitId(speciesId)
   if (!id) return null
   const uni = UNISEX[id]
   if (uni) return uni
@@ -54,6 +54,6 @@ export function getDefaultSpeciesPortraitSrc(
 }
 
 export function speciesHasPortrait(speciesId: string): boolean {
-  const id = resolveSpeciesTableId(speciesId.trim())
+  const id = resolveSpeciesPortraitId(speciesId)
   return Boolean(UNISEX[id] || PAIRED[id])
 }

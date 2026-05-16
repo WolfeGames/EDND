@@ -16,7 +16,6 @@ import { deriveBeautyClass, rollAllAbilityScores } from './abilityScores'
 import { normalizeCharacterBiology } from './biologicalSex'
 import { rollRandomEndowmentForBiologicalSex } from './endowment'
 import { mergeTableProficiencies } from './mergeEroticProficiencies'
-import { resolveSpeciesTableId } from './speciesAliases'
 import { rollSexualHistoryPersonality } from './rollSexualHistoryPersonality'
 
 const GENERIC_BACKGROUNDS = [
@@ -219,7 +218,7 @@ export function generateRandomCharacter(
     endowment: rollRandomEndowmentForBiologicalSex(genderIdentity),
     adventuringClass: adv,
     background: bg,
-    species: resolveSpeciesTableId(sp.id),
+    species: sp.id,
     sexualHistory: hist.id,
     sexualHistoryPersonality: rollSexualHistoryPersonality(hist.id),
     carnalClass: carnalCl?.id,
