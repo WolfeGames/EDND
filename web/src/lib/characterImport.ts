@@ -1,4 +1,5 @@
 import { createEmptyCharacter, createEmptyEroticTraits, type EdndCharacter } from '../types/character'
+import { normalizeCharacterBiology } from './biologicalSex'
 
 const ANATOMIES = new Set(['neither', 'breasts', 'phallus', 'both'])
 const SIZES = new Set(['Tiny', 'Small', 'Medium', 'Large', 'Huge', 'Gargantuan'])
@@ -108,7 +109,7 @@ export function parseCharacterJson(json: unknown): EdndCharacter {
     }
   }
 
-  return {
+  const draft: EdndCharacter = {
     ...base,
     id,
     name: str(json.name, ''),
@@ -127,4 +128,5 @@ export function parseCharacterJson(json: unknown): EdndCharacter {
     carnalFeatures: strArr(json.carnalFeatures),
     eroticTraits,
   }
+  return normalizeCharacterBiology(draft)
 }

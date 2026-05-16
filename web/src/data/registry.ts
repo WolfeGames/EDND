@@ -14,6 +14,27 @@ import type {
 
 export const species: SpeciesRow[] = speciesData.species as SpeciesRow[]
 
+/**
+ * Species shown in Character Creator and Random Generator rolls/filters.
+ * Full `species` remains for sheets, imports, and legacy characters.
+ */
+export const PLAYABLE_SPECIES_IDS: readonly string[] = [
+  'aasimar',
+  'dragonborn',
+  'mountaindwarf',
+  'hilldwarf',
+  'duergar',
+  'highelf',
+  'woodelf',
+  'drow',
+  'gnome',
+  'goliath',
+  'halfling',
+  'human',
+  'orc',
+  'tiefling',
+]
+
 export const sexualHistories: SexualHistoryRow[] = buildSexualHistories()
 
 export const carnalTraits: CarnalTraitRow[] =
@@ -34,6 +55,18 @@ function byId<T extends { id: string }>(rows: T[]): Map<string, T> {
 }
 
 const speciesById = byId(species)
+const playableSpeciesIdSet = new Set(PLAYABLE_SPECIES_IDS)
+
+export const playableSpecies: SpeciesRow[] = PLAYABLE_SPECIES_IDS.map((id) => {
+  const row = speciesById.get(id)
+  if (!row) throw new Error(`Playable species id "${id}" missing from species.json`)
+  return row
+})
+
+export function isPlayableSpeciesId(id: string): boolean {
+  return playableSpeciesIdSet.has(resolveSpeciesTableId(id.trim()))
+}
+
 const sexualHistoriesById = byId(sexualHistories)
 const carnalTraitsById = byId(carnalTraits)
 const carnalClassesById = byId(carnalClasses)

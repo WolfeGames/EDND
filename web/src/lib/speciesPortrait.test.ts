@@ -23,4 +23,18 @@ describe('getDefaultSpeciesPortraitSrc', () => {
   it('returns null for unknown species', () => {
     expect(getDefaultSpeciesPortraitSrc('not-a-species', 'Male')).toBeNull()
   })
+
+  it('returns null when biological sex is unset or invalid', () => {
+    expect(getDefaultSpeciesPortraitSrc('tiefling', '')).toBeNull()
+    expect(getDefaultSpeciesPortraitSrc('tiefling', 'Other')).toBeNull()
+  })
+
+  it('maps legacy labels to paired art after sanitize', () => {
+    expect(getDefaultSpeciesPortraitSrc('tiefling', 'Transgender')).toBe(
+      '/portraits/tiefling-male.jpg',
+    )
+    expect(getDefaultSpeciesPortraitSrc('tiefling', 'Nonbinary')).toBe(
+      '/portraits/tiefling-female.jpg',
+    )
+  })
 })

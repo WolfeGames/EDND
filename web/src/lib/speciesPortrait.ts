@@ -1,3 +1,4 @@
+import { isCanonicalBiologicalSex, sanitizeBiologicalSexForApp } from './biologicalSex'
 import { resolveSpeciesTableId } from './speciesAliases'
 
 /** Portrait paths under `public/portraits/`; keys are species table ids (see species.json). */
@@ -35,7 +36,7 @@ const UNISEX: Record<string, string> = {
 
 /**
  * Default premade portrait for a species + biological sex.
- * Male/Female use paired art. Nonbinary defaults to female-presenting art; Transgender to male-presenting (placeholder until custom art).
+ * Only Male/Female select paired art; anything else returns null (no silent mismatch).
  */
 export function getDefaultSpeciesPortraitSrc(
   speciesId: string,
@@ -47,11 +48,9 @@ export function getDefaultSpeciesPortraitSrc(
   if (uni) return uni
   const pair = PAIRED[id]
   if (!pair) return null
-  const g = genderIdentity.trim()
-  if (g === 'Male') return pair.male
-  if (g === 'Female') return pair.female
-  if (g === 'Transgender') return pair.male
-  return pair.female
+  const g = sanitizeBiologicalSexForApp(genderIdentity)
+  if (!isCanonicalBiologicalSex(g)) return null
+  return g === 'Male' ? pair.male : pair.female
 }
 
 export function speciesHasPortrait(speciesId: string): boolean {

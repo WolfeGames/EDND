@@ -8,11 +8,17 @@ import {
   getSexualHistory,
   getSpecies,
   pickRandom,
-  species,
+  playableSpecies,
   sexualHistories,
 } from '../data/registry'
 import { CharacterSummary } from '../components/CharacterSummary'
+import { RacialSexualTraitsPanel } from '../components/RacialSexualTraitsPanel'
 import { SpeciesPortrait } from '../components/SpeciesPortrait'
+import {
+  isCanonicalBiologicalSex,
+  normalizeCharacterBiology,
+  sanitizeBiologicalSexForApp,
+} from '../lib/biologicalSex'
 import { mergeTableProficiencies } from '../lib/mergeEroticProficiencies'
 import {
   emptySexualHistoryPersonality,
@@ -40,8 +46,6 @@ import {
 import { getSheetEndowmentProfile } from '../lib/endowedTrait'
 import { createEmptyCharacter, type EdndCharacter, type SexualHistoryPersonality } from '../types/character'
 import './CharacterCreatorPage.css'
-
-const SPECIES_SORTED = [...species].sort((a, b) => a.name.localeCompare(b.name))
 
 const STEP_LABELS = [
   'Identity',
@@ -132,21 +136,34 @@ export function CharacterCreatorPage() {
   const [persistHint, setPersistHint] = useState<string | null>(null)
   const importInputRef = useRef<HTMLInputElement>(null)
 
-  const withMergedProficiencies = (c: EdndCharacter): EdndCharacter =>
-    applyDerivedCharacterRules({
-      ...c,
+  const withMergedProficiencies = (c: EdndCharacter): EdndCharacter => {
+    const c0 = normalizeCharacterBiology(c)
+    return applyDerivedCharacterRules({
+      ...c0,
       eroticTraits: mergeTableProficiencies(
-        c.species,
-        c.sexualHistory ?? '',
-        c.carnalClass,
-        c.eroticTraits,
+        c0.species,
+        c0.sexualHistory ?? '',
+        c0.carnalClass,
+        c0.eroticTraits,
       ),
     })
+  }
 
   const speciesRow = useMemo(
     () => (character.species ? getSpecies(character.species) : undefined),
     [character.species],
   )
+  const speciesSelectOptions = useMemo(() => {
+    const base = [...playableSpecies]
+    if (
+      character.species &&
+      !playableSpecies.some((s) => s.id === character.species) &&
+      speciesRow
+    ) {
+      return [speciesRow, ...base]
+    }
+    return base
+  }, [character.species, speciesRow])
   const historyRow = useMemo(
     () =>
       character.sexualHistory ? getSexualHistory(character.sexualHistory) : undefined,
@@ -210,7 +227,9 @@ export function CharacterCreatorPage() {
     switch (step) {
       case 0:
         return (
-          character.name.trim().length > 0 && character.adventuringClass.trim().length > 0
+          character.name.trim().length > 0 &&
+          character.adventuringClass.trim().length > 0 &&
+          isCanonicalBiologicalSex(character.genderIdentity)
         )
       case 1:
         return character.species.length > 0
@@ -451,12 +470,18 @@ export function CharacterCreatorPage() {
             <label htmlFor="char-gender">Biological sex</label>
             <select
               id="char-gender"
+              required
               value={character.genderIdentity}
-              onChange={(e) =>
-                setCharacter((c) => ({ ...c, genderIdentity: e.target.value }))
-              }
+              onChange={(e) => {
+                const genderIdentity = sanitizeBiologicalSexForApp(e.target.value)
+                setCharacter((c) =>
+                  withMergedProficiencies({ ...c, genderIdentity }),
+                )
+              }}
             >
-              <option value="">(Not set)</option>
+              <option value="" disabled>
+                Choose Male or Female…
+              </option>
               {GENDERS.map((g) => (
                 <option key={g} value={g}>
                   {g}
@@ -464,9 +489,8 @@ export function CharacterCreatorPage() {
               ))}
             </select>
             <p className="hint">
-              Which primary sex traits can appear on the body for rules purposes (e.g. a phallus
-              is only an option for Male or Transgender). Identity and pronouns are separate—set
-              pronouns above.
+              Male or Female for portraits and core rules. Use endowment below for specific anatomy
+              (breasts, phallus, vagina). Identity and pronouns are separate—set pronouns above.
             </p>
           </div>
           <div className="creator-field">
@@ -577,8 +601,8 @@ export function CharacterCreatorPage() {
               ))}
             </select>
             <p className="hint">
-              {ENDOWMENT_SIZE_RULE} Female and Nonbinary characters cannot have a phallus (only
-              breasts and/or neither). When vagina applies to your biological sex, set it below.
+              {ENDOWMENT_SIZE_RULE} Any breasts/phallus combination is allowed for Male or Female;
+              set vagina below when it applies to your character.
             </p>
             <div className="hint" style={{ marginTop: '0.35rem' }}>
               <strong>Sheet readout:</strong>
@@ -741,7 +765,7 @@ export function CharacterCreatorPage() {
               }
             >
               <option value="">Choose…</option>
-              {SPECIES_SORTED.map((s) => (
+              {speciesSelectOptions.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.name}
                 </option>
@@ -749,23 +773,30 @@ export function CharacterCreatorPage() {
             </select>
           </div>
           {speciesRow && (
-            <div className="creator-species-layout">
-              <SpeciesPortrait
+            <>
+              <div className="creator-species-layout">
+                <SpeciesPortrait
+                  speciesId={character.species}
+                  genderIdentity={character.genderIdentity}
+                  alt={speciesRow.name ? `${speciesRow.name} portrait` : ''}
+                  className="creator-species-layout__portrait"
+                  imgClassName="creator-species-layout__img"
+                />
+                <div className="character-summary character-summary--embed">
+                  <p className="muted" style={{ margin: '0 0 0.5rem', lineHeight: 1.55 }}>
+                    <strong>{speciesRow.name}.</strong> {speciesRow.description}
+                  </p>
+                  <div className="trait-card trait-card--species">
+                    <strong>Species carnal trait — {speciesRow.carnalTrait}</strong>
+                    <p className="feature-body">{speciesRow.carnalTraitDescription}</p>
+                  </div>
+                </div>
+              </div>
+              <RacialSexualTraitsPanel
                 speciesId={character.species}
-                genderIdentity={character.genderIdentity}
-                className="creator-species-layout__portrait"
-                imgClassName="creator-species-layout__img"
+                headingClassName="creator-subheading"
               />
-              <div className="character-summary character-summary--embed">
-              <p className="muted" style={{ margin: '0 0 0.5rem', lineHeight: 1.55 }}>
-                <strong>{speciesRow.name}.</strong> {speciesRow.description}
-              </p>
-              <div className="trait-card trait-card--species">
-                <strong>Species carnal trait — {speciesRow.carnalTrait}</strong>
-                <p className="feature-body">{speciesRow.carnalTraitDescription}</p>
-              </div>
-              </div>
-            </div>
+            </>
           )}
         </section>
       )}

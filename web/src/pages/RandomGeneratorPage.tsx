@@ -1,19 +1,20 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ADVENTURING_CLASSES } from '../data/adventuringClasses'
-import { GENDERS } from '../data/identityOptions'
+import { GENDERS, isGenderOption, type GenderOption } from '../data/identityOptions'
+import { isCanonicalBiologicalSex } from '../lib/biologicalSex'
 import { CharacterSummary } from '../components/CharacterSummary'
 import {
   generateRandomCharacter,
   type RandomCharacterFilters,
 } from '../lib/generateRandomCharacter'
-import { carnalClasses, getSpecies, species, sexualHistories } from '../data/registry'
+import { carnalClasses, getSpecies, playableSpecies, sexualHistories } from '../data/registry'
 import { getDefaultSpeciesPortraitSrc } from '../lib/speciesPortrait'
 import { downloadCharacterJson, stashCharacterForSheet, upsertLibrary } from '../lib/characterStorage'
 import type { EdndCharacter } from '../types/character'
 import './RandomGeneratorPage.css'
 
-const SPECIES_SORTED = [...species].sort((a, b) => a.name.localeCompare(b.name))
+const SPECIES_SORTED = [...playableSpecies]
 
 const GENERIC_BACKGROUNDS = [
   'Acolyte',
@@ -40,7 +41,8 @@ function buildFiltersFromForm(f: RandomCharacterFilters): RandomCharacterFilters
   if (f.carnalClass !== undefined && f.carnalClass !== '') {
     out.carnalClass = f.carnalClass
   }
-  if (f.genderIdentity?.trim()) out.genderIdentity = f.genderIdentity.trim()
+  const g = f.genderIdentity?.trim()
+  if (g && isGenderOption(g)) out.genderIdentity = g
   if (f.pronouns?.trim()) out.pronouns = f.pronouns.trim()
   if (f.levelMin !== undefined) out.levelMin = f.levelMin
   if (f.levelMax !== undefined) out.levelMax = f.levelMax
@@ -56,8 +58,9 @@ export function RandomGeneratorPage() {
 
   const filterPortraitSrc = useMemo(() => {
     const sid = filterForm.species?.trim()
-    if (!sid || !getSpecies(sid)) return null
-    return getDefaultSpeciesPortraitSrc(sid, filterForm.genderIdentity ?? '')
+    const sex = filterForm.genderIdentity ?? ''
+    if (!sid || !getSpecies(sid) || !isCanonicalBiologicalSex(sex)) return null
+    return getDefaultSpeciesPortraitSrc(sid, sex)
   }, [filterForm.species, filterForm.genderIdentity])
 
   const roll = () => {
@@ -94,10 +97,10 @@ export function RandomGeneratorPage() {
     <div className="page random-generator">
       <h1 className="page-title">Random character</h1>
       <p className="lede">
-        Constrain the roll with the filters below (all optional). Biological sex is rolled or
-        fixed to Male, Female, Nonbinary, or Transgender. Pronouns are never auto-filled: type them
-        in the filter if you want them on the sheet. Sexual history and carnal class features
-        highlight when your rolled level meets the printed level gate.
+        Constrain the roll with the filters below (all optional). Biological sex is rolled or fixed
+        to Male or Female. Pronouns are never auto-filled: type them in the filter if you want them
+        on the sheet. Sexual history and carnal class features highlight when your rolled level meets
+        the printed level gate.
       </p>
 
       <details className="roll-filters">
@@ -308,7 +311,17 @@ export function RandomGeneratorPage() {
       )}
 
       {character ? (
-        <CharacterSummary character={character} />
+        <>
+          <p className="random-species-callout" role="status">
+            <span className="random-species-callout__label">Species</span>{' '}
+            <span className="random-species-callout__value">
+              {character.species?.trim()
+                ? getSpecies(character.species)?.name ?? character.species
+                : '—'}
+            </span>
+          </p>
+          <CharacterSummary character={character} />
+        </>
       ) : (
         <div className="random-empty-preview">
           {filterPortraitSrc ? (
@@ -322,7 +335,7 @@ export function RandomGeneratorPage() {
           <p className="muted random-empty-preview__text">
             Set filters if you want, then press <strong>Roll character</strong>.
             {filterPortraitSrc
-              ? ' Preview uses species and biological sex from the filters when set.'
+              ? ' Preview uses species and biological sex from the filters when both are set (Male or Female).'
               : ''}
           </p>
         </div>

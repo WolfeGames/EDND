@@ -1,0 +1,266 @@
+{
+  "racialSexualTraits": {
+    "aasimar": {
+      "name": "Aasimar",
+      "theme": "Born of divine bloodlines tied to gods of beauty, love, and ecstasy, Aasimar radiate an intoxicating celestial sensuality.",
+      "traits": [
+        {
+          "name": "Celestial Allure",
+          "mechanical": "+1 Beauty Class.",
+          "flavor": "Your skin carries a soft, ethereal glow. Mortals find themselves inexplicably drawn to you."
+        },
+        {
+          "name": "Heavenly Will",
+          "mechanical": "Advantage on all saving throws made to resist the Aroused condition.",
+          "flavor": "Your celestial heritage grants you strong resistance to being overwhelmed by lust."
+        },
+        {
+          "name": "Soothing Touch",
+          "mechanical": "As a Magic action, touch a willing creature and roll PB d4s to restore that many Pleasure Points. If used as part of an oral stimulation action, roll one additional die. Once per long rest (may expend Sex Die at higher levels).",
+          "flavor": "Your hands and mouth channel divine restorative energy."
+        },
+        {
+          "name": "Touch of Light",
+          "mechanical": "You know the Light cantrip (Charisma). When cast during intimate contact, the target adds +1d4 radiant pleasure to every pleasure roll for 1 minute.",
+          "flavor": "The light sensually highlights every curve and glistening surface."
+        },
+        {
+          "name": "Celestial Embrace",
+          "mechanical": "Once per long rest, when you cause a creature to Climax, grant them an Orgasmic Boon (1 hour): Advantage on saves vs Frightened or Charmed, and +1 HP from any healing.",
+          "flavor": "Those who climax with you carry a piece of divine ecstasy with them."
+        }
+      ]
+    },
+    "dragonborn": {
+      "name": "Dragonborn",
+      "theme": "Proud, powerful, scaled embodiments of draconic lust and dominance.",
+      "traits": [
+        {
+          "name": "Draconic Allure",
+          "mechanical": "+1 Beauty Class. Advantage on Intimidation and Persuasion checks when using Sexuality bonus.",
+          "flavor": "Your imposing scaled physique commands attention and submission."
+        },
+        {
+          "name": "Draconic Vitality",
+          "mechanical": "Refractory period halved. Fertility Bonus +1.",
+          "flavor": "Your blood burns hot and your seed is exceptionally potent."
+        },
+        {
+          "name": "Pheromone Breath",
+          "mechanical": "Expend Breath Weapon use to release pheromones. Creatures in cone/line make Wis save or become Aroused (or Seduced if already Aroused).",
+          "flavor": "One exhale fills the air with your intoxicating musk."
+        },
+        {
+          "name": "Awaken the Dragon",
+          "mechanical": "While Aroused, Bonus Action to enter Draconic Lust (1 min, 1/long rest): +1 pleasure of your ancestry type per source + advantage on coital checks.",
+          "flavor": "The dragon inside you fully awakens."
+        }
+      ]
+    },
+    "dwarf": {
+      "name": "Dwarf",
+      "theme": "Short, thick, incredibly durable, and famously insatiable.",
+      "traits": [
+        {
+          "name": "Dwarven Stamina",
+          "mechanical": "Advantage on all Orgasm Saving Throws. Once per round, reduce pleasure received by your Constitution modifier (min 1).",
+          "flavor": "Your body is a fortress of carnal endurance."
+        },
+        {
+          "name": "Secrets of Stone",
+          "mechanical": "Advantage on Insight/Erogeny checks to detect erogenous zones on other dwarves.",
+          "flavor": "You know dwarven bodies better than anyone."
+        },
+        {
+          "name": "Deep Delving",
+          "mechanical": "Advantage on all coital checks. Genitals count as one size larger for penetration. If larger than partner, +1d4 pleasure on coital stimulation.",
+          "flavor": "You become an unstoppable, rock-hard force of nature."
+        }
+      ]
+    },
+    "duergar": {
+      "name": "Duergar",
+      "theme": "Gray-skinned deep dwarves with powerful psionic and physical endurance.",
+      "traits": [
+        {
+          "name": "Deepstone Enlargement",
+          "mechanical": "You may use Enlarge/Reduce without expending spell slots, but only to enlarge your genitals or bosom by two size categories. Lasts until you (or your partner) achieve orgasm.",
+          "flavor": "When a Duergar grows, they become an absolute monster of girth and presence."
+        }
+      ]
+    },
+    "drow": {
+      "name": "Drow",
+      "theme": "Decadent, beautiful, and dangerously depraved dark elves.",
+      "traits": [
+        {
+          "name": "Decadent Society",
+          "mechanical": "You gain proficiency with up to two Taboos or Fetishes of your choice. While engaging with them: disadvantage on saves to resist Aroused, advantage on checks to deal pleasure with them.",
+          "flavor": "What other races consider shameful is everyday entertainment for you — and you are very, very good at it."
+        }
+      ]
+    },
+    "elf": {
+      "name": "Elf",
+      "theme": "Lithe, elegant, and endlessly sensual fey-blooded lovers.",
+      "traits": [
+        {
+          "name": "Fey Allure",
+          "mechanical": "+2 Beauty Class. Advantage on Persuasion checks when using Sexuality bonus.",
+          "flavor": "Your ethereal beauty melts resistance."
+        },
+        {
+          "name": "Blissful Trance",
+          "mechanical": "During long rest Trance, you may enter Blissful Trance: remain Aroused the whole time, then automatically Climax and roll on the Orgasmic Boon table at the end.",
+          "flavor": "You awaken glowing and satisfied."
+        },
+        {
+          "name": "Keen Senses",
+          "mechanical": "Advantage on Perception and Insight checks made with Sexuality bonus.",
+          "flavor": "You read every subtle sign of arousal perfectly."
+        },
+        {
+          "name": "Fey Grace",
+          "mechanical": "Add your Sexuality bonus to all Acrobatics checks for sex actions and positions.",
+          "flavor": "You move through even the most athletic positions with effortless sensuality."
+        }
+      ]
+    },
+    "gnome": {
+      "name": "Gnome",
+      "theme": "Small, brilliant, playful, and delightfully perverted tinkers.",
+      "traits": [
+        {
+          "name": "Gnomish Charm",
+          "mechanical": "Advantage on Persuasion and Deception checks when using Sexuality bonus.",
+          "flavor": "Your cheeky energy disarms even the biggest partners."
+        },
+        {
+          "name": "Inventive Fingers",
+          "mechanical": "Advantage on Object and Manual stimulation. Once per short rest, improvise a device granting +1d4 pleasure for 10 minutes.",
+          "flavor": "You can turn anything into a sex toy."
+        },
+        {
+          "name": "Small Stature",
+          "mechanical": "Subtract 1 from Endowment size rolls (min 1). Use Intelligence instead of Str/Dex for genital Stimulate checks.",
+          "flavor": "Small but incredibly skilled."
+        },
+        {
+          "name": "Lewd Illusions",
+          "mechanical": "Minor Illusion during sex dealing 1d6 psychic pleasure per turn when describing lewd behavior.",
+          "flavor": "You can make your partner feel three mouths at once."
+        }
+      ]
+    },
+    "goliath": {
+      "name": "Goliath",
+      "theme": "Towering, massively muscled embodiments of dominance.",
+      "traits": [
+        {
+          "name": "Mountainous Presence",
+          "mechanical": "Count as one size larger for penetration DCs and genital pleasure. Add Sexuality bonus to Intimidation checks even if not proficient.",
+          "flavor": "Your sheer mass commands submission."
+        },
+        {
+          "name": "Stone's Endurance",
+          "mechanical": "Advantage on all Orgasm Saving Throws.",
+          "flavor": "You can endure brutal, marathon sessions."
+        },
+        {
+          "name": "Climbing the Mountain",
+          "mechanical": "Automatically succeed Strength checks to maintain positions when partner is one size smaller.",
+          "flavor": "You effortlessly lift, pin, and use smaller lovers."
+        }
+      ]
+    },
+    "halfling": {
+      "name": "Halfling",
+      "theme": "Small, cheerful, nimble, and playfully insatiable.",
+      "traits": [
+        {
+          "name": "Halfling Charm",
+          "mechanical": "+1 Beauty Class. Add Sexuality bonus to Persuasion checks even if not proficient.",
+          "flavor": "Your cute energy lowers defenses instantly."
+        },
+        {
+          "name": "Lusty Luck",
+          "mechanical": "Reroll natural 1s on Sexuality checks, Pleasure rolls, or Orgasm Saving Throws.",
+          "flavor": "Fortune favors the horny."
+        },
+        {
+          "name": "Nimble Lover",
+          "mechanical": "Advantage on Acrobatics for sex. Move through larger creatures' space. Count as one size smaller when receiving.",
+          "flavor": "A horny, giggling tornado in bed."
+        },
+        {
+          "name": "Second Breakfast",
+          "mechanical": "After first climax in an encounter, gain temporary Pleasure Points = PB + Con or Cha mod (whichever higher).",
+          "flavor": "One is never enough."
+        }
+      ]
+    },
+    "human": {
+      "name": "Human",
+      "theme": "The most adaptable and versatile lovers.",
+      "traits": [
+        {
+          "name": "Adaptable Lover",
+          "mechanical": "Choose one skill. Add Sexuality bonus to checks with that skill even if not proficient (changeable on level up).",
+          "flavor": "You quickly become exactly what your partner needs."
+        },
+        {
+          "name": "Endless Curiosity",
+          "mechanical": "First time with a new creature type/species: +1d4 to Sexuality checks against that type for 24 hours.",
+          "flavor": "Every new body is an exciting discovery."
+        },
+        {
+          "name": "Versatile",
+          "mechanical": "Proficiency in one additional Stimulation type and one additional Position category.",
+          "flavor": "You collect techniques like trophies."
+        }
+      ]
+    },
+    "orc": {
+      "name": "Orc",
+      "theme": "Raw, brutal, and gloriously primal lovers.",
+      "traits": [
+        {
+          "name": "Primal Vitality",
+          "mechanical": "Advantage on Orgasm Saving Throws. Refractory period halved (min 1 minute).",
+          "flavor": "You recover fast and can keep going."
+        },
+        {
+          "name": "Savage Rut",
+          "mechanical": "On a natural 20 on a coital check, roll an additional die of pleasure of the same size.",
+          "flavor": "Perfect brutal strokes overwhelm your partners."
+        },
+        {
+          "name": "Frenzy",
+          "mechanical": "While Aroused, Bonus Action to enter Frenzy (1/long rest). Vulnerable to pleasure, max PP increased, immune to Refractory. Lasts 10 min × (Con or Sexuality bonus). Incapacitated afterward for 10 min per orgasm.",
+          "flavor": "You become a frenzied breeding beast."
+        }
+      ]
+    },
+    "tiefling": {
+      "name": "Tiefling",
+      "theme": "Seductive, hell-touched embodiments of forbidden pleasure.",
+      "traits": [
+        {
+          "name": "Passion of the Lower Planes",
+          "mechanical": "Additional pleasure from ability scores/Sexuality bonus can be fire or necrotic. Once per long rest, Persuasion (Sexuality) can attempt to apply Seduced (Wis save).",
+          "flavor": "Your very essence drips with infernal lust."
+        },
+        {
+          "name": "Fiendish Tail",
+          "mechanical": "Bonus Action to stimulate with tail (proficient, 1d4 pleasure). Tail has Subtle and Flexible properties.",
+          "flavor": "Your tail is legendary for its sinful versatility."
+        },
+        {
+          "name": "Taste of Sin",
+          "mechanical": "Creature Aroused by you + received pleasure from you makes Cha save or has disadvantage vs your Sexuality effects for 24 hours.",
+          "flavor": "Once they taste you, they are marked."
+        }
+      ]
+    }
+  }
+}

@@ -202,6 +202,7 @@
   width: 6.5rem;
   height: 8rem;
   object-fit: cover;
+  object-position: top center;
   border-radius: 10px;
   border: 1px solid var(--border);
 }

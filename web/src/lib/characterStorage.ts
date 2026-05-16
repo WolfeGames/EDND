@@ -1,4 +1,5 @@
 import type { EdndCharacter } from '../types/character'
+import { normalizeCharacterBiology } from './biologicalSex'
 import { parseCharacterJson } from './characterImport'
 
 /** Autosave draft while editing on /create */
@@ -52,15 +53,20 @@ export function loadLibrary(): LibraryEntry[] {
   try {
     const parsed = safeParse<LibraryEntry[]>(localStorage.getItem(LIBRARY_STORAGE_KEY))
     if (!Array.isArray(parsed)) return []
-    return parsed.filter(
-      (e) =>
-        e &&
-        typeof e === 'object' &&
-        typeof e.updatedAt === 'number' &&
-        e.character &&
-        typeof e.character === 'object' &&
-        typeof e.character.id === 'string',
-    )
+    return parsed
+      .filter(
+        (e) =>
+          e &&
+          typeof e === 'object' &&
+          typeof e.updatedAt === 'number' &&
+          e.character &&
+          typeof e.character === 'object' &&
+          typeof e.character.id === 'string',
+      )
+      .map((e) => ({
+        ...e,
+        character: normalizeCharacterBiology(e.character as EdndCharacter),
+      }))
   } catch {
     return []
   }

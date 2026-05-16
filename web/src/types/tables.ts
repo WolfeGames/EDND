@@ -12,6 +12,20 @@ export interface SpeciesRow {
   description: string
 }
 
+/** One line in `racial-sexual-traits.json` (species / ancestry group). */
+export interface RacialSexualTraitEntry {
+  name: string
+  mechanical: string
+  flavor: string
+}
+
+/** Group block (e.g. Dwarf, Duergar, Elf) with theme and trait list. */
+export interface RacialSexualTraitsGroup {
+  name: string
+  theme: string
+  traits: RacialSexualTraitEntry[]
+}
+
 export interface SexualHistoryPositionProficiencies {
   tiers: string[]
   specific?: string[]

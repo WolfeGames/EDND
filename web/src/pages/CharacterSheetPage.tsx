@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import { RacialSexualTraitsPanel } from '../components/RacialSexualTraitsPanel'
 import { getCarnalClass, getSexualHistory, getSpecies } from '../data/registry'
 import { abilityModifier } from '../lib/abilityScores'
 import { characterHasEndowedTrait, getSheetEndowmentProfile } from '../lib/endowedTrait'
 import { ENDOWMENT_SIZE_RULE, formatEndowmentLines } from '../lib/endowment'
+import { isCanonicalBiologicalSex } from '../lib/biologicalSex'
 import { getDefaultSpeciesPortraitSrc } from '../lib/speciesPortrait'
 import { getFromLibrary, peekCharacterFromSheetStash } from '../lib/characterStorage'
 import { parseFeatureLevelRequirement } from '../lib/parseFeatureLevelRequirement'
@@ -80,13 +82,15 @@ export function CharacterSheetPage() {
     [character],
   )
 
-  const sheetPortraitSrc = useMemo(
-    () =>
-      character?.species
-        ? getDefaultSpeciesPortraitSrc(character.species, character.genderIdentity)
-        : null,
-    [character?.species, character?.genderIdentity],
-  )
+  const sheetPortraitSrc = useMemo(() => {
+    if (
+      !character?.species ||
+      !isCanonicalBiologicalSex(character.genderIdentity)
+    ) {
+      return null
+    }
+    return getDefaultSpeciesPortraitSrc(character.species, character.genderIdentity)
+  }, [character?.species, character?.genderIdentity])
 
   if (!character && !loadMessage) {
     return (
@@ -141,7 +145,11 @@ export function CharacterSheetPage() {
               <img
                 className="sheet-portrait"
                 src={sheetPortraitSrc}
-                alt=""
+                alt={
+                  speciesRow?.name
+                    ? `${speciesRow.name} portrait (${c.genderIdentity})`
+                    : 'Character portrait'
+                }
                 loading="lazy"
               />
             ) : null}
@@ -153,6 +161,12 @@ export function CharacterSheetPage() {
             </div>
           </div>
           <div className="sheet-meta-grid">
+            <div className="sheet-meta-cell">
+              <span className="sheet-meta-label">Species</span>
+              <span className="sheet-meta-value">
+                {speciesRow?.name ?? (c.species?.trim() || '—')}
+              </span>
+            </div>
             <div className="sheet-meta-cell">
               <span className="sheet-meta-label">Background</span>
               <span className="sheet-meta-value">{c.background || '—'}</span>
@@ -172,113 +186,132 @@ export function CharacterSheetPage() {
           </div>
         </header>
 
-        <section className="sheet-section" aria-labelledby="abilities-heading">
-          <h2 id="abilities-heading" className="sheet-section-title">
-            Ability scores
+        <section className="sheet-section" aria-labelledby="identity-heading">
+          <h2 id="identity-heading" className="sheet-section-title">
+            Identity
           </h2>
-          <div className="sheet-abilities">
-            {ABILITIES.map(({ key, label }) => {
-              const score = c.abilityScores[key]
-              const mod = abilityModifier(score)
-              const modStr = mod >= 0 ? `+${mod}` : `${mod}`
-              return (
-                <div key={key} className="sheet-ability-box">
-                  <div className="sheet-ability-label">{label}</div>
-                  <div className="sheet-ability-score">{score}</div>
-                  <div className="sheet-ability-mod">{modStr}</div>
-                </div>
-              )
-            })}
+          <div className="sheet-block">
+            <h3 className="sheet-block-title">Character</h3>
+            <p className="sheet-block-body">
+              <strong>{c.adventuringClass || '—'}</strong>, level {c.level}
+              {c.background ? (
+                <>
+                  <br />
+                  Background: {c.background}
+                </>
+              ) : null}
+            </p>
+          </div>
+          <div className="sheet-block">
+            <h3 className="sheet-block-title">Ability scores</h3>
+            <div className="sheet-abilities">
+              {ABILITIES.map(({ key, label }) => {
+                const score = c.abilityScores[key]
+                const mod = abilityModifier(score)
+                const modStr = mod >= 0 ? `+${mod}` : `${mod}`
+                return (
+                  <div key={key} className="sheet-ability-box">
+                    <div className="sheet-ability-label">{label}</div>
+                    <div className="sheet-ability-score">{score}</div>
+                    <div className="sheet-ability-mod">{modStr}</div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+          <div className="sheet-block">
+            <h3 className="sheet-block-title">Endowment</h3>
+            <ul className="sheet-list">
+              {endowmentLines.map((line) => (
+                <li key={line}>{line}</li>
+              ))}
+            </ul>
+            <p className="sheet-fine-print">{ENDOWMENT_SIZE_RULE}</p>
+            {endowedNote && (
+              <p className="sheet-fine-print">
+                <strong>Endowed</strong> (from sexual history): bust and/or phallus sizes above are
+                one tier larger than stored values, capped at Gargantuan.
+              </p>
+            )}
           </div>
         </section>
 
-        <div className="sheet-columns">
-          <section className="sheet-section" aria-labelledby="prof-heading">
-            <h2 id="prof-heading" className="sheet-section-title">
-              Proficiencies &amp; training
-            </h2>
-            <div className="sheet-block">
-              <h3 className="sheet-block-title">Carnal / erotic arts</h3>
-              <p className="sheet-block-body">
-                {c.eroticTraits.carnalSkillProficiencies.length
-                  ? c.eroticTraits.carnalSkillProficiencies.join(', ')
-                  : '—'}
-              </p>
-            </div>
-            <div className="sheet-block">
-              <h3 className="sheet-block-title">Positions</h3>
-              <p className="sheet-block-body">
-                {c.eroticTraits.positionProficiencies.length
-                  ? c.eroticTraits.positionProficiencies.join(', ')
-                  : '—'}
-              </p>
-            </div>
-            <div className="sheet-block">
-              <h3 className="sheet-block-title">Erotic tools</h3>
-              <p className="sheet-block-body">
-                {c.eroticTraits.eroticToolProficiencies.length
-                  ? c.eroticTraits.eroticToolProficiencies.join(', ')
-                  : '—'}
-              </p>
-            </div>
-          </section>
-
-          <section className="sheet-section" aria-labelledby="erotic-heading">
-            <h2 id="erotic-heading" className="sheet-section-title">
-              Erotic profile
-            </h2>
-            <div className="sheet-block">
-              <h3 className="sheet-block-title">Beauty &amp; drive</h3>
-              <p className="sheet-block-body">
-                Beauty class <strong>{c.eroticTraits.beautyClass}</strong> (modifier{' '}
-                {c.eroticTraits.beautyModifier >= 0 ? '+' : ''}
-                {c.eroticTraits.beautyModifier}). Sexuality bonus{' '}
-                <strong>+{c.eroticTraits.sexualityBonus}</strong>.
-              </p>
-            </div>
-            <div className="sheet-block">
-              <h3 className="sheet-block-title">Endowment (sheet display)</h3>
-              <ul className="sheet-list">
-                {endowmentLines.map((line) => (
-                  <li key={line}>{line}</li>
-                ))}
-              </ul>
-              <p className="sheet-fine-print">{ENDOWMENT_SIZE_RULE}</p>
-              {endowedNote && (
+        <section className="sheet-section" aria-labelledby="species-erotic-heading">
+          <h2 id="species-erotic-heading" className="sheet-section-title">
+            Species &amp; erotic profile
+          </h2>
+          {speciesRow ? (
+            <>
+              <div className="sheet-block">
+                <h3 className="sheet-block-title">Species — {speciesRow.name}</h3>
+                <p className="sheet-prose">{speciesRow.description}</p>
                 <p className="sheet-fine-print">
-                  <strong>Endowed</strong> (from sexual history): bust and/or phallus sizes above are
-                  one tier larger than stored values, capped at Gargantuan.
+                  Size {speciesRow.size}, speed {speciesRow.speed} ft.
+                  {speciesRow.eroticGrants.length > 0
+                    ? ` · Erotic art grants: ${speciesRow.eroticGrants.join(', ')}`
+                    : ''}
                 </p>
-              )}
-            </div>
-            <div className="sheet-block">
-              <h3 className="sheet-block-title">Attraction &amp; boundaries</h3>
-              <p className="sheet-block-body">
-                <strong>Attraction:</strong> {c.eroticTraits.attraction || '—'}
-                <br />
-                <strong>Repulsion:</strong> {c.eroticTraits.repulsion || '—'}
-                <br />
-                <strong>Morality:</strong> {c.eroticTraits.sexualMorality || '—'}
-                <br />
-                <strong>Orientation:</strong> {c.eroticTraits.orientation || '—'}
-              </p>
-            </div>
-          </section>
-        </div>
-
-        {speciesRow && (
-          <section className="sheet-section">
-            <h2 className="sheet-section-title">Species — {speciesRow.name}</h2>
-            <p className="sheet-prose">{speciesRow.description}</p>
-            <div className="sheet-trait-callout">
-              <strong>{speciesRow.carnalTrait}</strong> — {speciesRow.carnalTraitDescription}
-            </div>
-          </section>
-        )}
+                <div className="sheet-trait-callout">
+                  <strong>{speciesRow.carnalTrait}</strong> — {speciesRow.carnalTraitDescription}
+                </div>
+              </div>
+              <RacialSexualTraitsPanel
+                speciesId={c.species}
+                headingClassName="sheet-subheading"
+                className="racial-traits--sheet"
+                groupClassName="racial-traits__group--sheet"
+              />
+            </>
+          ) : (
+            <p className="sheet-prose muted">No species selected.</p>
+          )}
+          <div className="sheet-block">
+            <h3 className="sheet-block-title">Beauty &amp; drive</h3>
+            <p className="sheet-block-body">
+              Beauty class <strong>{c.eroticTraits.beautyClass}</strong> (modifier{' '}
+              {c.eroticTraits.beautyModifier >= 0 ? '+' : ''}
+              {c.eroticTraits.beautyModifier}). Sexuality bonus{' '}
+              <strong>+{c.eroticTraits.sexualityBonus}</strong>.
+            </p>
+          </div>
+          <div className="sheet-block">
+            <h3 className="sheet-block-title">Proficiencies &amp; training</h3>
+            <p className="sheet-block-body">
+              <strong>Carnal / erotic arts:</strong>{' '}
+              {c.eroticTraits.carnalSkillProficiencies.length
+                ? c.eroticTraits.carnalSkillProficiencies.join(', ')
+                : '—'}
+              <br />
+              <strong>Positions:</strong>{' '}
+              {c.eroticTraits.positionProficiencies.length
+                ? c.eroticTraits.positionProficiencies.join(', ')
+                : '—'}
+              <br />
+              <strong>Erotic tools:</strong>{' '}
+              {c.eroticTraits.eroticToolProficiencies.length
+                ? c.eroticTraits.eroticToolProficiencies.join(', ')
+                : '—'}
+            </p>
+          </div>
+          <div className="sheet-block">
+            <h3 className="sheet-block-title">Attraction &amp; boundaries</h3>
+            <p className="sheet-block-body">
+              <strong>Attraction:</strong> {c.eroticTraits.attraction || '—'}
+              <br />
+              <strong>Repulsion:</strong> {c.eroticTraits.repulsion || '—'}
+              <br />
+              <strong>Morality:</strong> {c.eroticTraits.sexualMorality || '—'}
+              <br />
+              <strong>Orientation:</strong> {c.eroticTraits.orientation || '—'}
+            </p>
+          </div>
+        </section>
 
         {historyRow && (
-          <section className="sheet-section">
-            <h2 className="sheet-section-title">Sexual history — {historyRow.name}</h2>
+          <section className="sheet-section" aria-labelledby="history-heading">
+            <h2 id="history-heading" className="sheet-section-title">
+              Sexual history — {historyRow.name}
+            </h2>
             <p className="sheet-prose">{historyRow.description}</p>
             {historyRow.traitPoints != null ? (
               <p className="sheet-fine-print">Trait points: {historyRow.traitPoints}</p>
@@ -318,8 +351,10 @@ export function CharacterSheetPage() {
         )}
 
         {carnalClassRow && (
-          <section className="sheet-section">
-            <h2 className="sheet-section-title">Carnal class — {carnalClassRow.name}</h2>
+          <section className="sheet-section" aria-labelledby="carnal-heading">
+            <h2 id="carnal-heading" className="sheet-section-title">
+              Carnal class — {carnalClassRow.name}
+            </h2>
             <p className="sheet-prose">{carnalClassRow.description}</p>
             <ul className="sheet-list">
               {Object.entries(carnalClassRow.features).map(([k, v]) => {

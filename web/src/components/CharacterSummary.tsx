@@ -17,9 +17,12 @@ import {
   deriveBeautyClass,
   highestAbilityModifier,
 } from '../lib/abilityScores'
+import { isCanonicalBiologicalSex } from '../lib/biologicalSex'
+import { resolveSpeciesTableId } from '../lib/speciesAliases'
 import { getDefaultSpeciesPortraitSrc } from '../lib/speciesPortrait'
 import type { AbilityScores, EdndCharacter } from '../types/character'
 import type { CarnalClassRow } from '../types/tables'
+import { RacialSexualTraitsPanel } from './RacialSexualTraitsPanel'
 import { SpeciesPortrait } from './SpeciesPortrait'
 import './CharacterSummary.css'
 
@@ -169,6 +172,10 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
     () => (character.species ? getSpecies(character.species) : undefined),
     [character.species],
   )
+  const resolvedSpeciesId = useMemo(
+    () => (character.species ? resolveSpeciesTableId(character.species) : ''),
+    [character.species],
+  )
   const historyRow = useMemo(
     () =>
       character.sexualHistory ? getSexualHistory(character.sexualHistory) : undefined,
@@ -223,13 +230,16 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
     [character, carnalClassRow],
   )
 
-  const heroPortraitSrc = useMemo(
-    () =>
-      character.species
-        ? getDefaultSpeciesPortraitSrc(character.species, character.genderIdentity)
-        : null,
-    [character.species, character.genderIdentity],
-  )
+  const speciesDisplayName = speciesRow?.name ?? (character.species?.trim() || '—')
+
+  const heroPortraitSrc = useMemo(() => {
+    if (!resolvedSpeciesId || !isCanonicalBiologicalSex(character.genderIdentity)) {
+      return null
+    }
+    return getDefaultSpeciesPortraitSrc(resolvedSpeciesId, character.genderIdentity)
+  }, [resolvedSpeciesId, character.genderIdentity])
+
+  const portraitAlt = speciesDisplayName !== '—' ? `${speciesDisplayName} portrait` : ''
 
   const pleasureCurrent = useMemo(
     () => stablePleasureCurrent(character.id, pleasureMeta.max),
@@ -278,10 +288,11 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
             : 'immersive-hero'
         }
       >
-        {heroPortraitSrc ? (
+        {heroPortraitSrc && resolvedSpeciesId ? (
           <SpeciesPortrait
-            speciesId={character.species}
+            speciesId={resolvedSpeciesId}
             genderIdentity={character.genderIdentity}
+            alt={portraitAlt}
             className="immersive-hero__portrait"
             imgClassName="immersive-hero__portrait-img"
           />
@@ -291,10 +302,18 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
           <h2 className="immersive-hero__title">
             {character.name || 'Unnamed desire'}
             <span className="immersive-hero__sub">
-              Level {character.level} · {character.adventuringClass || '—'}
+              {speciesDisplayName}
+              {' · '}
+              Level {character.level}
+              {' · '}
+              {character.adventuringClass || '—'}
               {carnalClassRow ? ` · ${carnalClassRow.name}` : ''}
             </span>
           </h2>
+          <p className="immersive-hero__species" aria-label="Species">
+            <span className="immersive-hero__species-label">Species</span>{' '}
+            <span className="immersive-hero__species-value">{speciesDisplayName}</span>
+          </p>
           <div className="immersive-hero__chips">
             {character.pronouns && (
               <span className="immersive-chip">{character.pronouns}</span>
@@ -376,48 +395,119 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
         </div>
       </section>
 
-      {carnalClassRow && (
-        <section className="immersive-carnal immersive-panel">
-          <div className="immersive-carnal__banner">
-            <div>
-              <p className="immersive-carnal__eyebrow">Carnal class</p>
-              <h3 className="immersive-carnal__name">{carnalClassRow.name}</h3>
-              <p className="immersive-carnal__tagline muted">{carnalClassRow.description}</p>
-            </div>
-            <ul className="immersive-carnal__quick muted">
-              <li>Hit die d{carnalClassRow.hitDie}</li>
-              {carnalClassRow.primarySexualAbility && (
-                <li>Primary {carnalClassRow.primarySexualAbility}</li>
-              )}
-              {carnalClassRow.eroticAptitude && (
-                <li>Aptitude {carnalClassRow.eroticAptitude}</li>
-              )}
-            </ul>
-          </div>
-
-          <details className="immersive-carnal__features">
-            <summary className="immersive-carnal__summary">
-              Level features
-              <span className="immersive-carnal__chev" aria-hidden />
-            </summary>
-            <div className="feature-list immersive-carnal__feature-list">
-              {Object.entries(carnalClassRow.features).map(([k, v]) => (
-                <FeatureRuleBlock
-                  key={k}
-                  ruleKey={k}
-                  text={typeof v === 'string' ? v : `${v.name}: ${v.description}`}
-                  characterLevel={character.level}
-                />
+      <div className="review-section immersive-identity immersive-panel">
+        <h3>Identity</h3>
+        <ul className="review-list">
+          <li>
+            <strong>{character.name || '—'}</strong>, level {character.level}{' '}
+            {character.adventuringClass || '—'}
+          </li>
+          {character.background && <li>Background: {character.background}</li>}
+          {character.pronouns && <li>Pronouns: {character.pronouns}</li>}
+          {character.genderIdentity && <li>Biological sex: {character.genderIdentity}</li>}
+          <li>
+            <strong>Ability scores:</strong> STR {character.abilityScores.strength}, DEX{' '}
+            {character.abilityScores.dexterity}, CON {character.abilityScores.constitution}, INT{' '}
+            {character.abilityScores.intelligence}, WIS {character.abilityScores.wisdom}, CHA{' '}
+            {character.abilityScores.charisma}
+          </li>
+          <li>
+            <strong>Endowment</strong>
+            <div className="immersive-endo-block">
+              {endowmentReadout.map((line, i) => (
+                <div key={`endo-${i}`}>{line}</div>
               ))}
             </div>
-          </details>
-        </section>
-      )}
+            <p className="muted immersive-endo-note">
+              {ENDOWMENT_SIZE_RULE}
+              {endowedActive && (
+                <span>
+                  {' '}
+                  <strong>Endowed</strong> is applied here: bust and/or phallus sizes are shown one
+                  tier larger (max Gargantuan) than stored on the JSON export.
+                </span>
+              )}
+            </p>
+          </li>
+        </ul>
+      </div>
+
+      <div className="review-section immersive-species-erotic immersive-panel">
+        <h3>Species &amp; erotic profile</h3>
+        {speciesRow ? (
+          <>
+            <h4 className="immersive-subheading">Species — {speciesRow.name}</h4>
+            <ul className="review-list">
+              <li>
+                Size {speciesRow.size}, speed {speciesRow.speed} ft.
+              </li>
+              {speciesRow.eroticGrants.length > 0 && (
+                <li>Erotic art grants: {speciesRow.eroticGrants.join(', ')}</li>
+              )}
+              <li>{speciesRow.description}</li>
+            </ul>
+            <div className="trait-card trait-card--species immersive-trait">
+              <strong>Species carnal trait — {speciesRow.carnalTrait}</strong>
+              <p className="feature-body">{speciesRow.carnalTraitDescription}</p>
+            </div>
+            <RacialSexualTraitsPanel speciesId={character.species} />
+          </>
+        ) : (
+          <p className="muted">No species selected.</p>
+        )}
+        <h4 className="immersive-subheading">Beauty &amp; drive</h4>
+        <ul className="review-list">
+          <li>
+            Beauty class <strong>{character.eroticTraits.beautyClass}</strong>
+          </li>
+          <li>Sexuality bonus: +{character.eroticTraits.sexualityBonus}</li>
+        </ul>
+        <h4 className="immersive-subheading">Proficiencies</h4>
+        <ul className="review-list">
+          <li>
+            Carnal skills / erotic arts:{' '}
+            {character.eroticTraits.carnalSkillProficiencies.length
+              ? character.eroticTraits.carnalSkillProficiencies.join(', ')
+              : '—'}
+          </li>
+          <li>
+            Positions:{' '}
+            {character.eroticTraits.positionProficiencies.length
+              ? character.eroticTraits.positionProficiencies.join(', ')
+              : '—'}
+          </li>
+          {character.eroticTraits.eroticToolProficiencies.length > 0 && (
+            <li>Tools: {character.eroticTraits.eroticToolProficiencies.join(', ')}</li>
+          )}
+        </ul>
+        {(character.eroticTraits.attraction ||
+          character.eroticTraits.repulsion ||
+          character.eroticTraits.sexualMorality ||
+          character.eroticTraits.orientation) && (
+          <>
+            <h4 className="immersive-subheading">Attraction &amp; boundaries</h4>
+            <ul className="review-list">
+              {character.eroticTraits.attraction && (
+                <li>Attraction: {character.eroticTraits.attraction}</li>
+              )}
+              {character.eroticTraits.repulsion && (
+                <li>Repulsion: {character.eroticTraits.repulsion}</li>
+              )}
+              {character.eroticTraits.sexualMorality && (
+                <li>Morality: {character.eroticTraits.sexualMorality}</li>
+              )}
+              {character.eroticTraits.orientation && (
+                <li>Orientation: {character.eroticTraits.orientation}</li>
+              )}
+            </ul>
+          </>
+        )}
+      </div>
 
       {historyRow && (
         <section className="immersive-history immersive-panel">
           <div className="immersive-history__head">
-            <h3 className="immersive-history__title">Active sexual history</h3>
+            <h3 className="immersive-history__title">Sexual history</h3>
             <span className="immersive-history__name">{historyRow.name}</span>
             {historyRow.traitPoints != null ? (
               <span className="immersive-history__trait-points">
@@ -502,95 +592,51 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
         </section>
       )}
 
-      {speciesRow && (
-        <div className="review-section immersive-species immersive-panel">
-          <h3>Species — {speciesRow.name}</h3>
-          <ul className="review-list">
-            <li>
-              Size {speciesRow.size}, speed {speciesRow.speed} ft.
-            </li>
-            {speciesRow.eroticGrants.length > 0 && (
-              <li>Erotic art grants: {speciesRow.eroticGrants.join(', ')}</li>
-            )}
-            <li>{speciesRow.description}</li>
-          </ul>
-          <div className="trait-card trait-card--species immersive-trait">
-            <strong>Species carnal trait — {speciesRow.carnalTrait}</strong>
-            <p className="feature-body">{speciesRow.carnalTraitDescription}</p>
+      {carnalClassRow && (
+        <section className="immersive-carnal immersive-panel">
+          <div className="immersive-carnal__banner">
+            <div>
+              <p className="immersive-carnal__eyebrow">Carnal class</p>
+              <h3 className="immersive-carnal__name">{carnalClassRow.name}</h3>
+              <p className="immersive-carnal__tagline muted">{carnalClassRow.description}</p>
+            </div>
+            <ul className="immersive-carnal__quick muted">
+              <li>Hit die d{carnalClassRow.hitDie}</li>
+              {carnalClassRow.primarySexualAbility && (
+                <li>Primary {carnalClassRow.primarySexualAbility}</li>
+              )}
+              {carnalClassRow.eroticAptitude && (
+                <li>Aptitude {carnalClassRow.eroticAptitude}</li>
+              )}
+            </ul>
           </div>
-        </div>
-      )}
 
-      <div className="review-section immersive-identity immersive-panel">
-        <h3>Identity &amp; vessel</h3>
-        <ul className="review-list">
-          <li>
-            <strong>{character.name || '—'}</strong>, level {character.level}{' '}
-            {character.adventuringClass || '—'}
-          </li>
-          <li>
-            <strong>Endowment</strong>
-            <div className="immersive-endo-block">
-              {endowmentReadout.map((line, i) => (
-                <div key={`endo-${i}`}>{line}</div>
+          <details className="immersive-carnal__features">
+            <summary className="immersive-carnal__summary">
+              Level features
+              <span className="immersive-carnal__chev" aria-hidden />
+            </summary>
+            <div className="feature-list immersive-carnal__feature-list">
+              {Object.entries(carnalClassRow.features).map(([k, v]) => (
+                <FeatureRuleBlock
+                  key={k}
+                  ruleKey={k}
+                  text={typeof v === 'string' ? v : `${v.name}: ${v.description}`}
+                  characterLevel={character.level}
+                />
               ))}
             </div>
-            <p className="muted immersive-endo-note">
-              {ENDOWMENT_SIZE_RULE}
-              {endowedActive && (
-                <span>
-                  {' '}
-                  <strong>Endowed</strong> is applied here: bust and/or phallus sizes are shown one
-                  tier larger (max Gargantuan) than stored on the JSON export.
-                </span>
-              )}
+          </details>
+          {carnalClassRow.subclasses.length > 0 && (
+            <p className="muted">
+              Subclasses:{' '}
+              {carnalClassRow.subclasses
+                .map((s) => (typeof s === 'string' ? s : s.name))
+                .join(', ')}
             </p>
-          </li>
-          {character.background && <li>Background: {character.background}</li>}
-          <li>
-            <strong>Ability scores:</strong> STR {character.abilityScores.strength}, DEX{' '}
-            {character.abilityScores.dexterity}, CON {character.abilityScores.constitution}, INT{' '}
-            {character.abilityScores.intelligence}, WIS {character.abilityScores.wisdom}, CHA{' '}
-            {character.abilityScores.charisma}
-          </li>
-        </ul>
-      </div>
-
-      <div className="review-section immersive-profile immersive-panel">
-        <h3>Erotic profile</h3>
-        <ul className="review-list">
-          <li>Sexuality bonus: {character.eroticTraits.sexualityBonus}</li>
-          <li>
-            Carnal skills / erotic arts:{' '}
-            {character.eroticTraits.carnalSkillProficiencies.length
-              ? character.eroticTraits.carnalSkillProficiencies.join(', ')
-              : '—'}
-          </li>
-          {character.eroticTraits.attraction && (
-            <li>Attraction: {character.eroticTraits.attraction}</li>
           )}
-          {character.eroticTraits.repulsion && (
-            <li>Repulsion: {character.eroticTraits.repulsion}</li>
-          )}
-          {character.eroticTraits.sexualMorality && (
-            <li>Morality: {character.eroticTraits.sexualMorality}</li>
-          )}
-          {character.eroticTraits.orientation && (
-            <li>Orientation: {character.eroticTraits.orientation}</li>
-          )}
-          {character.eroticTraits.eroticToolProficiencies.length > 0 && (
-            <li>Tools: {character.eroticTraits.eroticToolProficiencies.join(', ')}</li>
-          )}
-        </ul>
-        {carnalClassRow && carnalClassRow.subclasses.length > 0 && (
-          <p className="muted">
-            Subclasses:{' '}
-            {carnalClassRow.subclasses
-              .map((s) => (typeof s === 'string' ? s : s.name))
-              .join(', ')}
-          </p>
-        )}
-      </div>
+        </section>
+      )}
 
       {teaserOpen && (
         <div
