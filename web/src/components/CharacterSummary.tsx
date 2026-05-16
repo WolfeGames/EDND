@@ -11,13 +11,16 @@ import {
 import { formatRuleKey } from '../lib/formatRuleKey'
 import { parseFeatureLevelRequirement } from '../lib/parseFeatureLevelRequirement'
 import { resolveCarnalTraitLabels } from '../lib/resolveCarnalTraitLabels'
+import { splitHistoryFeatureBody } from '../lib/sexualHistoryFeatureDisplay'
 import {
   abilityModifier,
   deriveBeautyClass,
   highestAbilityModifier,
 } from '../lib/abilityScores'
+import { getDefaultSpeciesPortraitSrc } from '../lib/speciesPortrait'
 import type { AbilityScores, EdndCharacter } from '../types/character'
 import type { CarnalClassRow } from '../types/tables'
+import { SpeciesPortrait } from './SpeciesPortrait'
 import './CharacterSummary.css'
 
 const ABILITY_WORD_TO_KEY: Record<string, keyof AbilityScores> = {
@@ -122,10 +125,12 @@ function FeatureRuleBlock({
   ruleKey,
   text,
   characterLevel,
+  heading,
 }: {
   ruleKey: string
   text: string
   characterLevel: number
+  heading?: string
 }) {
   const req = parseFeatureLevelRequirement(ruleKey)
   const unlocked = req === null || characterLevel >= req
@@ -134,7 +139,7 @@ function FeatureRuleBlock({
       className={`feature-block ${unlocked ? 'feature-block--unlocked' : 'feature-block--locked'}`}
     >
       <div className="feature-heading">
-        <span className="feature-heading-title">{formatRuleKey(ruleKey)}</span>
+        <span className="feature-heading-title">{heading ?? formatRuleKey(ruleKey)}</span>
         {req !== null && (
           <span className="feature-level-pill" title={`Requires character level ${req}`}>
             Lv {req}+
@@ -218,6 +223,14 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
     [character, carnalClassRow],
   )
 
+  const heroPortraitSrc = useMemo(
+    () =>
+      character.species
+        ? getDefaultSpeciesPortraitSrc(character.species, character.genderIdentity)
+        : null,
+    [character.species, character.genderIdentity],
+  )
+
   const pleasureCurrent = useMemo(
     () => stablePleasureCurrent(character.id, pleasureMeta.max),
     [character.id, pleasureMeta.max],
@@ -258,7 +271,21 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
       <div className="immersive-sheet__ambient" aria-hidden />
       <div className="immersive-sheet__particles" aria-hidden />
 
-      <header className="immersive-hero">
+      <header
+        className={
+          heroPortraitSrc
+            ? 'immersive-hero immersive-hero--with-portrait'
+            : 'immersive-hero'
+        }
+      >
+        {heroPortraitSrc ? (
+          <SpeciesPortrait
+            speciesId={character.species}
+            genderIdentity={character.genderIdentity}
+            className="immersive-hero__portrait"
+            imgClassName="immersive-hero__portrait-img"
+          />
+        ) : null}
         <div className="immersive-hero__identity">
           <p className="immersive-hero__eyebrow">Character veil</p>
           <h2 className="immersive-hero__title">
@@ -392,6 +419,11 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
           <div className="immersive-history__head">
             <h3 className="immersive-history__title">Active sexual history</h3>
             <span className="immersive-history__name">{historyRow.name}</span>
+            {historyRow.traitPoints != null ? (
+              <span className="immersive-history__trait-points">
+                {historyRow.traitPoints} trait points
+              </span>
+            ) : null}
           </div>
           <p className="immersive-history__desc">{historyRow.description}</p>
 
@@ -425,14 +457,20 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
 
           <h4 className="immersive-subheading">History features</h4>
           <div className="feature-list">
-            {Object.entries(historyRow.features).map(([k, v]) => (
-              <FeatureRuleBlock
-                key={k}
-                ruleKey={k}
-                text={v}
-                characterLevel={character.level}
-              />
-            ))}
+            {Object.entries(historyRow.features).map(([k, v]) => {
+              const split = splitHistoryFeatureBody(v)
+              return (
+                <FeatureRuleBlock
+                  key={k}
+                  ruleKey={k}
+                  text={split ? split.body : v}
+                  heading={
+                    split ? `${formatRuleKey(k)} — ${split.titleLine}` : undefined
+                  }
+                  characterLevel={character.level}
+                />
+              )
+            })}
           </div>
 
           <h4 className="immersive-subheading">Equipment from history</h4>

@@ -13,4 +13,11 @@ describe('mergeTableProficiencies', () => {
     expect(merged.positionProficiencies).toContain('Lotus')
     expect(merged.eroticToolProficiencies).toContain('Player-added tool')
   })
+
+  it('resolves legacy dwarf id to hill dwarf table row', () => {
+    const base = createEmptyEroticTraits()
+    const merged = mergeTableProficiencies('dwarf', 'courtesan', undefined, base)
+    expect(merged.carnalSkillProficiencies).toContain('Endurance')
+    expect(merged.carnalSkillProficiencies).toContain('Exhibitionism')
+  })
 })

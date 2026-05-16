@@ -12,6 +12,7 @@ import {
   sexualHistories,
 } from '../data/registry'
 import { CharacterSummary } from '../components/CharacterSummary'
+import { SpeciesPortrait } from '../components/SpeciesPortrait'
 import { mergeTableProficiencies } from '../lib/mergeEroticProficiencies'
 import {
   emptySexualHistoryPersonality,
@@ -39,6 +40,8 @@ import {
 import { getSheetEndowmentProfile } from '../lib/endowedTrait'
 import { createEmptyCharacter, type EdndCharacter, type SexualHistoryPersonality } from '../types/character'
 import './CharacterCreatorPage.css'
+
+const SPECIES_SORTED = [...species].sort((a, b) => a.name.localeCompare(b.name))
 
 const STEP_LABELS = [
   'Identity',
@@ -738,7 +741,7 @@ export function CharacterCreatorPage() {
               }
             >
               <option value="">Choose…</option>
-              {species.map((s) => (
+              {SPECIES_SORTED.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.name}
                 </option>
@@ -746,13 +749,21 @@ export function CharacterCreatorPage() {
             </select>
           </div>
           {speciesRow && (
-            <div className="character-summary character-summary--embed">
+            <div className="creator-species-layout">
+              <SpeciesPortrait
+                speciesId={character.species}
+                genderIdentity={character.genderIdentity}
+                className="creator-species-layout__portrait"
+                imgClassName="creator-species-layout__img"
+              />
+              <div className="character-summary character-summary--embed">
               <p className="muted" style={{ margin: '0 0 0.5rem', lineHeight: 1.55 }}>
                 <strong>{speciesRow.name}.</strong> {speciesRow.description}
               </p>
               <div className="trait-card trait-card--species">
                 <strong>Species carnal trait — {speciesRow.carnalTrait}</strong>
                 <p className="feature-body">{speciesRow.carnalTraitDescription}</p>
+              </div>
               </div>
             </div>
           )}

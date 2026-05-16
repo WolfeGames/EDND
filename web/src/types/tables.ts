@@ -33,7 +33,10 @@ export interface SexualHistoryPersonalityTables {
 export interface SexualHistoryRow {
   id: string
   name: string
+  /** Thematic summary (from bundle overlay when present). */
   description: string
+  /** Optional: points budget for history-granted carnal traits, etc. */
+  traitPoints?: number
   eroticArts: string[]
   positionProficiencies: SexualHistoryPositionProficiencies
   toolProficiencies?: string[]

@@ -50,3 +50,26 @@
   background: var(--bg);
   color: var(--text-h);
 }
+
+.random-empty-preview {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.random-empty-preview__img {
+  width: 6.5rem;
+  height: 8rem;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.random-empty-preview__text {
+  flex: 1 1 12rem;
+  margin: 0;
+  line-height: 1.5;
+}

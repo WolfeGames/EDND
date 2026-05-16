@@ -272,6 +272,48 @@
     grid-template-columns: 1fr auto auto;
     align-items: center;
   }
+
+  .immersive-hero--with-portrait {
+    grid-template-columns: auto 1fr auto auto;
+  }
+}
+
+.immersive-hero__portrait {
+  justify-self: center;
+}
+
+@media (min-width: 720px) {
+  .immersive-hero__portrait {
+    justify-self: start;
+  }
+}
+
+.immersive-hero__portrait-img {
+  display: block;
+  width: 5.5rem;
+  height: 6.75rem;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 180, 230, 0.45);
+  box-shadow:
+    0 0 20px rgba(255, 120, 200, 0.35),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+@media (min-width: 720px) {
+  .immersive-hero__portrait-img {
+    width: 6.25rem;
+    height: 7.75rem;
+  }
+}
+
+.species-portrait__img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.15));
 }
 
 .immersive-hero__eyebrow {
@@ -700,6 +742,13 @@
   font-size: 0.95rem;
   font-weight: 600;
   color: #ffb8e8;
+}
+
+.immersive-history__trait-points {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
 }
 
 .immersive-history__desc {

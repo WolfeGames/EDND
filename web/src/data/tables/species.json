@@ -11,6 +11,36 @@
       "description": "Celestial-blooded beings whose climaxes can heal and bless partners."
     },
     {
+      "id": "airgenasi",
+      "name": "Air Genasi",
+      "size": "Medium",
+      "speed": 35,
+      "carnalTrait": "Zephyr's Caress",
+      "carnalTraitDescription": "Once per short rest, when you begin intimate contact, you may trace a harmless ribbon of air along willing skin; the next Seduction or Erogeny check you make this scene gains advantage if your table allows advantage from setup.",
+      "eroticGrants": ["Seduction"],
+      "description": "Breath and touch carry a hint of sky; partners feel light-headed in the best way."
+    },
+    {
+      "id": "bugbear",
+      "name": "Bugbear",
+      "size": "Medium",
+      "speed": 30,
+      "carnalTrait": "Silent Hunger",
+      "carnalTraitDescription": "When you surprise a willing partner in a private scene, your first pleasure-dealing check this encounter deals extra pleasure equal to your proficiency bonus if your table tracks bonus pleasure dice.",
+      "eroticGrants": ["Coital"],
+      "description": "Looming and soft-footed; intensity lands before they hear you coming."
+    },
+    {
+      "id": "centaur",
+      "name": "Centaur",
+      "size": "Large",
+      "speed": 40,
+      "carnalTrait": "Thunderous Rhythm",
+      "carnalTraitDescription": "During consensual rough play or chase-and-catch scenes, you have advantage on Athletics checks to pin, lift, or reposition a willing partner of your size or smaller.",
+      "eroticGrants": ["Endurance"],
+      "description": "Power and stride translate to confident, grounding presence in intimate moments."
+    },
+    {
       "id": "dragonborn",
       "name": "Dragonborn",
       "size": "Medium",
@@ -21,24 +51,54 @@
       "description": "Their pheromone breath and ridged anatomy make them formidable lovers."
     },
     {
-      "id": "dwarf",
-      "name": "Dwarf",
-      "size": "Medium",
-      "speed": 25,
-      "carnalTrait": "Forged Stamina",
-      "carnalTraitDescription": "You ignore the first level of exhaustion caused solely by carnal marathons (multiple climaxes or extended scenes) until you finish a long rest. You have advantage on Constitution saves to resist fatigue, cramping, or forced refractory from prolonged activity. Your refractory period (if your table uses one) is reduced by one round or one minute, whichever your rules use.",
-      "eroticGrants": ["Endurance"],
-      "description": "Exceptional endurance and resistance to exhaustion during long sessions."
-    },
-    {
-      "id": "elf",
-      "name": "Elf",
+      "id": "drow",
+      "name": "Drow",
       "size": "Medium",
       "speed": 30,
       "carnalTrait": "Fey Allure",
       "carnalTraitDescription": "During a short rest that includes intimate contact or mutual pleasure, you regain additional Pleasure Points (PP) equal to your proficiency bonus if your table tracks PP on rests. Once per long rest, you may impose disadvantage on a creature's save to resist being Charmed or Attracted by you for one scene if they have seen you unclothed or heard your sincere invitation.",
       "eroticGrants": ["Seduction"],
-      "description": "Graceful and alluring; short rests restore extra Pleasure Points."
+      "description": "Underdark grace and velvet menace; desire follows shadow and silver."
+    },
+    {
+      "id": "duergar",
+      "name": "Duergar",
+      "size": "Medium",
+      "speed": 25,
+      "carnalTrait": "Forged Stamina",
+      "carnalTraitDescription": "You ignore the first level of exhaustion caused solely by carnal marathons (multiple climaxes or extended scenes) until you finish a long rest. You have advantage on Constitution saves to resist fatigue, cramping, or forced refractory from prolonged activity. Your refractory period (if your table uses one) is reduced by one round or one minute, whichever your rules use.",
+      "eroticGrants": ["Endurance"],
+      "description": "Gray discipline and iron constitution; they outlast candles and partners alike."
+    },
+    {
+      "id": "earthgenasi",
+      "name": "Earth Genasi",
+      "size": "Medium",
+      "speed": 30,
+      "carnalTrait": "Grounding Pulse",
+      "carnalTraitDescription": "A willing partner who shares a long rest with you in contact gains advantage on the first save vs Overstimulation or Edged effects before the next long rest, if your table uses those conditions.",
+      "eroticGrants": ["Endurance"],
+      "description": "Stone-blooded steadiness; partners feel anchored when skin meets skin."
+    },
+    {
+      "id": "firegenasi",
+      "name": "Fire Genasi",
+      "size": "Medium",
+      "speed": 30,
+      "carnalTrait": "Inner Spark",
+      "carnalTraitDescription": "Once per long rest, when you or a willing partner would become Aroused, you may choose to delay that condition until the end of your next turn, representing a controlled burn of desire.",
+      "eroticGrants": ["Seduction"],
+      "description": "Heat lives under the skin; a glance can feel like a brand well earned."
+    },
+    {
+      "id": "firbolg",
+      "name": "Firbolg",
+      "size": "Medium",
+      "speed": 30,
+      "carnalTrait": "Gentle Giant's Hush",
+      "carnalTraitDescription": "Willing partners who begin a short rest in close contact with you clear one level of Overstimulation if your table tracks that condition, once per long rest.",
+      "eroticGrants": ["Erogeny"],
+      "description": "Soft-spoken and vast; intimacy feels like shelter from the storm."
     },
     {
       "id": "gnome",
@@ -49,6 +109,16 @@
       "carnalTraitDescription": "You have proficiency with artisan erotic tools you personally maintain (whips, clockwork toys, puzzle locks on restraints, etc.). When you use a carnal tool or toy, you may add your Intelligence modifier once per scene to the pleasure dealt or to the DC to escape a restraint you designed. You can stabilize a broken toy or sabotaged restraint as an action if the object is Small or smaller.",
       "eroticGrants": ["Manual"],
       "description": "Clever with toys and erogenous engineering."
+    },
+    {
+      "id": "goblin",
+      "name": "Goblin",
+      "size": "Small",
+      "speed": 30,
+      "carnalTrait": "Wicked Grin",
+      "carnalTraitDescription": "You have advantage on the first Seduction or Exhibitionism check you make after successfully using the Hide action or surprising a willing partner in a private scene.",
+      "eroticGrants": ["Exhibitionism"],
+      "description": "Mischief and nerve; they steal kisses like coin purses."
     },
     {
       "id": "goliath",
@@ -71,6 +141,36 @@
       "description": "Lucky and playful; advantage on Conception rolls."
     },
     {
+      "id": "highelf",
+      "name": "High Elf",
+      "size": "Medium",
+      "speed": 30,
+      "carnalTrait": "Fey Allure",
+      "carnalTraitDescription": "During a short rest that includes intimate contact or mutual pleasure, you regain additional Pleasure Points (PP) equal to your proficiency bonus if your table tracks PP on rests. Once per long rest, you may impose disadvantage on a creature's save to resist being Charmed or Attracted by you for one scene if they have seen you unclothed or heard your sincere invitation.",
+      "eroticGrants": ["Seduction"],
+      "description": "Graceful and alluring; short rests restore extra Pleasure Points."
+    },
+    {
+      "id": "hilldwarf",
+      "name": "Hill Dwarf",
+      "size": "Medium",
+      "speed": 25,
+      "carnalTrait": "Forged Stamina",
+      "carnalTraitDescription": "You ignore the first level of exhaustion caused solely by carnal marathons (multiple climaxes or extended scenes) until you finish a long rest. You have advantage on Constitution saves to resist fatigue, cramping, or forced refractory from prolonged activity. Your refractory period (if your table uses one) is reduced by one round or one minute, whichever your rules use.",
+      "eroticGrants": ["Endurance"],
+      "description": "Exceptional endurance and resistance to exhaustion during long sessions."
+    },
+    {
+      "id": "hobgoblin",
+      "name": "Hobgoblin",
+      "size": "Medium",
+      "speed": 30,
+      "carnalTrait": "Disciplined Heat",
+      "carnalTraitDescription": "When you and a willing partner both consent to a structured scene (ritual wording, safe words, or written contract in play), you gain a +1 bonus on Orgasm Saving Throws until the scene ends.",
+      "eroticGrants": ["Endurance"],
+      "description": "Order and appetite intertwined; they savor rules as foreplay."
+    },
+    {
       "id": "human",
       "name": "Human",
       "size": "Medium",
@@ -79,6 +179,26 @@
       "carnalTraitDescription": "When you choose your Sexual History, you learn one additional Erotic Art from that history's list (if any remain you don't already have) and you gain one additional Carnal Trait name from that history's carnal trait list (resolve with your DM if it exceeds normal limits). This stacks with any similar human feature your table already uses.",
       "eroticGrants": [],
       "description": "Gain one extra Erotic Art and one Carnal Trait from their Sexual History."
+    },
+    {
+      "id": "minotaur",
+      "name": "Minotaur",
+      "size": "Medium",
+      "speed": 40,
+      "carnalTrait": "Labyrinthine Focus",
+      "carnalTraitDescription": "Once per rest, when pursuing or being pursued by a willing partner in a confined space, you have advantage on Athletics checks to close distance or maintain a grapple for position.",
+      "eroticGrants": ["Coital"],
+      "description": "Horns, heat, and single-minded drive; they do not lose the thread."
+    },
+    {
+      "id": "mountaindwarf",
+      "name": "Mountain Dwarf",
+      "size": "Medium",
+      "speed": 25,
+      "carnalTrait": "Forged Stamina",
+      "carnalTraitDescription": "You ignore the first level of exhaustion caused solely by carnal marathons (multiple climaxes or extended scenes) until you finish a long rest. You have advantage on Constitution saves to resist fatigue, cramping, or forced refractory from prolonged activity. Your refractory period (if your table uses one) is reduced by one round or one minute, whichever your rules use.",
+      "eroticGrants": ["Endurance"],
+      "description": "Stone and forge; marathon stamina with a harder edge than hill kin."
     },
     {
       "id": "orc",
@@ -91,6 +211,26 @@
       "description": "Climax causes psychic pleasure splash to nearby creatures."
     },
     {
+      "id": "satyr",
+      "name": "Satyr",
+      "size": "Medium",
+      "speed": 35,
+      "carnalTrait": "Reveler's Cadence",
+      "carnalTraitDescription": "During festivals, performances, or bardic duets, you and willing partners gain temporary Pleasure Points equal to your Charisma modifier (minimum 1) once per long rest when the crowd cheers for you.",
+      "eroticGrants": ["Exhibitionism"],
+      "description": "Hooves, music, and appetite; pleasure is a parade route."
+    },
+    {
+      "id": "tabaxi",
+      "name": "Tabaxi",
+      "size": "Medium",
+      "speed": 30,
+      "carnalTrait": "Curious Touch",
+      "carnalTraitDescription": "After you learn a willing partner's favorite erogenous zone through Erogeny or conversation, your next Stimulate attempt against them deals +1 pleasure if your table tracks flat bonuses.",
+      "eroticGrants": ["Erogeny"],
+      "description": "Every secret is a yarn ball; they unravel with delight."
+    },
+    {
       "id": "tiefling",
       "name": "Tiefling",
       "size": "Medium",
@@ -99,6 +239,26 @@
       "carnalTraitDescription": "You know the Sensual Caress cantrip (or your table's equivalent touch cantrip). When a creature deals you orgasmic pleasure or causes you to climax without consent in a scene, you may use a reaction to lash them with hellish rebuke styled as pleasure backlash (fire or necrotic, your choice at character creation). You have advantage on saves against charm from fiends who attempt to seduce you.",
       "eroticGrants": ["Lingus"],
       "description": "Sensual Caress cantrip and hellish rebuke as pleasure damage."
+    },
+    {
+      "id": "watergenasi",
+      "name": "Water Genasi",
+      "size": "Medium",
+      "speed": 30,
+      "carnalTrait": "Tidal Empathy",
+      "carnalTraitDescription": "When you Stimulate a willing partner who is Aroused, they gain +1 temporary Pleasure Point maximum until a short rest if your table tracks PP maximum shifts.",
+      "eroticGrants": ["Erogeny"],
+      "description": "Cool currents and deep listens; arousal ebbs and flows on their breath."
+    },
+    {
+      "id": "woodelf",
+      "name": "Wood Elf",
+      "size": "Medium",
+      "speed": 35,
+      "carnalTrait": "Fey Allure",
+      "carnalTraitDescription": "During a short rest that includes intimate contact or mutual pleasure, you regain additional Pleasure Points (PP) equal to your proficiency bonus if your table tracks PP on rests. Once per long rest, you may impose disadvantage on a creature's save to resist being Charmed or Attracted by you for one scene if they have seen you unclothed or heard your sincere invitation.",
+      "eroticGrants": ["Seduction"],
+      "description": "Wild grace and patient hunger; the forest teaches slow hands."
     }
   ]
 }

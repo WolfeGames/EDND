@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ADVENTURING_CLASSES } from '../data/adventuringClasses'
 import { GENDERS } from '../data/identityOptions'
@@ -7,10 +7,13 @@ import {
   generateRandomCharacter,
   type RandomCharacterFilters,
 } from '../lib/generateRandomCharacter'
-import { carnalClasses, species, sexualHistories } from '../data/registry'
+import { carnalClasses, getSpecies, species, sexualHistories } from '../data/registry'
+import { getDefaultSpeciesPortraitSrc } from '../lib/speciesPortrait'
 import { downloadCharacterJson, stashCharacterForSheet, upsertLibrary } from '../lib/characterStorage'
 import type { EdndCharacter } from '../types/character'
 import './RandomGeneratorPage.css'
+
+const SPECIES_SORTED = [...species].sort((a, b) => a.name.localeCompare(b.name))
 
 const GENERIC_BACKGROUNDS = [
   'Acolyte',
@@ -50,6 +53,12 @@ export function RandomGeneratorPage() {
   const [copyHint, setCopyHint] = useState<string | null>(null)
   const [saveHint, setSaveHint] = useState<string | null>(null)
   const [filterForm, setFilterForm] = useState<RandomCharacterFilters>({})
+
+  const filterPortraitSrc = useMemo(() => {
+    const sid = filterForm.species?.trim()
+    if (!sid || !getSpecies(sid)) return null
+    return getDefaultSpeciesPortraitSrc(sid, filterForm.genderIdentity ?? '')
+  }, [filterForm.species, filterForm.genderIdentity])
 
   const roll = () => {
     const filters = buildFiltersFromForm(filterForm)
@@ -103,7 +112,7 @@ export function RandomGeneratorPage() {
               }
             >
               <option value="">Any species</option>
-              {species.map((s) => (
+              {SPECIES_SORTED.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.name}
                 </option>
@@ -301,9 +310,22 @@ export function RandomGeneratorPage() {
       {character ? (
         <CharacterSummary character={character} />
       ) : (
-        <p className="muted" style={{ marginTop: '1.25rem' }}>
-          Set filters if you want, then press <strong>Roll character</strong>.
-        </p>
+        <div className="random-empty-preview">
+          {filterPortraitSrc ? (
+            <img
+              className="random-empty-preview__img"
+              src={filterPortraitSrc}
+              alt=""
+              loading="lazy"
+            />
+          ) : null}
+          <p className="muted random-empty-preview__text">
+            Set filters if you want, then press <strong>Roll character</strong>.
+            {filterPortraitSrc
+              ? ' Preview uses species and biological sex from the filters when set.'
+              : ''}
+          </p>
+        </div>
       )}
     </div>
   )

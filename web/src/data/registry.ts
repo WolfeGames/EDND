@@ -1,18 +1,9 @@
 import carnalClassesData from './tables/carnal-classes.json'
 import carnalEquipmentData from './tables/carnal-equipment.json'
 import carnalTraitsData from './tables/carnal-traits.json'
-import awakened from './tables/sexual-histories/awakened.json'
-import breedingStock from './tables/sexual-histories/breeding-stock.json'
-import chasteVirgin from './tables/sexual-histories/chaste-virgin.json'
-import courtesanHistory from './tables/sexual-histories/courtesan.json'
-import cultSeducer from './tables/sexual-histories/cult-seducer.json'
-import eroticDisciple from './tables/sexual-histories/erotic-disciple.json'
-import haremTender from './tables/sexual-histories/harem-tender.json'
-import hedonist from './tables/sexual-histories/hedonist.json'
-import houseServant from './tables/sexual-histories/house-servant.json'
-import indoctrinated from './tables/sexual-histories/indoctrinated.json'
-import paramour from './tables/sexual-histories/paramour.json'
 import speciesData from './tables/species.json'
+import { resolveSpeciesTableId } from '../lib/speciesAliases'
+import { buildSexualHistories } from '../lib/sexualHistoryMerge'
 import type {
   CarnalClassRow,
   CarnalEquipmentRow,
@@ -23,19 +14,7 @@ import type {
 
 export const species: SpeciesRow[] = speciesData.species as SpeciesRow[]
 
-export const sexualHistories: SexualHistoryRow[] = [
-  awakened,
-  breedingStock,
-  chasteVirgin,
-  courtesanHistory,
-  cultSeducer,
-  eroticDisciple,
-  haremTender,
-  hedonist,
-  houseServant,
-  indoctrinated,
-  paramour,
-] as SexualHistoryRow[]
+export const sexualHistories: SexualHistoryRow[] = buildSexualHistories()
 
 export const carnalTraits: CarnalTraitRow[] =
   carnalTraitsData.carnalTraits as CarnalTraitRow[]
@@ -61,7 +40,7 @@ const carnalClassesById = byId(carnalClasses)
 const carnalEquipmentById = byId(carnalEquipment)
 
 export function getSpecies(id: string): SpeciesRow | undefined {
-  return speciesById.get(id)
+  return speciesById.get(resolveSpeciesTableId(id))
 }
 
 export function getSexualHistory(id: string): SexualHistoryRow | undefined {

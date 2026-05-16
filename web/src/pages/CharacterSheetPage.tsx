@@ -4,8 +4,13 @@ import { getCarnalClass, getSexualHistory, getSpecies } from '../data/registry'
 import { abilityModifier } from '../lib/abilityScores'
 import { characterHasEndowedTrait, getSheetEndowmentProfile } from '../lib/endowedTrait'
 import { ENDOWMENT_SIZE_RULE, formatEndowmentLines } from '../lib/endowment'
+import { getDefaultSpeciesPortraitSrc } from '../lib/speciesPortrait'
 import { getFromLibrary, peekCharacterFromSheetStash } from '../lib/characterStorage'
 import { parseFeatureLevelRequirement } from '../lib/parseFeatureLevelRequirement'
+import {
+  historyFeatureSheetBody,
+  historyFeatureSheetLabel,
+} from '../lib/sexualHistoryFeatureDisplay'
 import type { EdndCharacter } from '../types/character'
 import './CharacterSheetPage.css'
 
@@ -75,6 +80,14 @@ export function CharacterSheetPage() {
     [character],
   )
 
+  const sheetPortraitSrc = useMemo(
+    () =>
+      character?.species
+        ? getDefaultSpeciesPortraitSrc(character.species, character.genderIdentity)
+        : null,
+    [character?.species, character?.genderIdentity],
+  )
+
   if (!character && !loadMessage) {
     return (
       <div className="sheet-page">
@@ -123,10 +136,20 @@ export function CharacterSheetPage() {
 
       <article className="sheet sheet-print-root">
         <header className="sheet-header">
-          <div className="sheet-name-block">
-            <h1 className="sheet-char-name">{c.name.trim() || 'Unnamed character'}</h1>
-            <div className="sheet-sub">
-              {speciesRow?.name ?? '—'} · {c.adventuringClass || '—'} · Level {c.level}
+          <div className="sheet-header__main">
+            {sheetPortraitSrc ? (
+              <img
+                className="sheet-portrait"
+                src={sheetPortraitSrc}
+                alt=""
+                loading="lazy"
+              />
+            ) : null}
+            <div className="sheet-name-block">
+              <h1 className="sheet-char-name">{c.name.trim() || 'Unnamed character'}</h1>
+              <div className="sheet-sub">
+                {speciesRow?.name ?? '—'} · {c.adventuringClass || '—'} · Level {c.level}
+              </div>
             </div>
           </div>
           <div className="sheet-meta-grid">
@@ -257,6 +280,9 @@ export function CharacterSheetPage() {
           <section className="sheet-section">
             <h2 className="sheet-section-title">Sexual history — {historyRow.name}</h2>
             <p className="sheet-prose">{historyRow.description}</p>
+            {historyRow.traitPoints != null ? (
+              <p className="sheet-fine-print">Trait points: {historyRow.traitPoints}</p>
+            ) : null}
             {c.sexualHistoryPersonality && (
               <ul className="sheet-list sheet-personality">
                 <li>
@@ -278,10 +304,12 @@ export function CharacterSheetPage() {
               {Object.entries(historyRow.features).map(([k, v]) => {
                 const req = parseFeatureLevelRequirement(k)
                 const unlocked = req === null || c.level >= req
+                const label = historyFeatureSheetLabel(k, v)
+                const body = historyFeatureSheetBody(v)
                 return (
                   <li key={k} className={unlocked ? '' : 'sheet-list-locked'}>
-                    <strong>{k}</strong>
-                    {req !== null && ` (level ${req}+)`}: {v}
+                    <strong>{label}</strong>
+                    {req !== null && ` (level ${req}+)`}: {body}
                   </li>
                 )
               })}

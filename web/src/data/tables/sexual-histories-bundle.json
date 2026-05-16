@@ -1,0 +1,279 @@
+{
+  "sexualHistories": {
+    "awakened": {
+      "name": "Awakened",
+      "traitPoints": 3,
+      "theme": "You have tasted true carnal ecstasy and it has awakened something primal inside you. Your body is now hypersensitive to every touch, every thrust, every moan — but that same sensitivity makes you dangerously easy to overwhelm.",
+      "features": [
+        {
+          "level": 1,
+          "name": "Awakened Senses",
+          "mechanical": "You gain one additional Erogenous Zone. Once per short or long rest, when you would receive pleasure, you may roll your Sex Die and gain that many temporary Pleasure Points (lost first when receiving pleasure).",
+          "flavor": "Your first brush with overwhelming pleasure has heightened every nerve ending. Colors seem brighter, skin feels electric, and you can briefly ride waves of sensation that would overwhelm lesser lovers."
+        },
+        {
+          "level": 3,
+          "name": "Echoes of Ecstasy",
+          "mechanical": "Once per long rest, when you climax, you may choose to gain the Transcendent status effect for 1 minute. While Transcendent: Automatically succeed on all pleasure-related saving throws, advantage on all Sexuality checks, and deal +1d6 psychic pleasure on any stimulation.",
+          "flavor": "In the shattering moment of orgasm your mind briefly touches something divine. For a short while afterward you move like living sex incarnate — irresistible, unstoppable, glowing."
+        },
+        {
+          "level": 5,
+          "name": "Hyper-Sensitive",
+          "mechanical": "When you would receive pleasure from any source, you receive 1 additional pleasure point per source of pleasure. You have disadvantage on all Orgasm Saving Throws.",
+          "flavor": "Your skin feels like silk stretched over live wires. Every brush of fingers, every hot breath, every slow thrust sends sparks racing through your nerves. You cum faster and harder than anyone else… but once the pleasure starts climbing, you can barely hold back the flood."
+        }
+      ]
+    },
+    "breedingStock": {
+      "name": "Breeding Stock",
+      "traitPoints": 3,
+      "theme": "Your body was built for one primary purpose: to be fucked, filled, and bred. You radiate raw fertility and physical vitality.",
+      "features": [
+        {
+          "level": 1,
+          "name": "Endowed",
+          "mechanical": "Your primary sexual organs increase in size category by 1 (up to Gargantuan). You gain +1 Beauty Class when size is attractive. When dealing pleasure using your endowed organs, you deal 1 additional pleasure per source.",
+          "flavor": "You bulge. You swell. You stretch. Your cock, cunt, breasts, or knot demands attention the moment clothing comes off."
+        },
+        {
+          "level": 3,
+          "name": "Fertile",
+          "mechanical": "Advantage on all Conception rolls when being impregnated. When impregnating, your partner has disadvantage on saves to resist conception.",
+          "flavor": "Your seed is thick and virile. Your womb is warm and unusually receptive. Nature itself seems eager for you to breed or be bred."
+        },
+        {
+          "level": 5,
+          "name": "Robust Build",
+          "mechanical": "+1 to all Endurance checks. Advantage on checks to resist fatigue, exhaustion, or prolonged physical activity (including long sexual encounters).",
+          "flavor": "Broad hips, powerful thighs, and a body sculpted for carrying strong offspring. You recover from being ridden hard far faster than most."
+        }
+      ]
+    },
+    "chasteVirgin": {
+      "name": "Chaste Virgin",
+      "traitPoints": 3,
+      "theme": "You have kept your body untouched or minimally experienced, preserving an aura of purity that many find intoxicating.",
+      "features": [
+        {
+          "level": 1,
+          "name": "Virtuous",
+          "mechanical": "+2 Beauty Class. Evil-aligned creatures have disadvantage on all Seduction checks against you.",
+          "flavor": "There's something pristine about you — a glow, a hesitation, a shy flush — that makes even the most depraved creatures want to corrupt you."
+        },
+        {
+          "level": 3,
+          "name": "Tease",
+          "mechanical": "Advantage on checks to apply Aroused without causing climax. When you successfully apply Aroused without climaxing, you may immediately impose Edged for 1 minute.",
+          "flavor": "You are a master of delicious denial, leaving lovers trembling and desperate for more."
+        },
+        {
+          "level": 5,
+          "name": "Pure Allure",
+          "mechanical": "Passive Sexuality score +5. Any creature that can see you and is capable of attraction must make a Wisdom save (DC = 8 + PB + Beauty Class mod) at the start of their turn or become Aroused. Aroused creatures have disadvantage resisting your Seduction and cannot willingly move away.",
+          "flavor": "Your mere presence radiates an almost painful erotic aura. Even fully clothed, viewers feel their bodies betray them with sudden, aching need."
+        }
+      ]
+    },
+    "courtesan": {
+      "name": "Courtesan",
+      "traitPoints": 3,
+      "theme": "You are a trained professional of pleasure — refined, expensive, and devastatingly effective.",
+      "features": [
+        {
+          "level": 1,
+          "name": "High Class",
+          "mechanical": "+2 Beauty Class. Advantage on Performance and Persuasion checks while dressed in fine or revealing clothing.",
+          "flavor": "You move like liquid silk and speak like velvet. Heads turn the moment you enter a room."
+        },
+        {
+          "level": 3,
+          "name": "Professional Allure",
+          "mechanical": "+1 Beauty Class in social settings or while seducing. Once per short rest, use a bonus action to force a Wisdom save or creatures become Aroused until end of your next turn.",
+          "flavor": "You've mastered making people want you with nothing more than a glance or sway of the hips."
+        },
+        {
+          "level": 5,
+          "name": "Cosmopolitan",
+          "mechanical": "Treat all humanoid species as your own for attraction and Beauty Class (ignore racial aversions). Gain proficiency/expertise in Deception, Insight, or Persuasion.",
+          "flavor": "Elf, orc, tiefling, or dragonborn — they are all simply potential lovers to you."
+        }
+      ]
+    },
+    "cultSeducer": {
+      "name": "Cult Seducer",
+      "traitPoints": 3,
+      "theme": "You were trained by a secretive cult to seduce, corrupt, and convert through pleasure.",
+      "features": [
+        {
+          "level": 1,
+          "name": "Forbidden Knowledge",
+          "mechanical": "No penalties for taboos or fetishes. Advantage on checks to research, recall, or perform any taboo or cult-related sexual act.",
+          "flavor": "You know the rites that make angels blush and the words that turn shame into screaming ecstasy."
+        },
+        {
+          "level": 3,
+          "name": "Dark Allure",
+          "mechanical": "+1 Beauty Class against morally conflicted or repressed creatures. Such creatures have disadvantage on saves against your Seduction and Eromancy.",
+          "flavor": "The more pious or self-denying the target, the stronger your corruptive pull becomes."
+        },
+        {
+          "level": 5,
+          "name": "Mesmerizing",
+          "mechanical": "Advantage on Seduction checks against creatures you have previously Aroused. Once per long rest, when you bring a creature to climax you may implant a sexual/cult-related Suggestion (24 hours).",
+          "flavor": "After tasting you once, victims dream of you and willingly walk into your cult's arms for another taste."
+        }
+      ]
+    },
+    "eroticDisciple": {
+      "name": "Erotic Disciple",
+      "traitPoints": 3,
+      "theme": "You have dedicated yourself to the study and mastery of pleasure as both art and spiritual practice.",
+      "features": [
+        {
+          "level": 1,
+          "name": "Erogenous Body",
+          "mechanical": "+1 Beauty Class. One additional Erogenous Zone. +1 pleasure when any Erogenous Zone is stimulated.",
+          "flavor": "Your body was made for sin. Every curve and hidden fold sings under the right touch."
+        },
+        {
+          "level": 3,
+          "name": "Attentive Lover",
+          "mechanical": "Advantage on Erogeny checks to intuit desires. Once per encounter, successful Erogeny check lets you immediately apply Aroused.",
+          "flavor": "You read bodies like sacred texts and know exactly how they want to be touched."
+        },
+        {
+          "level": 5,
+          "name": "Tantric Mastery",
+          "mechanical": "Add Wisdom modifier to all Endurance checks and pleasure saves (min +1). Resistance to pleasure (reduce by 2, min 1).",
+          "flavor": "You can ride waves of ecstasy that would drown lesser lovers while remaining poised and in control."
+        }
+      ]
+    },
+    "haremTender": {
+      "name": "Harem Tender",
+      "traitPoints": 3,
+      "theme": "You are a master of managing multiple lovers at once and keeping everyone synchronized in ecstasy.",
+      "features": [
+        {
+          "level": 1,
+          "name": "Accommodating",
+          "mechanical": "Reduce size-difference penetration difficulty by 2. +1 Beauty Class with creatures one or more size categories different from you.",
+          "flavor": "Your body is wonderfully adaptable — you make the impossible feel incredible."
+        },
+        {
+          "level": 3,
+          "name": "Group Harmony",
+          "mechanical": "Advantage on checks while pleasuring multiple partners. When you deal pleasure to one, each other willing participant gains 1 Pleasure Point.",
+          "flavor": "You conduct an orgy like a maestro conducts an orchestra."
+        },
+        {
+          "level": 5,
+          "name": "Shared Pleasure",
+          "mechanical": "When you cause one lover to gain Pleasure Points, each other present lover who can see or touch you also gains 1 Pleasure Point (once per turn).",
+          "flavor": "Your pleasure is contagious. You turn every encounter into a symphony of shared ecstasy."
+        }
+      ]
+    },
+    "hedonist": {
+      "name": "Hedonist",
+      "traitPoints": 3,
+      "theme": "You live for pleasure in all its forms and chase ecstasy without shame or restraint.",
+      "features": [
+        {
+          "level": 1,
+          "name": "High Libido",
+          "mechanical": "+1 additional Pleasure Point per die rolled during short rests. +1 Beauty Class in social or party settings.",
+          "flavor": "Your lust burns hot and constant. You're almost always ready for more."
+        },
+        {
+          "level": 3,
+          "name": "Party Animal",
+          "mechanical": "Advantage on saves to resist Refractory. In groups of 3+, +1d4 to all Sexuality checks and Pleasure rolls.",
+          "flavor": "You're the one who keeps the night going long after everyone else is spent."
+        },
+        {
+          "level": 5,
+          "name": "Never Enough",
+          "mechanical": "Gain Exhibitionist. +1 pleasure per source while being watched. Once per long rest, delay Refractory for 1 minute and gain resistance to pleasure during that time.",
+          "flavor": "No matter how many times you cum, you always want more."
+        }
+      ]
+    },
+    "houseServant": {
+      "name": "House Servant",
+      "traitPoints": 3,
+      "theme": "You were trained to serve — in the bedroom and the household — with quiet, masterful efficiency.",
+      "features": [
+        {
+          "level": 1,
+          "name": "Discreet Service",
+          "mechanical": "Advantage on Stealth and Deception checks during or immediately after sex. +1 Beauty Class in erotic servant attire.",
+          "flavor": "You know how to slip in, serve perfectly, and leave almost no trace."
+        },
+        {
+          "level": 3,
+          "name": "Self-Control",
+          "mechanical": "Advantage on saves to delay or resist climax. While pleasuring another, you may take only half the pleasure you would normally receive.",
+          "flavor": "You can hold yourself on the edge so you can focus entirely on your partner's pleasure."
+        },
+        {
+          "level": 5,
+          "name": "Devoted Service",
+          "mechanical": "While actively pleasuring/serving another, +2 to all stimulation and arousal checks. Once per long rest, when you bring a creature you serve to climax, regain one Sex Die or Pleasure Points = PB + Cha/Wis mod.",
+          "flavor": "Your devotion is absolute. The more you give, the more fulfilled and powerful you become."
+        }
+      ]
+    },
+    "indoctrinated": {
+      "name": "Indoctrinated",
+      "traitPoints": 3,
+      "theme": "You have been thoroughly indoctrinated into a cult, harem, temple, or secret society dedicated to carnal worship. Your mind and body have been reshaped to embrace pleasure without limits.",
+      "features": [
+        {
+          "level": 1,
+          "name": "Taboo-Free",
+          "mechanical": "No penalties (mechanical, social, or magical) when engaging in any taboos or fetishes. Advantage on saves to resist fear, guilt, or mental effects triggered by taboo acts.",
+          "flavor": "What others call depraved, you call sacred. Nothing is off-limits — the more forbidden, the hotter it makes you."
+        },
+        {
+          "level": 3,
+          "name": "Communal Sensuality",
+          "mechanical": "+1 Beauty Class in groups of 3 or more. In group encounters of 3+, use a reaction when one participant gains Pleasure Points to grant 1 Pleasure Point to yourself and one other willing participant.",
+          "flavor": "Alone you are desirable. In a crowd you become magnetic."
+        },
+        {
+          "level": 5,
+          "name": "Open-Minded",
+          "mechanical": "Treat all orientations, genders, and species as fully compatible for attraction. Once per long rest, touch a willing creature and grant them Taboo-Free for 24 hours.",
+          "flavor": "Your indoctrination has dissolved every boundary. You see beauty and pleasure in every form."
+        }
+      ]
+    },
+    "paramour": {
+      "name": "Paramour",
+      "traitPoints": 3,
+      "theme": "You are a passionate, secretive, and dangerously addictive lover who leaves lasting marks on both body and soul.",
+      "features": [
+        {
+          "level": 1,
+          "name": "Distracting",
+          "mechanical": "+1 Beauty Class. Advantage on checks made to draw attention to yourself or distract creatures (Performance, Deception, etc.).",
+          "flavor": "There's something about the way you move — people can't help but stare and forget everything else."
+        },
+        {
+          "level": 3,
+          "name": "Secretive Lover",
+          "mechanical": "Advantage on Stealth checks during or around sexual encounters. Creatures you've been intimate with have disadvantage on checks to notice evidence of your activities.",
+          "flavor": "You slip in and out of beds like a shadow, leaving lovers deliciously sore with almost no trace."
+        },
+        {
+          "level": 5,
+          "name": "Lingering Allure",
+          "mechanical": "Creatures you've had intimate contact with have disadvantage on saves against your Seduction, Eromancy, and further advances for 24 hours. Once per long rest, mark a creature you've been intimate with — you always know their general direction and emotional state for 24 hours.",
+          "flavor": "Even after you're gone, your touch lingers. They crave you. They dream of you. Some become utterly obsessed."
+        }
+      ]
+    }
+  }
+}
