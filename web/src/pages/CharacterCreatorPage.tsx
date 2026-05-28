@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ChangeEventHandler } from 'react'
+﻿import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ChangeEventHandler } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ADVENTURING_CLASSES } from '../data/adventuringClasses'
 import { GENDERS } from '../data/identityOptions'
@@ -7,11 +7,10 @@ import {
   getCarnalClass,
   getSexualHistory,
   getSpecies,
-  pickRandom,
   playableSpecies,
-  sexualHistories,
 } from '../data/registry'
 import { CharacterSummary } from '../components/CharacterSummary'
+import { CreatorSexualBackgroundStep } from '../components/CreatorSexualBackgroundStep'
 import { RacialSexualTraitsPanel } from '../components/RacialSexualTraitsPanel'
 import { SpeciesPortrait } from '../components/SpeciesPortrait'
 import {
@@ -50,7 +49,7 @@ import './CharacterCreatorPage.css'
 const STEP_LABELS = [
   'Identity',
   'Species',
-  'Sexual history',
+  'Sexual Background',
   'Carnal class',
   'Erotic profile',
   'Review',
@@ -293,7 +292,7 @@ export function CharacterCreatorPage() {
       setCopyHint('Copied to clipboard.')
       window.setTimeout(() => setCopyHint(null), 2500)
     } catch {
-      setCopyHint('Could not copy — select and copy manually from the console or export later.')
+      setCopyHint('Could not copy â€” select and copy manually from the console or export later.')
     }
   }
 
@@ -480,7 +479,7 @@ export function CharacterCreatorPage() {
               }}
             >
               <option value="" disabled>
-                Choose Male or Female…
+                Choose Male or Femaleâ€¦
               </option>
               {GENDERS.map((g) => (
                 <option key={g} value={g}>
@@ -490,7 +489,7 @@ export function CharacterCreatorPage() {
             </select>
             <p className="hint">
               Male or Female for portraits and core rules. Use endowment below for specific anatomy
-              (breasts, phallus, vagina). Identity and pronouns are separate—set pronouns above.
+              (breasts, phallus, vagina). Identity and pronouns are separateâ€”set pronouns above.
             </p>
           </div>
           <div className="creator-field">
@@ -578,7 +577,7 @@ export function CharacterCreatorPage() {
               onChange={(e) =>
                 setCharacter((c) => ({ ...c, background: e.target.value }))
               }
-              placeholder="Sage, Soldier, homebrew…"
+              placeholder="Sage, Soldier, homebrewâ€¦"
             />
           </div>
           <div className="creator-field">
@@ -760,11 +759,15 @@ export function CharacterCreatorPage() {
               value={character.species}
               onChange={(e) =>
                 setCharacter((c) =>
-                  withMergedProficiencies({ ...c, species: e.target.value }),
+                  withMergedProficiencies({
+                    ...c,
+                    species: e.target.value,
+                    race: e.target.value,
+                  }),
                 )
               }
             >
-              <option value="">Choose…</option>
+              <option value="">Chooseâ€¦</option>
               {speciesSelectOptions.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.name}
@@ -787,7 +790,7 @@ export function CharacterCreatorPage() {
                     <strong>{speciesRow.name}.</strong> {speciesRow.description}
                   </p>
                   <div className="trait-card trait-card--species">
-                    <strong>Species carnal trait — {speciesRow.carnalTrait}</strong>
+                    <strong>Species carnal trait â€” {speciesRow.carnalTrait}</strong>
                     <p className="feature-body">{speciesRow.carnalTraitDescription}</p>
                   </div>
                 </div>
@@ -802,188 +805,38 @@ export function CharacterCreatorPage() {
       )}
 
       {step === 2 && (
-        <section aria-labelledby="step-history">
-          <h2 id="step-history" className="creator-step-title">
-            Sexual history
+        <section aria-labelledby="step-sexual-background">
+          <h2 id="step-sexual-background" className="creator-step-title">
+            Sexual Background
           </h2>
-          <div className="creator-field">
-            <label htmlFor="char-history">Sexual history</label>
-            <select
-              id="char-history"
-              value={character.sexualHistory ?? ''}
-              onChange={(e) =>
-                setCharacter((c) =>
-                  withMergedProficiencies({
-                    ...c,
-                    sexualHistory: e.target.value || undefined,
-                    sexualHistoryPersonality: undefined,
-                  }),
-                )
-              }
-            >
-              <option value="">Choose…</option>
-              {sexualHistories.map((h) => (
-                <option key={h.id} value={h.id}>
-                  {h.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          {historyRow && (
-            <p className="muted" style={{ lineHeight: 1.5 }}>
-              {historyRow.description}
-            </p>
-          )}
-          {historyRow?.personality && (
-            <div className="creator-personality" style={{ marginTop: '1.25rem' }}>
-              <h3 className="creator-subheading">Personality (from history)</h3>
-              <p className="muted" style={{ fontSize: '0.85rem', marginBottom: '0.75rem' }}>
-                Choose one from each list or roll — all four are required to continue.
-              </p>
-              <div className="creator-field creator-field--inline-actions">
-                <label htmlFor="shp-trait">Personality trait</label>
-                <div className="creator-inline-row">
-                  <select
-                    id="shp-trait"
-                    value={character.sexualHistoryPersonality?.trait ?? ''}
-                    onChange={(e) =>
-                      patchSexualHistoryPersonality({ trait: e.target.value })
-                    }
-                  >
-                    <option value="">Choose…</option>
-                    {historyRow.personality.traits.map((t) => (
-                      <option key={t} value={t}>
-                        {t}
-                      </option>
-                    ))}
-                  </select>
-                  <button
-                    type="button"
-                    className="btn"
-                    onClick={() =>
-                      patchSexualHistoryPersonality({
-                        trait: pickRandom(historyRow.personality.traits) ?? '',
-                      })
-                    }
-                  >
-                    Roll
-                  </button>
-                </div>
-              </div>
-              <div className="creator-field creator-field--inline-actions">
-                <label htmlFor="shp-ideal">Ideal</label>
-                <div className="creator-inline-row">
-                  <select
-                    id="shp-ideal"
-                    value={character.sexualHistoryPersonality?.ideal ?? ''}
-                    onChange={(e) =>
-                      patchSexualHistoryPersonality({ ideal: e.target.value })
-                    }
-                  >
-                    <option value="">Choose…</option>
-                    {historyRow.personality.ideals.map((row) => {
-                      const v = `${row.text} (${row.alignment})`
-                      return (
-                        <option key={v} value={v}>
-                          {row.text} ({row.alignment})
-                        </option>
-                      )
-                    })}
-                  </select>
-                  <button
-                    type="button"
-                    className="btn"
-                    onClick={() => {
-                      const row = pickRandom(historyRow.personality.ideals)
-                      patchSexualHistoryPersonality({
-                        ideal: row ? `${row.text} (${row.alignment})` : '',
-                      })
-                    }}
-                  >
-                    Roll
-                  </button>
-                </div>
-              </div>
-              <div className="creator-field creator-field--inline-actions">
-                <label htmlFor="shp-bond">Bond</label>
-                <div className="creator-inline-row">
-                  <select
-                    id="shp-bond"
-                    value={character.sexualHistoryPersonality?.bond ?? ''}
-                    onChange={(e) =>
-                      patchSexualHistoryPersonality({ bond: e.target.value })
-                    }
-                  >
-                    <option value="">Choose…</option>
-                    {historyRow.personality.bonds.map((b) => (
-                      <option key={b} value={b}>
-                        {b}
-                      </option>
-                    ))}
-                  </select>
-                  <button
-                    type="button"
-                    className="btn"
-                    onClick={() =>
-                      patchSexualHistoryPersonality({
-                        bond: pickRandom(historyRow.personality.bonds) ?? '',
-                      })
-                    }
-                  >
-                    Roll
-                  </button>
-                </div>
-              </div>
-              <div className="creator-field creator-field--inline-actions">
-                <label htmlFor="shp-flaw">Flaw</label>
-                <div className="creator-inline-row">
-                  <select
-                    id="shp-flaw"
-                    value={character.sexualHistoryPersonality?.flaw ?? ''}
-                    onChange={(e) =>
-                      patchSexualHistoryPersonality({ flaw: e.target.value })
-                    }
-                  >
-                    <option value="">Choose…</option>
-                    {historyRow.personality.flaws.map((f) => (
-                      <option key={f} value={f}>
-                        {f}
-                      </option>
-                    ))}
-                  </select>
-                  <button
-                    type="button"
-                    className="btn"
-                    onClick={() =>
-                      patchSexualHistoryPersonality({
-                        flaw: pickRandom(historyRow.personality.flaws) ?? '',
-                      })
-                    }
-                  >
-                    Roll
-                  </button>
-                </div>
-              </div>
-              <div className="creator-field">
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  disabled={!character.sexualHistory}
-                  onClick={() => {
-                    if (!character.sexualHistory) return
-                    setCharacter((c) => ({
-                      ...c,
-                      sexualHistoryPersonality: rollSexualHistoryPersonality(
-                        character.sexualHistory!,
-                      ),
-                    }))
-                  }}
-                >
-                  Roll all personality
-                </button>
-              </div>
-            </div>
-          )}
+          <CreatorSexualBackgroundStep
+            character={character}
+            historyRow={historyRow}
+            onSelectHistory={(id) =>
+              setCharacter((c) =>
+                withMergedProficiencies({
+                  ...c,
+                  sexualHistory: id,
+                  sexualHistoryPersonality: undefined,
+                }),
+              )
+            }
+            onSelectRace={(id) =>
+              setCharacter((c) =>
+                withMergedProficiencies({ ...c, race: id, species: id }),
+              )
+            }
+            onPatchPersonality={patchSexualHistoryPersonality}
+            onRollAllPersonality={() => {
+              if (!character.sexualHistory) return
+              setCharacter((c) => ({
+                ...c,
+                sexualHistoryPersonality: rollSexualHistoryPersonality(
+                  character.sexualHistory!,
+                ),
+              }))
+            }}
+          />
         </section>
       )}
 
@@ -1035,7 +888,7 @@ export function CharacterCreatorPage() {
             <input
               id="beauty"
               type="text"
-              value={String(character.eroticTraits.beautyClass)}
+              value={String(character.beautyClass ?? character.eroticTraits.beautyClass)}
               readOnly
               placeholder="10"
             />
@@ -1121,7 +974,7 @@ export function CharacterCreatorPage() {
               value={character.eroticTraits.sexualMorality}
               onChange={(e) => updateErotic({ sexualMorality: e.target.value })}
             >
-              <option value="">Choose…</option>
+              <option value="">Chooseâ€¦</option>
               {SEXUAL_MORALITY_OPTIONS.map((m) => (
                 <option key={m} value={m}>
                   {m}
@@ -1136,7 +989,7 @@ export function CharacterCreatorPage() {
               value={character.eroticTraits.orientation}
               onChange={(e) => updateErotic({ orientation: e.target.value })}
             >
-              <option value="">Choose…</option>
+              <option value="">Chooseâ€¦</option>
               {ORIENTATION_OPTIONS.map((o) => (
                 <option key={o} value={o}>
                   {o}

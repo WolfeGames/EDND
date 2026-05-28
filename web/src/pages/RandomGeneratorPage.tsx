@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ADVENTURING_CLASSES } from '../data/adventuringClasses'
-import { GENDERS, isGenderOption, type GenderOption } from '../data/identityOptions'
+import { GENDERS, isGenderOption } from '../data/identityOptions'
 import { isCanonicalBiologicalSex } from '../lib/biologicalSex'
 import { CharacterSummary } from '../components/CharacterSummary'
 import {

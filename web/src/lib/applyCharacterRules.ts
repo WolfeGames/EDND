@@ -1,5 +1,8 @@
-import { deriveBeautyClass } from './abilityScores'
 import type { EdndCharacter } from '../types/character'
+import {
+  buildAppliedTraits,
+  computeBeautyClassBreakdown,
+} from './beautyClassCompute'
 
 export function sexualityBonusForLevel(level: number): number {
   if (level < 5) return 2
@@ -9,14 +12,26 @@ export function sexualityBonusForLevel(level: number): number {
   return 6
 }
 
-/** Recompute sexuality bonus and beauty class from level, scores, and current beauty modifier. */
+/** Recompute derived fields: sexuality bonus, beauty class, race sync, applied trait labels. */
 export function applyDerivedCharacterRules(c: EdndCharacter): EdndCharacter {
   const sexualityBonus = sexualityBonusForLevel(c.level)
-  const beautyClass = deriveBeautyClass(c.abilityScores, c.eroticTraits.beautyModifier)
-  return {
+  const race = (c.race || c.species || '').trim()
+  const species = (c.species || race).trim()
+  const sexualHistory = (c.sexualHistory ?? '').trim()
+  const synced: EdndCharacter = {
     ...c,
+    race,
+    species,
+    sexualHistory: sexualHistory || undefined,
+  }
+  const { total: beautyClass } = computeBeautyClassBreakdown(synced)
+  const appliedTraits = buildAppliedTraits(synced)
+  return {
+    ...synced,
+    beautyClass,
+    appliedTraits,
     eroticTraits: {
-      ...c.eroticTraits,
+      ...synced.eroticTraits,
       sexualityBonus,
       beautyClass,
     },

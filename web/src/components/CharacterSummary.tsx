@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useId, useMemo, useState } from 'react'
+import { useCallback, useEffect, useId, useMemo, useState, type ReactNode } from 'react'
 import { getCarnalClass, getSexualHistory, getSpecies } from '../data/registry'
 import {
   characterHasEndowedTrait,
@@ -12,33 +12,19 @@ import { formatRuleKey } from '../lib/formatRuleKey'
 import { parseFeatureLevelRequirement } from '../lib/parseFeatureLevelRequirement'
 import { resolveCarnalTraitLabels } from '../lib/resolveCarnalTraitLabels'
 import { splitHistoryFeatureBody } from '../lib/sexualHistoryFeatureDisplay'
-import {
-  abilityModifier,
-  deriveBeautyClass,
-  highestAbilityModifier,
-} from '../lib/abilityScores'
+import { computeBeautyClassBreakdown } from '../lib/beautyClassCompute'
+import { calculateMaxPleasure, sexDieLabel } from '../mechanics'
 import { isCanonicalBiologicalSex } from '../lib/biologicalSex'
+import {
+  formatRacialTraitBody,
+  getRacialSexualTraitSections,
+} from '../lib/racialSexualTraits'
 import { getDefaultSpeciesPortraitSrc } from '../lib/speciesPortrait'
-import type { AbilityScores, EdndCharacter } from '../types/character'
-import type { CarnalClassRow } from '../types/tables'
-import { RacialSexualTraitsPanel } from './RacialSexualTraitsPanel'
+import type { EdndCharacter } from '../types/character'
+import type { SexualHistoryRow } from '../types/tables'
+import { EncounterCalculator } from './EncounterCalculator'
 import { SpeciesPortrait } from './SpeciesPortrait'
 import './CharacterSummary.css'
-
-const ABILITY_WORD_TO_KEY: Record<string, keyof AbilityScores> = {
-  strength: 'strength',
-  str: 'strength',
-  dexterity: 'dexterity',
-  dex: 'dexterity',
-  constitution: 'constitution',
-  con: 'constitution',
-  intelligence: 'intelligence',
-  int: 'intelligence',
-  wisdom: 'wisdom',
-  wis: 'wisdom',
-  charisma: 'charisma',
-  cha: 'charisma',
-}
 
 const DUNGEON_TEASERS = [
   'Torchlight trembles across sweat-slick stone; a stranger’s breath ghosts your collar before the first die ever hits the table.',
@@ -64,63 +50,49 @@ function pickTeaserLines(count: number): string[] {
   return out
 }
 
-function parseStartingPleasureMax(
-  scores: AbilityScores,
-  raw: string,
-): number | null {
-  const m = raw.match(
-    /^(\d+)\s*\+\s*(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma)\s+modifier\b/i,
-  )
-  if (!m) return null
-  const base = parseInt(m[1], 10)
-  const key = ABILITY_WORD_TO_KEY[m[2].toLowerCase()]
-  if (!key) return null
-  return Math.max(1, base + abilityModifier(scores[key]))
-}
-
-function resolvePleasureMeta(
-  character: EdndCharacter,
-  cls: CarnalClassRow | undefined,
-): { label: string; max: number } {
-  if (cls?.startingPleasurePoints) {
-    const parsed = parseStartingPleasureMax(
-      character.abilityScores,
-      cls.startingPleasurePoints,
-    )
-    if (parsed !== null) {
-      return { label: cls.startingPleasurePoints, max: parsed }
-    }
-  }
-  const primary = cls?.primarySexualAbility?.trim()
-  let mod = highestAbilityModifier(character.abilityScores)
-  if (primary) {
-    const key = ABILITY_WORD_TO_KEY[primary.toLowerCase()]
-    if (key) mod = abilityModifier(character.abilityScores[key])
-  }
-  const max = Math.max(
-    6,
-    8 + character.level + Math.max(0, mod) + character.eroticTraits.sexualityBonus,
-  )
-  return {
-    label: cls
-      ? 'Estimated maximum (no explicit pleasure formula on this class).'
-      : 'Estimated maximum (choose a carnal class for precise pleasure scaling).',
-    max,
-  }
-}
-
-function stablePleasureCurrent(characterId: string, max: number): number {
-  if (max <= 1) return 0
-  let h = 0
-  for (let i = 0; i < characterId.length; i++) h = (h * 31 + characterId.charCodeAt(i)) >>> 0
-  const frac = 0.52 + ((h % 41) / 100) * 0.38
-  return Math.max(1, Math.min(max - 1, Math.round(max * frac)))
-}
-
 function traitHoverTitle(name: string, description: string): string {
   const pulse =
     ' · On the skin of memory, this trait thrums—inviting touch, gaze, and consequence in equal measure.'
   return `${name}\n\n${description}${pulse}`
+}
+
+function historySpotlightFeatures(row: SexualHistoryRow) {
+  return Object.entries(row.features)
+    .map(([key, text]) => {
+      const level = parseFeatureLevelRequirement(key)
+      const split = splitHistoryFeatureBody(text)
+      return {
+        key,
+        level: level ?? 99,
+        title: split?.titleLine ?? formatRuleKey(key),
+        body: split?.body ?? text,
+      }
+    })
+    .sort((a, b) => a.level - b.level)
+    .slice(0, 3)
+}
+
+function LushCollapse({
+  title,
+  badge,
+  children,
+  defaultOpen = false,
+}: {
+  title: string
+  badge?: string
+  children: ReactNode
+  defaultOpen?: boolean
+}) {
+  return (
+    <details className="lush-collapse" open={defaultOpen || undefined}>
+      <summary className="lush-collapse__summary">
+        <span className="lush-collapse__title">{title}</span>
+        {badge ? <span className="lush-collapse__badge">{badge}</span> : null}
+        <span className="lush-collapse__chev" aria-hidden />
+      </summary>
+      <div className="lush-collapse__body">{children}</div>
+    </details>
+  )
 }
 
 function FeatureRuleBlock({
@@ -164,8 +136,11 @@ function FeatureRuleBlock({
 export function CharacterSummary({ character }: { character: EdndCharacter }) {
   const teaserTitleId = useId()
   const [teaserOpen, setTeaserOpen] = useState(false)
+  const [encounterOpen, setEncounterOpen] = useState(false)
   const [teaserLines, setTeaserLines] = useState<string[]>([])
-  const [ppWave, setPpWave] = useState(0)
+  const [previewPleasureRemaining, setPreviewPleasureRemaining] = useState<number | null>(
+    null,
+  )
 
   const speciesRow = useMemo(
     () => (character.species ? getSpecies(character.species) : undefined),
@@ -191,39 +166,44 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
 
   const endowedActive = useMemo(() => characterHasEndowedTrait(character), [character])
 
-  const highestMod = useMemo(
-    () => highestAbilityModifier(character.abilityScores),
-    [character.abilityScores],
+  const beautyBreakdown = useMemo(() => computeBeautyClassBreakdown(character), [character])
+
+  const beautyDisplay = character.beautyClass ?? beautyBreakdown.total
+
+  const beautyTooltip = useMemo(
+    () =>
+      [
+        'Beauty Class — full calculation',
+        '',
+        `Base: ${beautyBreakdown.base}`,
+        `Highest ability modifier: +${beautyBreakdown.abilityMod}`,
+        `Other modifiers (equipment, magic, temp): +${beautyBreakdown.manualModifier}`,
+        `Racial & sexual history features: +${beautyBreakdown.traitBonus}`,
+        '————————————',
+        `Total: ${beautyBreakdown.total}`,
+        '',
+        'Hover anywhere on the crown to recall this breakdown.',
+      ].join('\n'),
+    [beautyBreakdown],
   )
 
-  const beautyFormulaValue = useMemo(
-    () => deriveBeautyClass(character.abilityScores, character.eroticTraits.beautyModifier),
-    [character.abilityScores, character.eroticTraits.beautyModifier],
+  const racialSections = useMemo(
+    () => getRacialSexualTraitSections(character.race || character.species || ''),
+    [character.race, character.species],
   )
 
-  const beautyTooltip = useMemo(() => {
-    const bc = character.eroticTraits.beautyClass
-    const bm = character.eroticTraits.beautyModifier
-    return [
-      'Beauty class sums your presence, allure, and how the world reads your desirability.',
-      '',
-      `Formula: 10 + highest ability modifier (${highestMod}) + beauty modifier from tables and features (${bm}).`,
-      `Recomputed baseline: ${beautyFormulaValue}.`,
-      bc === beautyFormulaValue
-        ? 'Stored value matches the formula.'
-        : `Note: sheet shows ${bc}; if this differs from ${beautyFormulaValue}, re-apply rules or refresh the character.`,
-    ].join('\n')
-  }, [
-    beautyFormulaValue,
-    character.eroticTraits.beautyClass,
-    character.eroticTraits.beautyModifier,
-    highestMod,
-  ])
-
-  const pleasureMeta = useMemo(
-    () => resolvePleasureMeta(character, carnalClassRow),
-    [character, carnalClassRow],
+  const historyFeatures = useMemo(
+    () => (historyRow ? historySpotlightFeatures(historyRow) : []),
+    [historyRow],
   )
+
+  const raceDisplayName =
+    speciesRow?.name ?? ((character.race || character.species || '—').trim() || '—')
+
+  const pleasureMeta = useMemo(() => {
+    const result = calculateMaxPleasure(character)
+    return { label: result.formula, max: result.max }
+  }, [character])
 
   const speciesDisplayName = speciesRow?.name ?? (character.species?.trim() || '—')
 
@@ -236,20 +216,10 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
 
   const portraitAlt = speciesDisplayName !== '—' ? `${speciesDisplayName} portrait` : ''
 
-  const pleasureCurrent = useMemo(
-    () => stablePleasureCurrent(character.id, pleasureMeta.max),
-    [character.id, pleasureMeta.max],
-  )
+  /** PP = max pleasure the character can withstand; starts full and drops when they receive pleasure. */
+  const pleasureRemaining = previewPleasureRemaining ?? pleasureMeta.max
 
-  const pleasurePct = useMemo(() => {
-    if (pleasureMeta.max <= 0) return 0
-    return Math.min(100, Math.round((pleasureCurrent / pleasureMeta.max) * 1000) / 10)
-  }, [pleasureCurrent, pleasureMeta.max])
-
-  const sexDieLabel = useMemo(() => {
-    if (!carnalClassRow) return '—'
-    return carnalClassRow.sexDie ?? `d${carnalClassRow.hitDie}`
-  }, [carnalClassRow])
+  const sexDieDisplay = useMemo(() => sexDieLabel(character), [character])
 
   const stimulationList = carnalClassRow?.stimulationProficiencies ?? []
   const positionList = character.eroticTraits.positionProficiencies
@@ -257,7 +227,6 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
   const openTeaser = useCallback(() => {
     setTeaserLines(pickTeaserLines(3))
     setTeaserOpen(true)
-    setPpWave((w) => w + 1)
   }, [])
 
   const closeTeaser = useCallback(() => setTeaserOpen(false), [])
@@ -275,6 +244,23 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
     <div className="character-summary immersive-sheet">
       <div className="immersive-sheet__ambient" aria-hidden />
       <div className="immersive-sheet__particles" aria-hidden />
+
+      <section className="beauty-crown lush-panel" aria-label="Beauty class" title={beautyTooltip}>
+        <p className="beauty-crown__label">Beauty class</p>
+        <p className="beauty-crown__value">{beautyDisplay}</p>
+        <p className="beauty-crown__hint muted">Hover for full calculation</p>
+        <ul className="beauty-crown__breakdown muted">
+          <li>
+            {beautyBreakdown.base} base + {beautyBreakdown.abilityMod} ability
+            {beautyBreakdown.manualModifier !== 0
+              ? ` + ${beautyBreakdown.manualModifier} other`
+              : ''}
+            {beautyBreakdown.traitBonus > 0
+              ? ` + ${beautyBreakdown.traitBonus} traits`
+              : ''}
+          </li>
+        </ul>
+      </section>
 
       <header
         className={
@@ -319,15 +305,17 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
           </div>
         </div>
 
-        <div className="immersive-hero__beauty" title={beautyTooltip}>
-          <span className="immersive-hero__beauty-label">Beauty class</span>
-          <span className="immersive-hero__beauty-value">
-            {character.eroticTraits.beautyClass}
-          </span>
-          <span className="immersive-hero__beauty-hint">Hover for the math</span>
-        </div>
-
-        <div className="immersive-hero__cta">
+        <div className="immersive-hero__cta immersive-hero__cta--row">
+          <button
+            type="button"
+            className="btn-encounter"
+            onClick={() => {
+              setPreviewPleasureRemaining(null)
+              setEncounterOpen(true)
+            }}
+          >
+            Test encounter
+          </button>
           <button
             type="button"
             className="btn-dungeon"
@@ -340,58 +328,137 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
         </div>
       </header>
 
-      <section className="immersive-meters" aria-label="Pleasure reserve">
+      <section className="immersive-meters" aria-label="Pleasure points capacity">
         <div className="immersive-meters__head">
           <span className="immersive-meters__title">Pleasure points</span>
           <span className="immersive-meters__meta">
-            {pleasureCurrent} / {pleasureMeta.max}
+            {pleasureRemaining} / {pleasureMeta.max} remaining
           </span>
         </div>
+        <p className="immersive-meters__capacity muted">
+          Maximum pleasure you can withstand before climax checks apply.
+        </p>
         <p className="immersive-meters__rule muted">{pleasureMeta.label}</p>
-        <div className="ecstasy-meter" key={ppWave}>
-          <div className="ecstasy-meter__glow" aria-hidden />
-          <div
-            className="ecstasy-meter__fill"
-            style={{ width: `${pleasurePct}%` }}
-            role="progressbar"
-            aria-valuenow={pleasureCurrent}
-            aria-valuemin={0}
-            aria-valuemax={pleasureMeta.max}
-            aria-label="Pleasure reserve fill"
-          />
-          <div className="ecstasy-meter__sheen" aria-hidden />
-        </div>
         <p className="immersive-meters__whisper muted">
-          Illustrative reserve for the sheet—track current PP in play as your table prefers.
+          Receiving pleasure reduces remaining PP. Use Test encounter to simulate stimulation.
         </p>
       </section>
 
-      <section className="immersive-key-stats" aria-label="Key carnal stats">
-        <div className="immersive-stat-card immersive-stat-card--die">
-          <span className="immersive-stat-card__label">Sex die</span>
-          <span className="immersive-stat-card__value">{sexDieLabel}</span>
-          <span className="immersive-stat-card__note muted">
-            {carnalClassRow ? 'From carnal class' : 'Select a carnal class'}
-          </span>
-        </div>
-        <div className="immersive-stat-card">
-          <span className="immersive-stat-card__label">Stimulation proficiencies</span>
-          <span className="immersive-stat-card__value immersive-stat-card__value--list">
-            {stimulationList.length ? stimulationList.join(' · ') : '—'}
-          </span>
-          <span className="immersive-stat-card__note muted">Class training</span>
-        </div>
-        <div className="immersive-stat-card">
-          <span className="immersive-stat-card__label">Position proficiencies</span>
-          <span className="immersive-stat-card__value immersive-stat-card__value--list">
-            {positionList.length ? positionList.join(' · ') : '—'}
-          </span>
-          <span className="immersive-stat-card__note muted">Merged from history &amp; class</span>
-        </div>
-      </section>
+      <div className="immersive-spotlight">
+        {historyRow ? (
+          <article className="lush-card lush-card--history lush-panel">
+            <header className="lush-card__head">
+              <span className="lush-card__eyebrow">Sexual history</span>
+              <h3 className="lush-card__title">{historyRow.name}</h3>
+              {historyRow.traitPoints != null ? (
+                <span className="lush-card__meta">{historyRow.traitPoints} trait points</span>
+              ) : null}
+            </header>
+            <p className="lush-card__theme">{historyRow.description}</p>
+            <ol className="lush-card__features">
+              {historyFeatures.map((f) => (
+                <li key={f.key} className="lush-feature">
+                  <span className="lush-feature__level">Lv {f.level === 99 ? '?' : f.level}</span>
+                  <strong className="lush-feature__name">{f.title}</strong>
+                  <p className="lush-feature__body feature-body">{f.body}</p>
+                </li>
+              ))}
+            </ol>
+          </article>
+        ) : (
+          <article className="lush-card lush-card--empty lush-panel">
+            <p className="muted">No sexual history selected.</p>
+          </article>
+        )}
 
-      <div className="review-section immersive-identity immersive-panel">
-        <h3>Identity</h3>
+        {racialSections.length > 0 ? (
+          <article className="lush-card lush-card--race lush-panel">
+            <header className="lush-card__head">
+              <span className="lush-card__eyebrow">Race</span>
+              <h3 className="lush-card__title">{raceDisplayName}</h3>
+            </header>
+            {racialSections.map((sec) => (
+              <div key={sec.groupId} className="lush-race-group">
+                <h4 className="lush-race-group__title">{sec.name}</h4>
+                <p className="lush-race-group__theme muted">{sec.theme}</p>
+                <ul className="lush-race-group__traits">
+                  {sec.traits.map((t) => (
+                    <li key={t.name} className="lush-race-trait immersive-trait">
+                      <strong>{t.name}</strong>
+                      <p className="feature-body">{formatRacialTraitBody(t)}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </article>
+        ) : (
+          <article className="lush-card lush-card--empty lush-panel">
+            <p className="muted">No race selected.</p>
+          </article>
+        )}
+      </div>
+
+      <LushCollapse
+        title="Carnal traits"
+        badge={
+          resolvedCarnalTraits.length
+            ? String(resolvedCarnalTraits.length)
+            : unresolvedCarnalLabels.length
+              ? `${unresolvedCarnalLabels.length}?`
+              : undefined
+        }
+      >
+        {resolvedCarnalTraits.length === 0 && unresolvedCarnalLabels.length === 0 ? (
+          <p className="muted">No traits from history.</p>
+        ) : (
+          <div className="immersive-trait-grid">
+            {resolvedCarnalTraits.map((t) => (
+              <div
+                key={t.id}
+                className="trait-card immersive-trait"
+                title={traitHoverTitle(t.name, t.description)}
+              >
+                <strong>{t.name}</strong>
+                <p className="feature-body">{t.description}</p>
+              </div>
+            ))}
+          </div>
+        )}
+        {unresolvedCarnalLabels.length > 0 && (
+          <p className="muted immersive-trait-unresolved">
+            Not in table:{' '}
+            {unresolvedCarnalLabels.map((u) => (
+              <span key={u} className="unresolved-pill">
+                {u}
+              </span>
+            ))}
+          </p>
+        )}
+      </LushCollapse>
+
+      <LushCollapse
+        title="Stimulation & position proficiencies"
+        badge={String(stimulationList.length + positionList.length)}
+        defaultOpen
+      >
+        <div className="lush-prof-grid">
+          <div>
+            <h4 className="immersive-subheading">Stimulation</h4>
+            <p>{stimulationList.length ? stimulationList.join(' · ') : '—'}</p>
+          </div>
+          <div>
+            <h4 className="immersive-subheading">Positions</h4>
+            <p>{positionList.length ? positionList.join(' · ') : '—'}</p>
+          </div>
+          <div>
+            <h4 className="immersive-subheading">Sex die</h4>
+            <p className="lush-sex-die">{sexDieDisplay}</p>
+          </div>
+        </div>
+      </LushCollapse>
+
+      <LushCollapse title="Identity & endowment">
         <ul className="review-list">
           <li>
             <strong>{character.name || '—'}</strong>, level {character.level}{' '}
@@ -418,129 +485,74 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
               {endowedActive && (
                 <span>
                   {' '}
-                  <strong>Endowed</strong> is applied here: bust and/or phallus sizes are shown one
-                  tier larger (max Gargantuan) than stored on the JSON export.
+                  <strong>Endowed</strong> sizes display one tier larger on the sheet than in
+                  export JSON.
                 </span>
               )}
             </p>
           </li>
         </ul>
-      </div>
+      </LushCollapse>
 
-      <div className="review-section immersive-species-erotic immersive-panel">
-        <h3>Species &amp; erotic profile</h3>
+      <LushCollapse title="Species mechanics" badge={speciesRow ? '1' : undefined}>
         {speciesRow ? (
           <>
-            <h4 className="immersive-subheading">Species — {speciesRow.name}</h4>
             <ul className="review-list">
               <li>
                 Size {speciesRow.size}, speed {speciesRow.speed} ft.
               </li>
               {speciesRow.eroticGrants.length > 0 && (
-                <li>Erotic art grants: {speciesRow.eroticGrants.join(', ')}</li>
+                <li>Erotic grants: {speciesRow.eroticGrants.join(', ')}</li>
               )}
               <li>{speciesRow.description}</li>
             </ul>
             <div className="trait-card trait-card--species immersive-trait">
-              <strong>Species carnal trait — {speciesRow.carnalTrait}</strong>
+              <strong>{speciesRow.carnalTrait}</strong>
               <p className="feature-body">{speciesRow.carnalTraitDescription}</p>
             </div>
-            <RacialSexualTraitsPanel speciesId={character.species} />
           </>
         ) : (
-          <p className="muted">No species selected.</p>
+          <p className="muted">No species.</p>
         )}
-        <h4 className="immersive-subheading">Beauty &amp; drive</h4>
+      </LushCollapse>
+
+      <LushCollapse title="Erotic arts & tools">
         <ul className="review-list">
           <li>
-            Beauty class <strong>{character.eroticTraits.beautyClass}</strong>
-          </li>
-          <li>Sexuality bonus: +{character.eroticTraits.sexualityBonus}</li>
-        </ul>
-        <h4 className="immersive-subheading">Proficiencies</h4>
-        <ul className="review-list">
-          <li>
-            Carnal skills / erotic arts:{' '}
+            Arts:{' '}
             {character.eroticTraits.carnalSkillProficiencies.length
               ? character.eroticTraits.carnalSkillProficiencies.join(', ')
-              : '—'}
-          </li>
-          <li>
-            Positions:{' '}
-            {character.eroticTraits.positionProficiencies.length
-              ? character.eroticTraits.positionProficiencies.join(', ')
               : '—'}
           </li>
           {character.eroticTraits.eroticToolProficiencies.length > 0 && (
             <li>Tools: {character.eroticTraits.eroticToolProficiencies.join(', ')}</li>
           )}
+          <li>Sexuality bonus: +{character.eroticTraits.sexualityBonus}</li>
         </ul>
         {(character.eroticTraits.attraction ||
           character.eroticTraits.repulsion ||
           character.eroticTraits.sexualMorality ||
           character.eroticTraits.orientation) && (
-          <>
-            <h4 className="immersive-subheading">Attraction &amp; boundaries</h4>
-            <ul className="review-list">
-              {character.eroticTraits.attraction && (
-                <li>Attraction: {character.eroticTraits.attraction}</li>
-              )}
-              {character.eroticTraits.repulsion && (
-                <li>Repulsion: {character.eroticTraits.repulsion}</li>
-              )}
-              {character.eroticTraits.sexualMorality && (
-                <li>Morality: {character.eroticTraits.sexualMorality}</li>
-              )}
-              {character.eroticTraits.orientation && (
-                <li>Orientation: {character.eroticTraits.orientation}</li>
-              )}
-            </ul>
-          </>
+          <ul className="review-list">
+            {character.eroticTraits.attraction && (
+              <li>Attraction: {character.eroticTraits.attraction}</li>
+            )}
+            {character.eroticTraits.repulsion && (
+              <li>Repulsion: {character.eroticTraits.repulsion}</li>
+            )}
+            {character.eroticTraits.sexualMorality && (
+              <li>Morality: {character.eroticTraits.sexualMorality}</li>
+            )}
+            {character.eroticTraits.orientation && (
+              <li>Orientation: {character.eroticTraits.orientation}</li>
+            )}
+          </ul>
         )}
-      </div>
+      </LushCollapse>
 
       {historyRow && (
-        <section className="immersive-history immersive-panel">
-          <div className="immersive-history__head">
-            <h3 className="immersive-history__title">Sexual history</h3>
-            <span className="immersive-history__name">{historyRow.name}</span>
-            {historyRow.traitPoints != null ? (
-              <span className="immersive-history__trait-points">
-                {historyRow.traitPoints} trait points
-              </span>
-            ) : null}
-          </div>
-          <p className="immersive-history__desc">{historyRow.description}</p>
-
-          <h4 className="immersive-subheading">Equipped carnal traits</h4>
-          {resolvedCarnalTraits.length === 0 && unresolvedCarnalLabels.length === 0 ? (
-            <p className="muted">No traits resolved from this history.</p>
-          ) : (
-            <div className="immersive-trait-grid">
-              {resolvedCarnalTraits.map((t) => (
-                <div
-                  key={t.id}
-                  className="trait-card immersive-trait"
-                  title={traitHoverTitle(t.name, t.description)}
-                >
-                  <strong>{t.name}</strong>
-                  <p className="feature-body">{t.description}</p>
-                </div>
-              ))}
-            </div>
-          )}
-          {unresolvedCarnalLabels.length > 0 && (
-            <p className="muted immersive-trait-unresolved">
-              Not in table yet:{' '}
-              {unresolvedCarnalLabels.map((u) => (
-                <span key={u} className="unresolved-pill">
-                  {u}
-                </span>
-              ))}
-            </p>
-          )}
-
-          <h4 className="immersive-subheading">History features</h4>
+        <LushCollapse title="History details & personality">
+          <h4 className="immersive-subheading">All history features</h4>
           <div className="feature-list">
             {Object.entries(historyRow.features).map(([k, v]) => {
               const split = splitHistoryFeatureBody(v)
@@ -549,25 +561,21 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
                   key={k}
                   ruleKey={k}
                   text={split ? split.body : v}
-                  heading={
-                    split ? `${formatRuleKey(k)} — ${split.titleLine}` : undefined
-                  }
+                  heading={split ? `${formatRuleKey(k)} — ${split.titleLine}` : undefined}
                   characterLevel={character.level}
                 />
               )
             })}
           </div>
-
-          <h4 className="immersive-subheading">Equipment from history</h4>
+          <h4 className="immersive-subheading">Equipment</h4>
           <ul className="review-list">
             {historyRow.equipment.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
-
           {character.sexualHistoryPersonality && (
             <>
-              <h4 className="immersive-subheading">Personality (chosen)</h4>
+              <h4 className="immersive-subheading">Personality</h4>
               <ul className="review-list">
                 <li>
                   <strong>Trait:</strong> {character.sexualHistoryPersonality.trait || '—'}
@@ -584,7 +592,7 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
               </ul>
             </>
           )}
-        </section>
+        </LushCollapse>
       )}
 
       {carnalClassRow && (
@@ -632,6 +640,15 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
           )}
         </section>
       )}
+
+      <EncounterCalculator
+        open={encounterOpen}
+        onClose={() => setEncounterOpen(false)}
+        character={character}
+        pleasureMax={pleasureMeta.max}
+        pleasureRemaining={pleasureRemaining}
+        onApplyPreview={setPreviewPleasureRemaining}
+      />
 
       {teaserOpen && (
         <div

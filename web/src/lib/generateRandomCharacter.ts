@@ -12,7 +12,8 @@ import {
   sexualHistories,
 } from '../data/registry'
 import { createEmptyCharacter, createEmptyEroticTraits, type EdndCharacter } from '../types/character'
-import { deriveBeautyClass, rollAllAbilityScores } from './abilityScores'
+import { rollAllAbilityScores } from './abilityScores'
+import { applyDerivedCharacterRules } from './applyCharacterRules'
 import { normalizeCharacterBiology } from './biologicalSex'
 import { rollRandomEndowmentForBiologicalSex } from './endowment'
 import { mergeTableProficiencies } from './mergeEroticProficiencies'
@@ -197,10 +198,6 @@ export function generateRandomCharacter(
   const baseTraits = createEmptyEroticTraits()
   const merged = mergeTableProficiencies(sp.id, hist.id, carnalCl?.id, {
     ...baseTraits,
-    beautyModifier: 0,
-    beautyClass: deriveBeautyClass(abilityScores, 0),
-    sexualityBonus:
-      level < 5 ? 2 : level < 10 ? 3 : level < 14 ? 4 : level < 18 ? 5 : 6,
     attraction: pickRandom(ATTRACTIONS)!,
     repulsion: pickRandom(REPULSIONS)!,
     sexualMorality: pickRandom(MORALITIES)!,
@@ -208,21 +205,24 @@ export function generateRandomCharacter(
     eroticToolProficiencies: randomToolProficiencies(),
   })
 
-  return normalizeCharacterBiology({
-    ...createEmptyCharacter(),
-    name: randomName(),
-    pronouns,
-    genderIdentity,
-    level,
-    abilityScores,
-    endowment: rollRandomEndowmentForBiologicalSex(genderIdentity),
-    adventuringClass: adv,
-    background: bg,
-    species: sp.id,
-    sexualHistory: hist.id,
-    sexualHistoryPersonality: rollSexualHistoryPersonality(hist.id),
-    carnalClass: carnalCl?.id,
-    carnalFeatures: [sp.carnalTrait],
-    eroticTraits: merged,
-  })
+  return applyDerivedCharacterRules(
+    normalizeCharacterBiology({
+      ...createEmptyCharacter(),
+      name: randomName(),
+      pronouns,
+      genderIdentity,
+      level,
+      abilityScores,
+      endowment: rollRandomEndowmentForBiologicalSex(genderIdentity),
+      adventuringClass: adv,
+      background: bg,
+      species: sp.id,
+      race: sp.id,
+      sexualHistory: hist.id,
+      sexualHistoryPersonality: rollSexualHistoryPersonality(hist.id),
+      carnalClass: carnalCl?.id,
+      carnalFeatures: [sp.carnalTrait],
+      eroticTraits: merged,
+    }),
+  )
 }

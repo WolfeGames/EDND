@@ -1,4 +1,5 @@
 import { createEmptyCharacter, createEmptyEroticTraits, type EdndCharacter } from '../types/character'
+import { applyDerivedCharacterRules } from './applyCharacterRules'
 import { normalizeCharacterBiology } from './biologicalSex'
 
 const ANATOMIES = new Set(['neither', 'breasts', 'phallus', 'both'])
@@ -116,6 +117,7 @@ export function parseCharacterJson(json: unknown): EdndCharacter {
     pronouns: str(json.pronouns, ''),
     genderIdentity: str(json.genderIdentity, ''),
     species: str(json.species, ''),
+    race: str(json.race, str(json.species, '')),
     adventuringClass: str(json.adventuringClass, ''),
     level: num(json.level, base.level, 1, 20),
     abilityScores,
@@ -126,7 +128,9 @@ export function parseCharacterJson(json: unknown): EdndCharacter {
       json.sexualHistory === undefined ? undefined : str(json.sexualHistory, '') || undefined,
     sexualHistoryPersonality,
     carnalFeatures: strArr(json.carnalFeatures),
+    beautyClass: num(json.beautyClass, emptyEt.beautyClass, 1, 99),
+    appliedTraits: strArr(json.appliedTraits),
     eroticTraits,
   }
-  return normalizeCharacterBiology(draft)
+  return applyDerivedCharacterRules(normalizeCharacterBiology(draft))
 }

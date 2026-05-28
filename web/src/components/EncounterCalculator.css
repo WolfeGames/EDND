@@ -1,0 +1,132 @@
+.encounter-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 210;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: rgba(8, 2, 14, 0.78);
+  backdrop-filter: blur(8px);
+}
+
+.encounter-dialog {
+  max-width: 26rem;
+  width: 100%;
+  animation: teaser-rise 0.4s ease-out;
+}
+
+.encounter-dialog__title {
+  margin: 0 0 0.35rem;
+  font-family: var(--heading);
+  font-size: 1.2rem;
+  color: #fce7f3;
+  text-shadow: 0 0 20px rgba(244, 114, 182, 0.5);
+}
+
+.encounter-dialog__lede {
+  margin: 0 0 1rem;
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.encounter-dialog__readout {
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(244, 114, 182, 0.35);
+  background: rgba(12, 4, 20, 0.65);
+  text-align: center;
+}
+
+.encounter-dialog__readout-label {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(251, 207, 232, 0.75);
+  margin-bottom: 0.25rem;
+}
+
+.encounter-dialog__readout-value {
+  font-family: var(--heading);
+  font-size: 1.5rem;
+  color: #fda4af;
+}
+
+.encounter-dialog__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.65rem;
+  margin-bottom: 0.85rem;
+}
+
+@media (max-width: 420px) {
+  .encounter-dialog__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.encounter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.encounter-field input,
+.encounter-field select {
+  padding: 0.45rem 0.55rem;
+  border-radius: 8px;
+  border: 1px solid rgba(236, 72, 153, 0.35);
+  background: rgba(12, 4, 20, 0.85);
+  color: var(--text-h);
+  font: inherit;
+}
+
+.encounter-field--check {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.encounter-field--check input[type='checkbox'] {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: #ec4899;
+}
+
+.encounter-dialog__modifiers {
+  margin: 0 0 0.65rem;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.encounter-dialog__notes {
+  margin: 0 0 0.65rem;
+  padding-left: 1.1rem;
+  font-size: 0.78rem;
+}
+
+.encounter-dialog__result {
+  margin: 0 0 1rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.encounter-dialog__taken {
+  color: #fda4af;
+  text-shadow: 0 0 12px rgba(244, 114, 182, 0.6);
+}
+
+.encounter-dialog__climax {
+  color: #f9a8d4;
+  font-style: italic;
+}
+
+.encounter-dialog__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}

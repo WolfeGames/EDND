@@ -1,4 +1,5 @@
 import type { EdndCharacter } from '../types/character'
+import { applyDerivedCharacterRules } from './applyCharacterRules'
 import { normalizeCharacterBiology } from './biologicalSex'
 import { parseCharacterJson } from './characterImport'
 
@@ -27,7 +28,8 @@ function safeParse<T>(raw: string | null): T | null {
 export function loadDraft(): EdndCharacter | null {
   try {
     const parsed = safeParse<EdndCharacter>(localStorage.getItem(DRAFT_STORAGE_KEY))
-    return parsed && typeof parsed === 'object' ? parsed : null
+    if (!parsed || typeof parsed !== 'object') return null
+    return applyDerivedCharacterRules(normalizeCharacterBiology(parsed))
   } catch {
     return null
   }
@@ -65,7 +67,9 @@ export function loadLibrary(): LibraryEntry[] {
       )
       .map((e) => ({
         ...e,
-        character: normalizeCharacterBiology(e.character as EdndCharacter),
+        character: applyDerivedCharacterRules(
+          normalizeCharacterBiology(e.character as EdndCharacter),
+        ),
       }))
   } catch {
     return []

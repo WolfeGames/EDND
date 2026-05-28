@@ -123,6 +123,9 @@ export interface EdndCharacter {
 
   species: SpeciesId
 
+  /** Playable ancestry key (synced with `species`; drives racial-sexual-traits.json). */
+  race: string
+
   adventuringClass: AdventuringClassId
 
   level: number
@@ -133,7 +136,14 @@ export interface EdndCharacter {
 
   carnalClass?: CarnalClassId
 
+  /** Key from `sexualHistories` table (e.g. courtesan, awakened). */
   sexualHistory?: SexualHistoryId
+
+  /** Running total: 10 + highest ability mod + modifiers + racial/history beauty bonuses. */
+  beautyClass: number
+
+  /** Active racial trait names, history label, and unlocked history feature titles. */
+  appliedTraits: string[]
 
   /** From sexual history tables; cleared when history changes. */
 
@@ -192,6 +202,8 @@ export function createEmptyCharacter(): EdndCharacter {
 
     species: '',
 
+    race: '',
+
     adventuringClass: '',
 
     level: 1,
@@ -210,6 +222,10 @@ export function createEmptyCharacter(): EdndCharacter {
     background: '',
 
     carnalFeatures: [],
+
+    beautyClass: 10,
+
+    appliedTraits: [],
 
     eroticTraits: createEmptyEroticTraits(),
 
