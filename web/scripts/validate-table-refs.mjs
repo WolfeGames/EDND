@@ -72,8 +72,82 @@ for (const s of species) {
   speciesIds.add(s.id)
 }
 
+const bestiaryPath = path.join(tables, 'bestiary.json')
+let bestiaryCount = 0
+try {
+  const bestiary = JSON.parse(readFileSync(bestiaryPath, 'utf8')).bestiary
+  bestiaryCount = bestiary.length
+  const bestiaryIds = new Set()
+  const REQUIRED_KEYS = [
+    'id',
+    'name',
+    'sr',
+    'creatureType',
+    'carnalType',
+    'size',
+    'description',
+    'abilityScores',
+    'sexualTraits',
+    'sexualNorms',
+    'recreationalPractices',
+    'breedingPractices',
+    'encounterHooks',
+  ]
+  const ABILITY_KEYS = ['str', 'dex', 'con', 'int', 'wis', 'cha']
+  for (const entry of bestiary) {
+    if (!entry.id || typeof entry.id !== 'string') {
+      console.error('[error] bestiary entry missing or invalid id')
+      errors++
+      continue
+    }
+    if (bestiaryIds.has(entry.id)) {
+      console.error(`[error] duplicate bestiary id: ${entry.id}`)
+      errors++
+    }
+    bestiaryIds.add(entry.id)
+    for (const k of REQUIRED_KEYS) {
+      if (!(k in entry)) {
+        console.error(`[error] bestiary ${entry.id}: missing required key "${k}"`)
+        errors++
+      }
+    }
+    if (typeof entry.sr !== 'number') {
+      console.error(`[error] bestiary ${entry.id}: "sr" must be a number`)
+      errors++
+    }
+    if (entry.abilityScores && typeof entry.abilityScores === 'object') {
+      for (const ab of ABILITY_KEYS) {
+        if (typeof entry.abilityScores[ab] !== 'number') {
+          console.error(`[error] bestiary ${entry.id}: abilityScores.${ab} must be a number`)
+          errors++
+        }
+      }
+    }
+    if (!Array.isArray(entry.sexualTraits)) {
+      console.error(`[error] bestiary ${entry.id}: "sexualTraits" must be an array`)
+      errors++
+    } else {
+      for (const trait of entry.sexualTraits) {
+        if (!trait || typeof trait.name !== 'string' || typeof trait.mechanical !== 'string') {
+          console.error(
+            `[error] bestiary ${entry.id}: each sexualTrait needs string "name" and "mechanical"`,
+          )
+          errors++
+        }
+      }
+    }
+  }
+} catch (e) {
+  if (e.code === 'ENOENT') {
+    console.log('[info] bestiary.json not found — skipping bestiary validation.')
+  } else {
+    console.error(`[error] failed to parse bestiary.json: ${e.message}`)
+    errors++
+  }
+}
+
 console.log(
-  `Table ref check: ${files.length} sexual history files, ${species.length} species, ${traits.length} carnal traits.`,
+  `Table ref check: ${files.length} sexual history files, ${species.length} species, ${traits.length} carnal traits, ${bestiaryCount} bestiary entries.`,
 )
 if (warnings) console.log(`Warnings: ${warnings} (trait label not matched by id or name)`)
 if (errors) {

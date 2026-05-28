@@ -25,6 +25,14 @@
       "category": "Consumable"
     },
     {
+      "id": "vibrating-olisbos",
+      "name": "Vibrating Olisbos",
+      "cost": "75 gp",
+      "weight": "2 lb",
+      "description": "Artificer-crafted focus. Adds 1d8 pleasure on stimulation while equipped.",
+      "category": "Crafted Focus"
+    },
+    {
       "id": "vibrating-tongue-ring",
       "name": "Vibrating Tongue Ring",
       "cost": "40 gp",

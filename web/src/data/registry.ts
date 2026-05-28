@@ -1,3 +1,4 @@
+import bestiaryData from './tables/bestiary.json'
 import carnalClassesData from './tables/carnal-classes.json'
 import carnalEquipmentData from './tables/carnal-equipment.json'
 import carnalTraitsData from './tables/carnal-traits.json'
@@ -5,6 +6,7 @@ import speciesData from './tables/species.json'
 import { resolveSpeciesTableId } from '../lib/speciesAliases'
 import { buildSexualHistories } from '../lib/sexualHistoryMerge'
 import type {
+  BestiaryEntry,
   CarnalClassRow,
   CarnalEquipmentRow,
   CarnalTraitRow,
@@ -46,6 +48,9 @@ export const carnalClasses: CarnalClassRow[] =
 export const carnalEquipment: CarnalEquipmentRow[] =
   carnalEquipmentData.carnalEquipment as CarnalEquipmentRow[]
 
+export const bestiary: BestiaryEntry[] =
+  bestiaryData.bestiary as BestiaryEntry[]
+
 function byId<T extends { id: string }>(rows: T[]): Map<string, T> {
   const map = new Map<string, T>()
   for (const row of rows) {
@@ -71,6 +76,7 @@ const sexualHistoriesById = byId(sexualHistories)
 const carnalTraitsById = byId(carnalTraits)
 const carnalClassesById = byId(carnalClasses)
 const carnalEquipmentById = byId(carnalEquipment)
+const bestiaryById = byId(bestiary)
 
 export function getSpecies(id: string): SpeciesRow | undefined {
   return speciesById.get(resolveSpeciesTableId(id))
@@ -90,6 +96,10 @@ export function getCarnalClass(id: string): CarnalClassRow | undefined {
 
 export function getCarnalEquipment(id: string): CarnalEquipmentRow | undefined {
   return carnalEquipmentById.get(id)
+}
+
+export function getBestiaryEntry(id: string): BestiaryEntry | undefined {
+  return bestiaryById.get(id)
 }
 
 /** Uniform random element; use for the random character generator. */

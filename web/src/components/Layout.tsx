@@ -28,6 +28,18 @@ export function Layout() {
             Random
           </NavLink>
           <NavLink
+            to="/bestiary"
+            className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+          >
+            Bestiary
+          </NavLink>
+          <NavLink
+            to="/pleasure-test"
+            className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+          >
+            Scene builder
+          </NavLink>
+          <NavLink
             to="/rules"
             className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
           >

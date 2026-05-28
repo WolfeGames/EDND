@@ -1,5 +1,6 @@
 import type { EdndCharacter } from '../types/character'
 import { normalizedEndowment } from './endowment'
+import { normalizeGenitalTraitOnCharacter } from './genitalTrait'
 
 /** Canonical biological sex in the app (portraits + rolls). */
 export type BiologicalSex = 'Male' | 'Female'
@@ -22,9 +23,9 @@ export function isCanonicalBiologicalSex(g: string): g is BiologicalSex {
 
 export function normalizeCharacterBiology(c: EdndCharacter): EdndCharacter {
   const genderIdentity = sanitizeBiologicalSexForApp(c.genderIdentity)
-  return {
+  return normalizeGenitalTraitOnCharacter({
     ...c,
     genderIdentity,
     endowment: normalizedEndowment(genderIdentity, c.endowment),
-  }
+  })
 }

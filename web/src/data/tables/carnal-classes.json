@@ -88,6 +88,39 @@
       }
     },
     {
+      "id": "siren",
+      "name": "Siren",
+      "description": "A performer whose body and voice weave pleasure into art. Sirens command attention on stage and in the sheets, turning Dexterity and Charisma into devastating bliss.",
+      "hitDie": 8,
+      "primarySexualAbility": "Charisma",
+      "sexDie": "d8",
+      "startingPleasurePoints": "8 + Charisma modifier",
+      "savingThrowProficiencies": ["Charisma", "Dexterity"],
+      "eroticArts": ["Seduction", "Erotica", "Exhibitionism"],
+      "positionProficiencies": {
+        "tiers": ["Basic", "Advanced"]
+      },
+      "features": {
+        "level1": {
+          "name": "Bliss die",
+          "description": "When you use Dexterity or Charisma for stimulation, add your Bliss die to pleasure dealt (d6 at 1st, scales to d12 by 17th)."
+        },
+        "level2": {
+          "name": "Center of Attention",
+          "description": "While performing for an audience, add your Sexuality bonus to pleasure dealt."
+        },
+        "level3": {
+          "name": "Erotic Performance",
+          "description": "During an erotic performance, add 2d6 pleasure to stimulation rolls."
+        },
+        "level6": "Sirensong",
+        "level10": "Captivating Chorus",
+        "level14": "Ecstatic Encore",
+        "level20": "Legendary Siren"
+      },
+      "subclasses": ["Stage Diva", "Bordello Virtuoso", "Wild Chanter"]
+    },
+    {
       "id": "ravager",
       "name": "Ravager",
       "description": "A Ravager is someone beholden only to their most primal instincts. The voice from deep within that quickens their blood to rut, to breed, and to devour their lover is barely controlled — and in many cases, not controlled at all. A Ravager is not often found in civilized lands. They thrive in tribal settings and wild places where survival depends on breeding strong offspring. When a Ravager enters civilized society, their raw sexuality is often overwhelming and intimidating.",

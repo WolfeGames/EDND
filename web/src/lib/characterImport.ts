@@ -1,4 +1,6 @@
 import { createEmptyCharacter, createEmptyEroticTraits, type EdndCharacter } from '../types/character'
+import { isGenitalTraitId } from '../data/genitalTraits'
+import type { GenitalTraitId } from '../types/genitalTrait'
 import { normalizeCharacterBiology } from './biologicalSex'
 
 const ANATOMIES = new Set(['neither', 'breasts', 'phallus', 'both'])
@@ -109,12 +111,26 @@ export function parseCharacterJson(json: unknown): EdndCharacter {
     }
   }
 
+  const genitalRaw = str(json.genitalTrait, '').trim()
+  const genitalTrait: GenitalTraitId | undefined = isGenitalTraitId(genitalRaw)
+    ? genitalRaw
+    : undefined
+  const hasGenitalShift =
+    json.hasGenitalShift === undefined ? undefined : json.hasGenitalShift === true
+  const fertilityBonus =
+    json.fertilityBonus === undefined
+      ? undefined
+      : num(json.fertilityBonus, 0, -99, 99)
+
   const draft: EdndCharacter = {
     ...base,
     id,
     name: str(json.name, ''),
     pronouns: str(json.pronouns, ''),
     genderIdentity: str(json.genderIdentity, ''),
+    genitalTrait,
+    hasGenitalShift,
+    fertilityBonus,
     species: str(json.species, ''),
     adventuringClass: str(json.adventuringClass, ''),
     level: num(json.level, base.level, 1, 20),

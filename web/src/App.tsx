@@ -5,11 +5,14 @@ import { CharacterCreatorPage } from './pages/CharacterCreatorPage'
 import { HomePage } from './pages/HomePage'
 import { RandomGeneratorPage } from './pages/RandomGeneratorPage'
 import { SavedCharactersPage } from './pages/SavedCharactersPage'
+import { BestiaryEntryPage } from './pages/bestiary/BestiaryEntryPage'
+import { BestiaryIndexPage } from './pages/bestiary/BestiaryIndexPage'
 import { RulesEcstasyPage } from './pages/rules/RulesEcstasyPage'
 import { RulesHubPage } from './pages/rules/RulesHubPage'
 import { RulesLayout } from './pages/rules/RulesLayout'
 import { RulesSexInPlayPage } from './pages/rules/RulesSexInPlayPage'
 import { RulesSpellsPage } from './pages/rules/RulesSpellsPage'
+import { QuickEncounterTester } from './components/QuickEncounterTester'
 import './App.css'
 
 function CreateCharacterRoute() {
@@ -27,6 +30,9 @@ export default function App() {
           <Route path="/create" element={<CreateCharacterRoute />} />
           <Route path="/characters" element={<SavedCharactersPage />} />
           <Route path="/random" element={<RandomGeneratorPage />} />
+          <Route path="/bestiary" element={<BestiaryIndexPage />} />
+          <Route path="/bestiary/:id" element={<BestiaryEntryPage />} />
+          <Route path="/pleasure-test" element={<QuickEncounterTester />} />
           <Route path="/rules" element={<RulesLayout />}>
             <Route index element={<RulesHubPage />} />
             <Route path="ecstasy" element={<RulesEcstasyPage />} />

@@ -6,7 +6,7 @@
 
  */
 
-
+import type { GenitalTraitId } from './genitalTrait'
 
 export type SpeciesId = string
 
@@ -128,6 +128,21 @@ export interface EdndCharacter {
   level: number
   abilityScores: AbilityScores
   endowment: EndowmentProfile
+
+  /**
+   * Pleasure / refractory / fertility rules (phallic, vaginal, intersex, hermaphrodite).
+   * Inferred from biology + endowment when omitted on import.
+   */
+  genitalTrait?: GenitalTraitId
+
+  /** Changeling, plasmoid, shapeshift spells, etc. — enables Genital Shift in play. */
+  hasGenitalShift?: boolean
+
+  /**
+   * Bonus applied when impregnating others (phallic-side traits) and as DC when impregnated
+   * (vaginal-side traits). Defaults to Con mod + Sexuality bonus when unset.
+   */
+  fertilityBonus?: number
 
   background: BackgroundId
 

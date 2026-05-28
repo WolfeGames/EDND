@@ -115,3 +115,49 @@ export interface CarnalEquipmentRow {
   description: string
   category: string
 }
+
+/** Six-attribute block for a bestiary entry; mirrors `AbilityScores` but uses short keys. */
+export interface BestiaryAbilityScores {
+  str: number
+  dex: number
+  con: number
+  int: number
+  wis: number
+  cha: number
+}
+
+/** One sexual / carnal trait attached to a bestiary creature. */
+export interface BestiarySexualTrait {
+  name: string
+  /** Rules text — what the trait does mechanically. */
+  mechanical: string
+  /** Optional narrative / flavor copy used on hover or below the rules text. */
+  flavor?: string
+}
+
+/**
+ * A creature in the in-app bestiary. SR (Sexual Rating) parallels CR and is
+ * intentionally numeric so the index can sort and filter by it.
+ */
+export interface BestiaryEntry {
+  id: string
+  name: string
+  /** Sexual Rating — encounter-tier hint for carnal scenes. */
+  sr: number
+  /** D&D-style creature type (e.g. Fiend, Beast, Humanoid). */
+  creatureType: string
+  /** Carnal archetype (e.g. Infernal, Celestial, Bestial). */
+  carnalType: string
+  size: string
+  description: string
+  abilityScores: BestiaryAbilityScores
+  sexualTraits: BestiarySexualTrait[]
+  sexualNorms: string
+  recreationalPractices: string
+  breedingPractices: string
+  encounterHooks: string
+  /** Optional alignment for quick-reference. */
+  alignment?: string
+  /** Optional tags for filtering (e.g. "shapeshifter", "fey-court"). */
+  tags?: string[]
+}

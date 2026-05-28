@@ -44,6 +44,15 @@ export function HomePage() {
           </Link>
         </li>
         <li>
+          <Link to="/bestiary" className="card-link">
+            <span className="card-link-title">Bestiary</span>
+            <span className="card-link-desc">
+              Creatures with stat blocks, sexual traits, norms, breeding practices, and encounter
+              hooks for any fantasy setting.
+            </span>
+          </Link>
+        </li>
+        <li>
           <Link to="/rules" className="card-link">
             <span className="card-link-title">Rules reference</span>
             <span className="card-link-desc">

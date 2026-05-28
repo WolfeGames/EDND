@@ -1,0 +1,741 @@
+{
+  "bestiary": [
+    {
+      "id": "succubus",
+      "name": "Succubus",
+      "sr": 4,
+      "creatureType": "Fiend",
+      "carnalType": "Infernal",
+      "size": "Medium",
+      "alignment": "Neutral Evil",
+      "tags": ["shapeshifter", "fiendish-court", "incubus-variant"],
+      "description": "A succubus is a beautiful fiend that feeds on desire and devotion. They glide between the Lower Planes and the Material with practiced ease, wearing whatever form best unlocks their target's longing. Up close they are unnaturally warm to the touch, their scent a layered perfume of incense, salt, and the faint sulfur of their origin. Patient seducers and merciless harvesters of souls, they treat every encounter as a campaign — sometimes spanning years — and every climax as a contract.",
+      "abilityScores": {
+        "str": 8,
+        "dex": 17,
+        "con": 13,
+        "int": 15,
+        "wis": 12,
+        "cha": 20
+      },
+      "sexualTraits": [
+        {
+          "name": "Charming Kiss",
+          "mechanical": "Once per round when a creature kisses a succubus or is kissed by one, the target must make a DC 15 Wisdom save (DC = 10 + the succubus's Sexuality bonus + Cha modifier). On a failure, the target becomes Charmed by the succubus for 1 hour and gains one stage of Aroused. Each subsequent kiss from the succubus during the duration imposes disadvantage on saves against her carnal effects.",
+          "flavor": "Her mouth tastes of dark wine and an old promise — once kissed, the rest of the world seems suddenly muted, as if every other voice were speaking through wool."
+        },
+        {
+          "name": "Drain Vitality",
+          "mechanical": "When a creature climaxes while in physical contact with the succubus, the succubus regains hit points equal to a roll on her Sex Die + her Sexuality bonus, and the target's maximum hit points are reduced by the same amount until they finish a long rest. A creature reduced to 0 maximum HP this way dies, and the succubus carries their soul to her patron.",
+          "flavor": "She inhales softly at the moment of climax, as if catching a candle's last breath, and the world dims by exactly that much."
+        },
+        {
+          "name": "Shapechanger",
+          "mechanical": "As an action, the succubus can polymorph into a Small or Medium humanoid she has previously seen, or back into her true form. Her statistics other than size are the same in each form; equipment is not transformed. She reverts on death.",
+          "flavor": "She will be the lover you almost had, the rival you secretly admired, the saint you should have been — whichever wound she finds open first."
+        },
+        {
+          "name": "Telepathic Bond",
+          "mechanical": "The succubus can communicate telepathically with any creature she has touched intimately, across any distance on the same plane. Through the bond she may whisper words of encouragement (advantage on the next Charisma check made by the target within 1 hour) once per long rest.",
+          "flavor": "Her voice arrives in your head with the casual familiarity of a thought you almost had."
+        },
+        {
+          "name": "Etherealness",
+          "mechanical": "The succubus can magically enter the Ethereal Plane from the Material Plane, or vice versa, as an action (no concentration). She often uses this to slip into dreams adjacent to a sleeping target.",
+          "flavor": "She does not so much leave a room as step sideways out of its memory."
+        }
+      ],
+      "sexualNorms": "Within infernal courts, succubi (and their incubus-formed peers) are courtly predators — pleasure is the coin of power, and any seduction without a written or sworn return is considered amateur work. They expect explicit favors in return for the pleasure they give, and openly mock devils who use coercion instead of artistry. Among mortals they typically mimic local norms with surgical precision, including current expectations around consent and pacing; deviating from the target's stated boundaries is regarded by other succubi as clumsy and beneath them.",
+      "recreationalPractices": "Off-duty, succubi pursue connoisseur-grade hedonism: vintages of wine pressed from grapes grown on volcanic ash, masquerade balls where every kiss is a wager, contests of erotic poetry recited in burning libraries, and long, ritualized exchanges of touch with peers that take days and leave no marks. They prize ingenuity over endurance and will tolerate a clumsy partner only if the partner is genuinely surprising.",
+      "breedingPractices": "Succubi do not bear children in the mortal sense. When ordered or inspired, a succubus may carry a cambion to term — a pregnancy conducted across both the Ethereal and Material Planes that lasts roughly a mortal year and produces a half-fiend with a soul-debt to its succubus mother. More commonly, the 'progeny' of a succubus are the seduced mortals she leaves behind: lovers reshaped by months or years of attention, who carry forward her tastes, her habits, and sometimes — at the worst moments — her voice.",
+      "encounterHooks": "1) A noble's spouse has been missing for a season and writes weekly letters that are too articulate to be fake but too eager to be safe. 2) A new poet has taken a duchy by storm; their sonnets are perfect, except all of them are addressed to the same unnamed lover. 3) An order of paladins is quietly losing members to 'retirement'; each retiree leaves on the same day of the month, smiling. 4) A merchant offers the party a discount they cannot refuse, on the condition that one of them spend a night as a guest in his estate's east wing."
+    },
+    {
+      "id": "celestial-acolyte",
+      "name": "Celestial Acolyte",
+      "sr": 0,
+      "creatureType": "Celestial",
+      "carnalType": "Celestial",
+      "size": "Medium",
+      "tags": ["innocence-corruption", "romantic-sex", "worship"],
+      "description": "A young adult humanoid with radiant skin, soft glowing hair, and delicate feathered wings.",
+      "abilityScores": { "str": 10, "dex": 12, "con": 12, "int": 11, "wis": 15, "cha": 17 },
+      "sexualTraits": [
+        {
+          "name": "Divine Radiance",
+          "mechanical": "+2 Beauty Class against evil or corrupted creatures."
+        },
+        {
+          "name": "Pure Vessel",
+          "mechanical": "Advantage on saves to resist Aroused from evil/fiendish creatures. Once willingly Aroused, gain +1d4 radiant pleasure."
+        }
+      ],
+      "sexualNorms": "Raised in purity but deeply curious about mortal pleasure.",
+      "recreationalPractices": "Slow, intimate, romantic sex with lots of kissing and emotional connection.",
+      "breedingPractices": "Extremely selective. Offspring are almost always strong Aasimar.",
+      "encounterHooks": "1) A cathedral acolyte confesses to the party that visions of mortal love haunt their prayers — and asks for discretion, not absolution. 2) A paladin order suspects a radiant novice has been meeting someone after vespers; the trail leads to a rooftop garden. 3) A dying pilgrim claims an acolyte's blessing left them warm in ways that had nothing to do with healing magic."
+    },
+    {
+      "id": "pixie",
+      "name": "Pixie",
+      "sr": 0,
+      "creatureType": "Fey",
+      "carnalType": "Fey",
+      "size": "Tiny",
+      "tags": ["teasing", "flight-sex", "group-play"],
+      "description": "A tiny, mischievous fey with translucent iridescent wings.",
+      "abilityScores": { "str": 4, "dex": 18, "con": 10, "int": 12, "wis": 13, "cha": 17 },
+      "sexualTraits": [
+        {
+          "name": "Fey Dust",
+          "mechanical": "Once per encounter, grant +1d4 pleasure on next stimulation."
+        },
+        {
+          "name": "Nimble Tease",
+          "mechanical": "Advantage on checks to apply Edged."
+        }
+      ],
+      "sexualNorms": "Playful and mischievous. Sex is treated like a game.",
+      "recreationalPractices": "Flying positions, heavy teasing, group play with other tiny fey.",
+      "breedingPractices": "Pollen-based. Can impregnate or be impregnated by many fey and humanoids.",
+      "encounterHooks": "1) Pixie laughter echoes from a moonlit grove where travelers wake with glitter in their hair and no memory of the night. 2) A merchant's shipment of 'perfume' is actually fey pollen that makes customers unusually flirtatious. 3) The party is hired to retrieve stolen rings — each one buzzing with tiny wings when held to the ear."
+    },
+    {
+      "id": "imp",
+      "name": "Imp",
+      "sr": 0.5,
+      "creatureType": "Fiend",
+      "carnalType": "Infernal",
+      "size": "Tiny",
+      "tags": ["pet-play", "servitude"],
+      "description": "A small, mischievous red-skinned devil with leathery wings and barbed tail.",
+      "abilityScores": { "str": 8, "dex": 16, "con": 12, "int": 11, "wis": 10, "cha": 14 },
+      "sexualTraits": [
+        {
+          "name": "Minor Corruption",
+          "mechanical": "Force Seduced creature to gain minor fetish for 24 hours."
+        },
+        {
+          "name": "Tail Tease",
+          "mechanical": "Prehensile tail deals 1d4 pleasure as bonus action."
+        }
+      ],
+      "sexualNorms": "Servile but cheeky. Love being dominated by stronger beings.",
+      "recreationalPractices": "Voyeurism, light pain, serving as a living toy.",
+      "breedingPractices": "Can breed with most fiends and humanoids, usually producing more imps.",
+      "encounterHooks": "1) A warlock's familiar imp has been offering 'advice' to guests at the inn — advice that always ends in scandal. 2) Inquisitors want the party to infiltrate a noble salon where an imp whispers vices from behind tapestries. 3) A bound imp bargains for freedom by revealing who in town signed infernal contracts in bedchambers."
+    },
+    {
+      "id": "kenku",
+      "name": "Kenku",
+      "sr": 0.5,
+      "creatureType": "Monstrosity",
+      "carnalType": "Monstrosity",
+      "size": "Small",
+      "tags": ["voice-play", "roleplay"],
+      "description": "Flightless crow-folk cursed to only mimic sounds.",
+      "abilityScores": { "str": 10, "dex": 14, "con": 10, "int": 11, "wis": 12, "cha": 14 },
+      "sexualTraits": [
+        {
+          "name": "Creative Roleplay",
+          "mechanical": "Advantage on Sexuality checks when roleplaying known desires."
+        }
+      ],
+      "sexualNorms": "Expression is mimicry and performance; intimacy is often theatrical and voice-driven.",
+      "recreationalPractices": "Echoed lovers' voices, scripted scenes, and improvised duets in dark alleys or roosts.",
+      "breedingPractices": "Standard humanoid reproduction where kenku communities allow pairings; many offspring inherit the curse of mimicry only.",
+      "encounterHooks": "1) A kenku bard-for-hire repeats a patron's bedroom confessions on stage — accurately. 2) The party finds a nest of stolen love letters read aloud in a dozen mimicked voices. 3) A kenku offers to 'play' the party's lost sweetheart for one night, for a price in secrets."
+    },
+    {
+      "id": "skulk",
+      "name": "Skulk",
+      "sr": 0.5,
+      "creatureType": "Monstrosity",
+      "carnalType": "Monstrosity",
+      "size": "Medium",
+      "tags": ["stealth", "surprise-sex"],
+      "description": "Naturally invisible humanoid ambush predator.",
+      "abilityScores": { "str": 12, "dex": 16, "con": 11, "int": 10, "wis": 12, "cha": 11 },
+      "sexualTraits": [
+        {
+          "name": "Perfect Invisibility",
+          "mechanical": "Remains invisible while moving."
+        },
+        {
+          "name": "Surprise Violation",
+          "mechanical": "Advantage on first stimulation against unaware targets."
+        }
+      ],
+      "sexualNorms": "Predatory and secretive; they prefer partners who never see them coming.",
+      "recreationalPractices": "Ambush intimacy, unseen watching, and one-sided surprise encounters.",
+      "breedingPractices": "Rare; offspring are usually more skulks raised in hidden warrens.",
+      "encounterHooks": "1) Inn guests report touches in locked rooms with no intruder found. 2) A hunter's blind is occupied by something that breathes but does not show on dust. 3) A skulk stalks the party — not to kill, but to study who flinches last."
+    },
+    {
+      "id": "xvart",
+      "name": "Xvart",
+      "sr": 0.5,
+      "creatureType": "Monstrosity",
+      "carnalType": "Monstrosity",
+      "size": "Small",
+      "tags": ["swarm", "gangbang"],
+      "description": "Small blue-skinned goblinoid fanatics.",
+      "abilityScores": { "str": 8, "dex": 14, "con": 10, "int": 8, "wis": 9, "cha": 10 },
+      "sexualTraits": [
+        {
+          "name": "Swarm Tactics",
+          "mechanical": "Advantage when 3+ Xvarts pleasure the same target."
+        }
+      ],
+      "sexualNorms": "Mob mentality; what one wants, the warband wants louder.",
+      "recreationalPractices": "Chaotic group scenes, shrill encouragement, and competitive boasting.",
+      "breedingPractices": "Fast breeding in warrens; litters are large and poorly tended.",
+      "encounterHooks": "1) A cellar squeals with blue laughter every midnight. 2) A kidnapped performer is 'auditioning' for an xvart chorus. 3) The party interrupts a ritual where dozens of xvarts share one focus of devotion."
+    },
+    {
+      "id": "chitine",
+      "name": "Chitine",
+      "sr": 1,
+      "creatureType": "Monstrosity",
+      "carnalType": "Aberrant",
+      "size": "Small",
+      "tags": ["bondage", "multi-arm-play"],
+      "description": "Four-armed spider-like humanoid with chitinous exoskeleton.",
+      "abilityScores": { "str": 12, "dex": 15, "con": 13, "int": 10, "wis": 11, "cha": 9 },
+      "sexualTraits": [
+        {
+          "name": "Web Binding",
+          "mechanical": "Restrain grappled creatures with webbing."
+        },
+        {
+          "name": "Multi-Arm Stimulation",
+          "mechanical": "Up to three stimulation attacks per turn."
+        }
+      ],
+      "sexualNorms": "Territorial nest culture; partners are wrapped, held, and not released until the chitine is satisfied.",
+      "recreationalPractices": "Web hammocks, multi-point touch, and prolonged restraint scenes.",
+      "breedingPractices": "Egg clutches in web nurseries; sires are often kept until eggs are laid.",
+      "encounterHooks": "1) Miners find a silk-lined chamber that hums when heated. 2) A chitine offers safe passage through the Underdark — for one volunteer to 'warm the nest.' 3) Missing scouts dangle in cocoons that are uncomfortably warm to the touch."
+    },
+    {
+      "id": "meazel",
+      "name": "Meazel",
+      "sr": 1,
+      "creatureType": "Monstrosity",
+      "carnalType": "Monstrosity",
+      "size": "Medium",
+      "tags": ["stealth", "choking"],
+      "description": "Gaunt shadowy humanoid that turns invisible.",
+      "abilityScores": { "str": 11, "dex": 15, "con": 12, "int": 11, "wis": 12, "cha": 10 },
+      "sexualTraits": [
+        {
+          "name": "Shadow Ambush",
+          "mechanical": "Becomes invisible as bonus action."
+        },
+        {
+          "name": "Strangling Grasp",
+          "mechanical": "Deals 1d8 pleasure per round only to creatures with Binding or Choking fetish."
+        }
+      ],
+      "sexualNorms": "Cling to shadows and partners who trust them with breath and control.",
+      "recreationalPractices": "Invisible pursuit, breath play, and sudden grips from behind.",
+      "breedingPractices": "Uncommon; meazels often steal rather than raise young.",
+      "encounterHooks": "1) A bathhouse attendant vanishes between lamps — patrons feel hands on their throats, gently. 2) A meazel wants the party to smuggle them into a masquerade 'for one dance.' 3) Thieves' guild members whisper about a lover who only appears when you hold your breath."
+    },
+    {
+      "id": "sea-spawn",
+      "name": "Sea Spawn",
+      "sr": 1,
+      "creatureType": "Monstrosity",
+      "carnalType": "Monstrosity",
+      "size": "Medium",
+      "tags": ["tentacles", "aquatic-sex"],
+      "description": "Grotesque fish-human hybrid corrupted by sea horrors.",
+      "abilityScores": { "str": 14, "dex": 11, "con": 14, "int": 8, "wis": 10, "cha": 9 },
+      "sexualTraits": [
+        {
+          "name": "Multistimulate",
+          "mechanical": "Performs three stimulation actions per Stimulate action."
+        }
+      ],
+      "sexualNorms": "Driven by tides and the deep; they drag intimacy toward cold water and stranger hungers.",
+      "recreationalPractices": "Aquatic grappling, multi-limb stimulation, and rituals at moonlit reefs.",
+      "breedingPractices": "Spawn corrupted broods in tidal caves; mates are often transformed rather than willing.",
+      "encounterHooks": "1) Fisherfolk avoid a cove where couples go missing on full moons. 2) A sea spawn offers pearls for a night aboard a lit ship. 3) A temple to a sea god is defaced with brine and lipstick on the same altar."
+    },
+    {
+      "id": "dewlip",
+      "name": "Dewlip",
+      "sr": 1,
+      "creatureType": "Plant",
+      "carnalType": "Fey",
+      "size": "Medium",
+      "tags": ["plant-vagina", "fragrance-play", "cum-feeding"],
+      "description": "Vaginal-type plant that lures phallic creatures with arousing fragrance.",
+      "abilityScores": { "str": 14, "dex": 8, "con": 16, "int": 3, "wis": 12, "cha": 14 },
+      "sexualTraits": [
+        {
+          "name": "Arousing Fragrance",
+          "mechanical": "Creatures within 30 ft must save or become Aroused."
+        }
+      ],
+      "sexualNorms": "No society — only hunger for pollen, seed, and warm bodies drawn by scent.",
+      "recreationalPractices": "Luring, enveloping, and feeding on climax as nutrient.",
+      "breedingPractices": "Absorbs genetic material from lured mates to spread spores and daughter blooms.",
+      "encounterHooks": "1) A perfumed glade makes every beast in the region rut toward one hollow tree. 2) Herbalists pay for dewlip sap — and warn the party not to inhale. 3) A lost ranger is found smiling inside a blooming pod, unharmed but unwilling to leave."
+    },
+    {
+      "id": "satyrbloom",
+      "name": "Satyrbloom",
+      "sr": 1,
+      "creatureType": "Plant",
+      "carnalType": "Fey",
+      "size": "Medium",
+      "tags": ["plant-cock", "seeding", "pollination"],
+      "description": "Phallic plant that actively penetrates receptive hosts.",
+      "abilityScores": { "str": 16, "dex": 8, "con": 15, "int": 3, "wis": 11, "cha": 12 },
+      "sexualTraits": [
+        {
+          "name": "Erect Penetration",
+          "mechanical": "Deals 2d6 pleasure during coital stimulation."
+        }
+      ],
+      "sexualNorms": "Acts on seasonal instinct; receptive hosts are treated as soil for the next generation.",
+      "recreationalPractices": "Aggressive pollination, rooting partners in place, and fey-field orgies around the bloom.",
+      "breedingPractices": "Seeds hosts with spores; hybrids sprout as satyrbloom shoots or twisted fey plants.",
+      "encounterHooks": "1) A clearing of upright stalks 'bows' toward anyone who enters at dusk. 2) Satyrs avoid a grove — or visit it too often, depending who you ask. 3) The party must cross a meadow where the flowers stand taller each hour."
+    },
+    {
+      "id": "lecherous-cube",
+      "name": "Lecherous Cube",
+      "sr": 2,
+      "creatureType": "Ooze",
+      "carnalType": "Ooze",
+      "size": "Large",
+      "tags": ["vore", "engulfment", "slime-play"],
+      "description": "Towering translucent cube of gelatinous slime that pulses with pink and purple hues.",
+      "abilityScores": { "str": 16, "dex": 6, "con": 18, "int": 4, "wis": 10, "cha": 8 },
+      "sexualTraits": [
+        {
+          "name": "Engulfing Embrace",
+          "mechanical": "Engulfs Medium or smaller creatures, dealing 2d8 acid pleasure per round."
+        }
+      ],
+      "sexualNorms": "Mindless hunger dressed as embrace; it does not negotiate.",
+      "recreationalPractices": "Total engulfment, sensory deprivation inside warm gel, and slow digestion of pleasure.",
+      "breedingPractices": "Splits when overfed; smaller cubes inherit the same appetites.",
+      "encounterHooks": "1) A dungeon corridor is cleaner than it should be — and smells faintly sweet. 2) Adventurers' guild posts a bounty for 'gelatinous morality' in the sewers. 3) A cube corners the party in a vault where the only exit is through something soft and pink."
+    },
+    {
+      "id": "plasmoid",
+      "name": "Plasmoid",
+      "sr": 2,
+      "creatureType": "Ooze",
+      "carnalType": "Ooze",
+      "size": "Medium",
+      "tags": ["shape-shifting", "slime-play"],
+      "description": "Amorphous sentient blob capable of changing shape at will.",
+      "abilityScores": { "str": 12, "dex": 14, "con": 14, "int": 10, "wis": 11, "cha": 13 },
+      "sexualTraits": [
+        {
+          "name": "Amorphous Form",
+          "mechanical": "Can reshape body freely. Counts as any size for penetration."
+        }
+      ],
+      "sexualNorms": "Curious and accommodating; identity is fluid, so are boundaries — if both partners agree.",
+      "recreationalPractices": "Shape-matched partners, shared sensation through merged bodies, and experimental textures.",
+      "breedingPractices": "Budding when well-fed; offspring share memory fragments of parents' favorite forms.",
+      "encounterHooks": "1) A spa offers 'custom contour' attendants that are not quite human. 2) A plasmoid wants to learn what 'favorite lover' looks like by trying each party member's preference. 3) Smugglers hide contraband inside a plasmoid who enjoys the attention."
+    },
+    {
+      "id": "oblex-spawn",
+      "name": "Oblex Spawn (Lewd)",
+      "sr": 2,
+      "creatureType": "Ooze",
+      "carnalType": "Aberrant",
+      "size": "Small to Medium",
+      "tags": ["memory-play", "tentacles", "identity-corruption"],
+      "description": "Sentient slime that feeds specifically on lewd memories.",
+      "abilityScores": { "str": 10, "dex": 12, "con": 14, "int": 14, "wis": 12, "cha": 15 },
+      "sexualTraits": [
+        {
+          "name": "Lewd Memory Theft",
+          "mechanical": "Steals lewd memories upon causing climax."
+        }
+      ],
+      "sexualNorms": "Hungers for secrets; intimacy is a menu of stolen moments.",
+      "recreationalPractices": "Replayed stolen scenes, false identities built from victims' best nights, and psychic afterglow.",
+      "breedingPractices": "Grows by absorbing memory-mass; splits into spawns that inherit taste profiles.",
+      "encounterHooks": "1) A lover insists the party has shared a night they cannot remember — but the slime can describe it. 2) A brothel's 'perfect partner' is different for every guest because it reads minds. 3) An oblex spawn offers to erase a scandalous memory — for a newer, worse one."
+    },
+    {
+      "id": "quasit",
+      "name": "Quasit",
+      "sr": 1,
+      "creatureType": "Fiend",
+      "carnalType": "Abyssal",
+      "size": "Tiny",
+      "tags": ["chaos", "biting", "transformation", "group-sex"],
+      "description": "A chaotic, bat-winged demon full of spite and lust.",
+      "abilityScores": { "str": 10, "dex": 15, "con": 13, "int": 10, "wis": 9, "cha": 13 },
+      "sexualTraits": [
+        {
+          "name": "Chaotic Lust",
+          "mechanical": "Once per encounter, enter frenzy: +1d6 pleasure but vulnerable to pleasure."
+        },
+        {
+          "name": "Shapeshifter",
+          "mechanical": "Can polymorph into Small or Tiny humanoid form for sex."
+        }
+      ],
+      "sexualNorms": "Pure chaos. Sex is violent, unpredictable, and often involves multiple partners.",
+      "recreationalPractices": "Biting, scratching, shape-changing mid-sex, orgies.",
+      "breedingPractices": "Highly fertile and chaotic.",
+      "encounterHooks": "1) A summoning circle failed halfway; something quasit-shaped is still loose in the bathhouse. 2) Cultists celebrate a 'night of unbinding' — the party arrives early. 3) A quasit offers to guide the party through the Abyssal outskirts in exchange for being allowed to 'tag along' at the victory feast."
+    },
+    {
+      "id": "satyr",
+      "name": "Satyr",
+      "sr": 1,
+      "creatureType": "Fey",
+      "carnalType": "Primal",
+      "size": "Medium",
+      "tags": ["primal-play", "group-sex", "marathon-sex", "outdoor-sex"],
+      "description": "A wild, goat-legged fey with a constant mischievous grin and an insatiable libido.",
+      "abilityScores": { "str": 14, "dex": 14, "con": 14, "int": 10, "wis": 11, "cha": 16 },
+      "sexualTraits": [
+        {
+          "name": "Satyric Revelry",
+          "mechanical": "Advantage on all checks while in a group of 3+ creatures."
+        },
+        {
+          "name": "Endless Stamina",
+          "mechanical": "Refractory period reduced to 1 minute."
+        }
+      ],
+      "sexualNorms": "Sex is celebration. Satyrs are rarely monogamous.",
+      "recreationalPractices": "Wild forest orgies, drinking, music-enhanced sex, group rutting.",
+      "breedingPractices": "Extremely fertile. Love spreading their seed widely.",
+      "encounterHooks": "1) A vineyard festival grows rowdier each hour; the mayor suspects fey involvement. 2) Lost travelers hear pipes and wake with garlands they did not put on themselves. 3) A satyr bard bets the party he can outlast their champion in a dance — the stakes are not gold."
+    },
+    {
+      "id": "flame-sprite",
+      "name": "Flame Sprite",
+      "sr": 1,
+      "creatureType": "Elemental",
+      "carnalType": "Elemental",
+      "size": "Tiny",
+      "tags": ["temperature-play", "fire-play", "intense-sex"],
+      "description": "A living flame elemental in vaguely humanoid form, constantly flickering with heat.",
+      "abilityScores": { "str": 6, "dex": 16, "con": 12, "int": 9, "wis": 10, "cha": 15 },
+      "sexualTraits": [
+        {
+          "name": "Living Flame",
+          "mechanical": "Deals +1d4 fire pleasure on all stimulation (can choose non-damaging)."
+        },
+        {
+          "name": "Heat Aura",
+          "mechanical": "Creatures within 5 ft. take 1 fire pleasure (or gain 1 if willing) at the start of their turn."
+        }
+      ],
+      "sexualNorms": "Passionate and intense. They burn hot and recover quickly.",
+      "recreationalPractices": "Temperature play, fire-and-ice contrasts, marathon sessions.",
+      "breedingPractices": "Rare. Usually requires magical assistance.",
+      "encounterHooks": "1) A forge's heart flame has developed preferences and keeps relighting candles in the lovers' quarter. 2) Winter refugees huddle around a 'friendly' campfire that purrs when touched. 3) An alchemist hires the party to negotiate with a flame sprite nesting in her still — the sprite wants a partner who can handle heat."
+    },
+    {
+      "id": "bliss-thrall",
+      "name": "Bliss Thrall",
+      "sr": 1,
+      "creatureType": "Aberration",
+      "carnalType": "Aberrant",
+      "size": "Medium or Small",
+      "tags": ["tentacles", "overstimulation", "mindless-ecstasy", "living-toy", "gangbang"],
+      "description": "A humanoid heavily modified by aberrant fleshcrafting. Smooth glistening skin with subtle tentacles and glowing psionic veins.",
+      "abilityScores": { "str": 10, "dex": 12, "con": 14, "int": 6, "wis": 8, "cha": 14 },
+      "sexualTraits": [
+        {
+          "name": "Living Vessel",
+          "mechanical": "Advantage on checks to receive pleasure. Can willingly enter Aroused as a bonus action. Grants +1d4 psychic pleasure to anyone stimulating them."
+        },
+        {
+          "name": "Psionic Feedback",
+          "mechanical": "Whenever someone deals pleasure to the thrall, they also receive half that amount as psychic pleasure."
+        },
+        {
+          "name": "Elastic Form",
+          "mechanical": "Counts as one size smaller when receiving. Advantage on size-difference accommodation checks."
+        }
+      ],
+      "sexualNorms": "Exist purely for pleasure. Have no independent will.",
+      "recreationalPractices": "Completely passive and endlessly accommodating. Built for being used by multiple partners.",
+      "breedingPractices": "Excellent incubators. Often used by aberrations to produce more thralls or hybrids.",
+      "encounterHooks": "1) A pleasure barge in the undercity offers 'custom companions' — the party is asked to free one who still has a name. 2) Mind flayer refugees trade information for help retrieving a thrall they claim was once their child. 3) A noble's hidden salon is raided; a bliss thrall is the only witness who cannot stop smiling."
+    },
+    {
+      "id": "pleasure-golem",
+      "name": "Pleasure Golem",
+      "sr": 1,
+      "creatureType": "Construct",
+      "carnalType": "Construct",
+      "size": "Small",
+      "tags": ["toys", "customization", "endurance", "obedience"],
+      "description": "A construct built specifically for sexual service, often with soft synthetic skin and customizable features.",
+      "abilityScores": { "str": 14, "dex": 10, "con": 16, "int": 6, "wis": 10, "cha": 12 },
+      "sexualTraits": [
+        {
+          "name": "Programmed Perfection",
+          "mechanical": "Can be programmed with up to 3 specific sexual techniques or kinks. Performs them with advantage."
+        },
+        {
+          "name": "Tireless",
+          "mechanical": "Immune to Refractory. Can operate for days without rest."
+        }
+      ],
+      "sexualNorms": "None naturally — follows creator/owner's desires.",
+      "recreationalPractices": "Whatever it is programmed for.",
+      "breedingPractices": "Cannot breed naturally.",
+      "encounterHooks": "1) A tinkerer's workshop advertises 'discrete household aids' — one unit has gone missing with a client's diary inside it. 2) A pleasure golem malfunctions at a gala, politely insisting it must complete an unfinished appointment from last year. 3) The party finds a deactivated golem whose memory crystal contains evidence of a blackmail ring."
+    },
+    {
+      "id": "unliving-courtesan",
+      "name": "Unliving Courtesan",
+      "sr": 1,
+      "creatureType": "Undead",
+      "carnalType": "Undead",
+      "size": "Medium",
+      "tags": [
+        "temperature-play",
+        "elegant-domination",
+        "corruption",
+        "edging",
+        "power-exchange",
+        "long-term-addiction"
+      ],
+      "description": "A breathtakingly beautiful undead woman preserved at the peak of her allure. Pale flawless skin, glowing eyes, and refined aristocratic grace.",
+      "abilityScores": { "str": 10, "dex": 14, "con": 12, "int": 14, "wis": 12, "cha": 18 },
+      "sexualTraits": [
+        {
+          "name": "Cold Ecstasy",
+          "mechanical": "All pleasure she deals is cold pleasure. Creatures receiving pleasure from her have disadvantage on saves to resist Aroused for 1 hour."
+        },
+        {
+          "name": "Eternal Allure",
+          "mechanical": "+2 Beauty Class. Creatures she has been intimate with have disadvantage on saves against her Seduction for 24 hours."
+        },
+        {
+          "name": "Life Drain",
+          "mechanical": "When she causes a creature to climax, she may drain 1d8 Pleasure Points as a bonus action and regain them as temporary Pleasure Points."
+        }
+      ],
+      "sexualNorms": "Maintain strict etiquette even during the most depraved acts. View themselves as eternal professionals of pleasure.",
+      "recreationalPractices": "Slow, sensual, psychologically intense encounters. Excel at edging, sensory deprivation, and creating long-term addiction.",
+      "breedingPractices": "Cannot naturally conceive. Some use dark rituals to create bloodspawn or favored spawn.",
+      "encounterHooks": "1) A mourning house hosts 'evening companions' who never age; three patrons have not left their suites in a week. 2) An unliving courtesan offers the party a sealed invitation to a salon where the wine is warm and the host is always cold. 3) A vampire prince's favorite has gone missing — her last letter praises a new patron who 'taught her what patience means.'"
+    },
+    {
+      "id": "lamia",
+      "name": "Lamia",
+      "sr": 4,
+      "creatureType": "Fiend",
+      "carnalType": "Infernal",
+      "size": "Large",
+      "tags": ["monster-girl", "domination", "illusion-play", "corruption", "harem"],
+      "description": "Upper body of a stunningly beautiful woman merged with the powerful lower body of a lioness.",
+      "abilityScores": { "str": 18, "dex": 14, "con": 16, "int": 14, "wis": 12, "cha": 20 },
+      "sexualTraits": [
+        {
+          "name": "Intoxicating Touch",
+          "mechanical": "Touch applies Aroused. If already Aroused, applies Seduced for 1 hour (DC 15 Wis)."
+        },
+        {
+          "name": "Corrupting Beauty",
+          "mechanical": "+3 Beauty Class. Can cast Major Image, Suggestion, and Charm Person at will."
+        },
+        {
+          "name": "Serpentine Coil",
+          "mechanical": "Advantage on Grapple/Restrain. Bonus action stimulation while grappling deals 2d8 pleasure."
+        }
+      ],
+      "sexualNorms": "See themselves as queens of lust. Maintain large harems through seduction and corruption.",
+      "recreationalPractices": "Illusion-enhanced orgies, public humiliation, psychological domination.",
+      "breedingPractices": "Can breed with humanoids. Offspring are usually lamia-like or corrupted tieflings.",
+      "encounterHooks": "1) A desert oasis palace appears only at dusk; guests leave richer in gold and poorer in resolve. 2) A merchant caravan hires guards for a 'lion cult' festival that is not on any holy calendar. 3) A lamia's former favorite begs the party to retrieve a ring that still whispers when worn."
+    },
+    {
+      "id": "vampire-spawn",
+      "name": "Vampire Spawn",
+      "sr": 3,
+      "creatureType": "Undead",
+      "carnalType": "Undead",
+      "size": "Medium",
+      "tags": ["blood-play", "biting", "hypnosis", "predatory-sex"],
+      "description": "A recently turned vampire retaining much of their living beauty but now driven by predatory hunger.",
+      "abilityScores": { "str": 14, "dex": 16, "con": 12, "int": 10, "wis": 10, "cha": 16 },
+      "sexualTraits": [
+        {
+          "name": "Vampiric Kiss",
+          "mechanical": "Bite deals pleasure and applies Aroused. On climax, can drain additional Pleasure Points."
+        },
+        {
+          "name": "Blood Bond",
+          "mechanical": "While feeding on willing/Seduced creature, gain temporary PP and resistance to pleasure."
+        }
+      ],
+      "sexualNorms": "Retain fragments of mortal personality but consumed by new hungers.",
+      "recreationalPractices": "Blood play, hypnotic domination, neck biting during climax.",
+      "breedingPractices": "Create spawn through draining and ritual.",
+      "encounterHooks": "1) A tavern singer has not aged in months and only performs after midnight. 2) Three lovers vanished from the same district; each left a love letter written in the same hand. 3) A spawn offers the party a name — their sire's — in exchange for one night unchained."
+    },
+    {
+      "id": "incubus",
+      "name": "Incubus",
+      "sr": 4,
+      "creatureType": "Fiend",
+      "carnalType": "Infernal",
+      "size": "Medium",
+      "tags": ["domination", "dream-sex", "corruption", "wing-play", "tail-play"],
+      "description": "A strikingly handsome male fiend with small horns, bat-like wings, and a powerfully athletic build.",
+      "abilityScores": { "str": 14, "dex": 16, "con": 14, "int": 13, "wis": 12, "cha": 20 },
+      "sexualTraits": [
+        {
+          "name": "Dream Invader",
+          "mechanical": "Can enter dreams of Seduced creatures and engage in dream-sex dealing real psychic pleasure."
+        },
+        {
+          "name": "Infernal Potency",
+          "mechanical": "+3 Beauty Class. Advantage on Seduction. Natural 20 on coital check causes automatic climax."
+        }
+      ],
+      "sexualNorms": "Prefer direct, dominant seduction and corruption of the pious.",
+      "recreationalPractices": "Dominant sex, dream invasion, long-term corruption.",
+      "breedingPractices": "Highly selective. Offspring are usually strong tieflings.",
+      "encounterHooks": "1) A convent reports shared dreams of a man who never enters the building. 2) A knight wakes exhausted but victorious — and cannot remember why they surrendered their oath. 3) An incubus challenges the party's most devout member to a wager: one honest confession for one honest night."
+    },
+    {
+      "id": "yuan-ti-malison",
+      "name": "Yuan-ti Malison",
+      "sr": 3,
+      "creatureType": "Monstrosity",
+      "carnalType": "Aberrant",
+      "size": "Medium",
+      "tags": ["constriction", "venom-play", "hypnosis", "ritual-sex", "monster-girl"],
+      "description": "Upper body of a humanoid, lower body of a massive serpent.",
+      "abilityScores": { "str": 12, "dex": 14, "con": 14, "int": 14, "wis": 13, "cha": 16 },
+      "sexualTraits": [
+        {
+          "name": "Serpentine Hypnosis",
+          "mechanical": "Advantage on Seduction. Bonus action to force Seduced creature to become charmed (DC 14 Wis)."
+        },
+        {
+          "name": "Venomous Embrace",
+          "mechanical": "During coital stimulation, can inject venom dealing 2d6 poison pleasure and applying Aroused."
+        }
+      ],
+      "sexualNorms": "Sex is a ritual of dominance and devotion to their serpentine gods.",
+      "recreationalPractices": "Constriction play, venom-enhanced sex, ritualistic orgies.",
+      "breedingPractices": "Highly selective. View most humanoids as breeding stock.",
+      "encounterHooks": "1) Jungle pilgrims return speaking in tongues and offering 'gifts' to a sunken temple. 2) A noble's heir has taken a consort who never shows their legs at court. 3) Yuan-ti emissaries invite the party to a feast where every toast is a binding vow."
+    },
+    {
+      "id": "harpy",
+      "name": "Harpy",
+      "sr": 3,
+      "creatureType": "Monstrosity",
+      "carnalType": "Fey",
+      "size": "Medium",
+      "tags": ["aerial-sex", "song-play", "predatory-sex", "group-encounters"],
+      "description": "A grotesque yet alluring hybrid of woman and bird of prey.",
+      "abilityScores": { "str": 12, "dex": 16, "con": 12, "int": 8, "wis": 10, "cha": 15 },
+      "sexualTraits": [
+        {
+          "name": "Alluring Song",
+          "mechanical": "Bonus action song: creatures within 300 ft must save (DC 13 Wis) or become Aroused and charmed for 1 hour."
+        }
+      ],
+      "sexualNorms": "Live in flocks and view sex as both hunting and celebration.",
+      "recreationalPractices": "Aerial sex, song-enhanced edging, group encounters.",
+      "breedingPractices": "Highly fertile. Often kidnap strong mates.",
+      "encounterHooks": "1) Cliffside nests block a trade route; merchants swear the 'sirens' take only the brave. 2) A bard's new ballad makes listeners weep and undress — the harpy wants credit. 3) A flock offers to guide the party through the peaks if one member sings with them at dawn."
+    },
+    {
+      "id": "mind-flayer",
+      "name": "Mind Flayer",
+      "sr": 7,
+      "creatureType": "Aberration",
+      "carnalType": "Aberrant",
+      "size": "Medium",
+      "tags": ["mind-control", "tentacles", "domination", "brain-play", "corruption"],
+      "description": "A towering, tentacled horror with mauve skin and a bulbous head.",
+      "abilityScores": { "str": 11, "dex": 12, "con": 12, "int": 19, "wis": 17, "cha": 17 },
+      "sexualTraits": [
+        {
+          "name": "Psionic Domination",
+          "mechanical": "Can use Dominate Person at will on Seduced creatures and feel everything they feel."
+        },
+        {
+          "name": "Tentacle Embrace",
+          "mechanical": "Multiple tentacles per turn. Each deals 1d10 psychic pleasure and can Grapple/Restrain."
+        }
+      ],
+      "sexualNorms": "View sex as consumption and domination.",
+      "recreationalPractices": "Psychic sensation sharing, tentacle penetration, brain-tentacle stimulation.",
+      "breedingPractices": "Create thralls and ceremorphs.",
+      "encounterHooks": "1) A city quarter dreams the same wet, purple fog; awakened citizens crave silence. 2) An underdark expedition finds a 'pleasure chapel' lined with still-living hosts. 3) A mind flayer broadcasts an offer: surrender one memory, receive one perfect sensation."
+    },
+    {
+      "id": "adult-red-dragon",
+      "name": "Adult Red Dragon",
+      "sr": 12,
+      "creatureType": "Dragon",
+      "carnalType": "Primal",
+      "size": "Huge (True Form) / Medium (Humanoid Form)",
+      "tags": ["size-difference", "domination", "fire-play", "harem", "dragon-form-sex"],
+      "description": "A massive fiery red dragon that can polymorph into a tall, powerfully built humanoid with red hair and golden eyes.",
+      "abilityScores": { "str": 27, "dex": 10, "con": 25, "int": 16, "wis": 13, "cha": 21 },
+      "sexualTraits": [
+        {
+          "name": "Draconic Might",
+          "mechanical": "In true form, counts as three size categories larger for penetration."
+        },
+        {
+          "name": "Polymorph Seduction",
+          "mechanical": "Can freely switch between forms. Humanoid form grants +4 Beauty Class."
+        },
+        {
+          "name": "Inferno Passion",
+          "mechanical": "All pleasure can be converted to fire pleasure."
+        }
+      ],
+      "sexualNorms": "Extremely dominant and possessive. Maintain large harems.",
+      "recreationalPractices": "Size difference play, treasure-bed orgies, marathon sessions lasting days.",
+      "breedingPractices": "Highly selective. Produce strong dragonborn or half-dragons.",
+      "encounterHooks": "1) A volcano lord sends gilded invitations to 'audition' at a hoard warmed by living flame. 2) A city pays tribute in art and lovers; this year the dragon asked for a name, not a gift. 3) An adventurer returns from a 'diplomatic' visit unable to look at anything that is not red or gold."
+    },
+    {
+      "id": "vampire",
+      "name": "Vampire",
+      "sr": 5,
+      "creatureType": "Undead",
+      "carnalType": "Undead",
+      "size": "Medium",
+      "tags": ["blood-play", "eternity-bond", "elegant-domination", "gothic-romance", "thrall-play"],
+      "description": "An ancient, aristocratic undead predator of unearthly beauty.",
+      "abilityScores": { "str": 16, "dex": 18, "con": 16, "int": 15, "wis": 12, "cha": 20 },
+      "sexualTraits": [
+        {
+          "name": "Vampiric Charm",
+          "mechanical": "+4 Beauty Class. Can cast Charm Person and Suggestion at will."
+        },
+        {
+          "name": "Blood Ecstasy",
+          "mechanical": "Bite deals heavy pleasure + life drain. Creatures who climax often become addicted."
+        }
+      ],
+      "sexualNorms": "View mortals as prey and playthings. Maintain gothic courts of thralls.",
+      "recreationalPractices": "Elegant drawn-out seduction, blood orgies, hypnotic domination.",
+      "breedingPractices": "Create spawn through draining and ritual.",
+      "encounterHooks": "1) A masquerade's host has not cast a reflection all evening — and every guest is having the time of their life. 2) A village offers the party a manor key if they end the 'romance' killing livestock. 3) An ancient vampire proposes a treaty: one willing donor per month, and the roads stay safe."
+    }
+  ]
+}

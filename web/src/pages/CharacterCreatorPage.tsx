@@ -44,6 +44,12 @@ import {
   vaginaAllowedForBiologicalSex,
 } from '../lib/endowment'
 import { getSheetEndowmentProfile } from '../lib/endowedTrait'
+import { GENITAL_TRAIT_DEFINITIONS } from '../data/genitalTraits'
+import {
+  inferGenitalTraitFromCharacter,
+  syncGenitalTraitWithBiology,
+} from '../lib/genitalTrait'
+import type { GenitalTraitId } from '../types/genitalTrait'
 import { createEmptyCharacter, type EdndCharacter, type SexualHistoryPersonality } from '../types/character'
 import './CharacterCreatorPage.css'
 
@@ -475,7 +481,11 @@ export function CharacterCreatorPage() {
               onChange={(e) => {
                 const genderIdentity = sanitizeBiologicalSexForApp(e.target.value)
                 setCharacter((c) =>
-                  withMergedProficiencies({ ...c, genderIdentity }),
+                  withMergedProficiencies(
+                    syncGenitalTraitWithBiology({ ...c, genderIdentity }, {
+                      preserveExplicitChoice: true,
+                    }),
+                  ),
                 )
               }}
             >
@@ -491,6 +501,60 @@ export function CharacterCreatorPage() {
             <p className="hint">
               Male or Female for portraits and core rules. Use endowment below for specific anatomy
               (breasts, phallus, vagina). Identity and pronouns are separate—set pronouns above.
+            </p>
+          </div>
+          <div className="creator-field">
+            <label htmlFor="char-genital-trait">Genital trait</label>
+            <select
+              id="char-genital-trait"
+              value={character.genitalTrait ?? inferGenitalTraitFromCharacter(character)}
+              onChange={(e) =>
+                setCharacter((c) => ({
+                  ...c,
+                  genitalTrait: e.target.value as GenitalTraitId,
+                }))
+              }
+            >
+              {GENITAL_TRAIT_DEFINITIONS.map((def) => (
+                <option key={def.id} value={def.id} title={def.tooltip}>
+                  {def.label}
+                </option>
+              ))}
+            </select>
+            <p className="hint">
+              {
+                GENITAL_TRAIT_DEFINITIONS.find(
+                  (d) =>
+                    d.id ===
+                    (character.genitalTrait ?? inferGenitalTraitFromCharacter(character)),
+                )?.summary
+              }
+            </p>
+            <details className="creator-genital-tooltip">
+              <summary>Rules for this genital trait</summary>
+              <p>
+                {
+                  GENITAL_TRAIT_DEFINITIONS.find(
+                    (d) =>
+                      d.id ===
+                      (character.genitalTrait ?? inferGenitalTraitFromCharacter(character)),
+                  )?.tooltip
+                }
+              </p>
+            </details>
+            <label className="creator-checkbox" style={{ marginTop: '0.5rem' }}>
+              <input
+                type="checkbox"
+                checked={character.hasGenitalShift ?? false}
+                onChange={(e) =>
+                  setCharacter((c) => ({ ...c, hasGenitalShift: e.target.checked }))
+                }
+              />
+              Genital Shift (shapeshifter, plasmoid, polymorph, etc.)
+            </label>
+            <p className="hint">
+              Shapeshifters can change configuration in play: new form clears Refractory and
+              Overstim for that configuration; reverting restores the previous state.
             </p>
           </div>
           <div className="creator-field">
