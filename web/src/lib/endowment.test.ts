@@ -1,20 +1,28 @@
 import { describe, expect, it } from 'vitest'
 import {
+  breastsAllowedForBiologicalSex,
   coerceEndowmentForBiologicalSex,
   formatEndowmentLines,
   getAllowedAnatomiesForBiologicalSex,
   normalizedEndowment,
   phallusAllowedForBiologicalSex,
+  rollRandomEndowmentForBiologicalSex,
   vaginaAllowedForBiologicalSex,
 } from './endowment'
 
 const FULL = ['neither', 'breasts', 'phallus', 'both'] as const
 
 describe('endowment biology rules', () => {
-  it('phallus allowed for Male, Female, and unset biology', () => {
+  it('phallus allowed only for Male and unset biology', () => {
     expect(phallusAllowedForBiologicalSex('Male')).toBe(true)
-    expect(phallusAllowedForBiologicalSex('Female')).toBe(true)
+    expect(phallusAllowedForBiologicalSex('Female')).toBe(false)
     expect(phallusAllowedForBiologicalSex('')).toBe(true)
+  })
+
+  it('breasts allowed only for Female and unset biology', () => {
+    expect(breastsAllowedForBiologicalSex('Female')).toBe(true)
+    expect(breastsAllowedForBiologicalSex('Male')).toBe(false)
+    expect(breastsAllowedForBiologicalSex('')).toBe(true)
   })
 
   it('vagina allowed for Male, Female, and unset biology', () => {
@@ -23,50 +31,63 @@ describe('endowment biology rules', () => {
     expect(vaginaAllowedForBiologicalSex('')).toBe(true)
   })
 
-  it('getAllowedAnatomiesForBiologicalSex is full set for Male and Female', () => {
-    expect(getAllowedAnatomiesForBiologicalSex('Female').sort()).toEqual([...FULL].sort())
-    expect(getAllowedAnatomiesForBiologicalSex('Male').sort()).toEqual([...FULL].sort())
+  it('getAllowedAnatomiesForBiologicalSex matches sex-specific options', () => {
+    expect(getAllowedAnatomiesForBiologicalSex('Male').sort()).toEqual(
+      ['neither', 'phallus'].sort(),
+    )
+    expect(getAllowedAnatomiesForBiologicalSex('Female').sort()).toEqual(
+      ['neither', 'breasts'].sort(),
+    )
     expect(getAllowedAnatomiesForBiologicalSex('').sort()).toEqual([...FULL].sort())
   })
 
-  it('coerceEndowmentForBiologicalSex preserves phallus for Female', () => {
+  it('coerceEndowmentForBiologicalSex strips breasts from Male', () => {
     expect(
-      coerceEndowmentForBiologicalSex('Female', { anatomy: 'phallus', phallusSize: 'Large' }),
+      coerceEndowmentForBiologicalSex('Male', {
+        anatomy: 'breasts',
+        breastsSize: 'Large',
+      }),
+    ).toEqual({
+      anatomy: 'phallus',
+      phallusSize: undefined,
+    })
+  })
+
+  it('coerceEndowmentForBiologicalSex strips phallus from Female', () => {
+    expect(
+      coerceEndowmentForBiologicalSex('Female', {
+        anatomy: 'phallus',
+        phallusSize: 'Large',
+      }),
+    ).toEqual({
+      anatomy: 'breasts',
+      breastsSize: undefined,
+    })
+  })
+
+  it('coerceEndowmentForBiologicalSex converts both to phallus for Male', () => {
+    expect(
+      coerceEndowmentForBiologicalSex('Male', {
+        anatomy: 'both',
+        breastsSize: 'Medium',
+        phallusSize: 'Large',
+      }),
     ).toEqual({
       anatomy: 'phallus',
       phallusSize: 'Large',
     })
   })
 
-  it('coerce preserves both anatomy for Female', () => {
-    expect(
-      coerceEndowmentForBiologicalSex('Female', {
-        anatomy: 'both',
-        breastsSize: 'Medium',
-        phallusSize: 'Large',
-      }),
-    ).toEqual({
-      anatomy: 'both',
-      breastsSize: 'Medium',
-      phallusSize: 'Large',
-    })
-  })
-
-  it('coerce preserves vagina when present on Female both', () => {
+  it('coerceEndowmentForBiologicalSex converts both to breasts for Female', () => {
     expect(
       coerceEndowmentForBiologicalSex('Female', {
         anatomy: 'both',
         breastsSize: 'Small',
         phallusSize: 'Large',
-        vaginaPresent: true,
-        vaginaSize: 'Tiny',
       }),
     ).toEqual({
-      anatomy: 'both',
+      anatomy: 'breasts',
       breastsSize: 'Small',
-      phallusSize: 'Large',
-      vaginaPresent: true,
-      vaginaSize: 'Tiny',
     })
   })
 
@@ -110,5 +131,23 @@ describe('endowment biology rules', () => {
         vaginaSize: 'Huge',
       }),
     ).toEqual(['No breast or phallus size category (neither).', 'Vagina: Huge.'])
+  })
+
+  it('rollRandomEndowmentForBiologicalSex never assigns breasts to Male', () => {
+    for (let i = 0; i < 40; i++) {
+      const e = rollRandomEndowmentForBiologicalSex('Male')
+      expect(e.anatomy).not.toBe('breasts')
+      expect(e.anatomy).not.toBe('both')
+      expect(e.breastsSize).toBeUndefined()
+    }
+  })
+
+  it('rollRandomEndowmentForBiologicalSex never assigns phallus to Female', () => {
+    for (let i = 0; i < 40; i++) {
+      const e = rollRandomEndowmentForBiologicalSex('Female')
+      expect(e.anatomy).not.toBe('phallus')
+      expect(e.anatomy).not.toBe('both')
+      expect(e.phallusSize).toBeUndefined()
+    }
   })
 })

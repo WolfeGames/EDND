@@ -28,4 +28,13 @@ describe('normalizeCharacterBiology', () => {
     expect(out.genderIdentity).toBe('Male')
     expect(out.endowment.anatomy).toBe('phallus')
   })
+
+  it('strips breast endowment when biology is Male', () => {
+    const c = createEmptyCharacter()
+    c.genderIdentity = 'Male'
+    c.endowment = { anatomy: 'breasts', breastsSize: 'Large' }
+    const out = normalizeCharacterBiology(c)
+    expect(out.endowment.anatomy).toBe('phallus')
+    expect(out.endowment.breastsSize).toBeUndefined()
+  })
 })

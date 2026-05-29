@@ -488,8 +488,8 @@ export function CharacterCreatorPage() {
               ))}
             </select>
             <p className="hint">
-              Male or Female for portraits and core rules. Use endowment below for specific anatomy
-              (breasts, phallus, vagina). Identity and pronouns are separateâ€”set pronouns above.
+              Male or Female for portraits and core rules. Endowment options follow biological sex
+              (phallus for Male, breasts for Female). Identity and pronouns are separate—set pronouns above.
             </p>
           </div>
           <div className="creator-field">
@@ -600,8 +600,8 @@ export function CharacterCreatorPage() {
               ))}
             </select>
             <p className="hint">
-              {ENDOWMENT_SIZE_RULE} Any breasts/phallus combination is allowed for Male or Female;
-              set vagina below when it applies to your character.
+              {ENDOWMENT_SIZE_RULE} Male characters roll phallus endowment; Female characters roll
+              breast endowment. Configure vagina below when it applies.
             </p>
             <div className="hint" style={{ marginTop: '0.35rem' }}>
               <strong>Sheet readout:</strong>
