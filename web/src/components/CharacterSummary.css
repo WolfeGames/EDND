@@ -521,80 +521,82 @@
     0 0 20px rgba(255, 100, 180, 0.2);
 }
 
-.ecstasy-meter__glow {
-  position: absolute;
-  inset: -30%;
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(255, 140, 220, 0.35),
-    transparent 55%
-  );
-  animation: ecstasy-pulse 2.8s ease-in-out infinite;
-  pointer-events: none;
-}
-
-.ecstasy-meter__fill {
+.ecstasy-meter--static .ecstasy-meter__fill {
   position: relative;
   height: 100%;
   border-radius: inherit;
   background: linear-gradient(
     90deg,
     #7c3aed 0%,
-    #ec4899 35%,
-    #fda4af 65%,
+    #ec4899 45%,
+    #fda4af 85%,
     #fff1f2 100%
   );
-  background-size: 200% 100%;
-  animation: ecstasy-shimmer 3.2s linear infinite;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.45),
-    0 0 18px rgba(255, 120, 200, 0.65);
-  transition: width 0.6s cubic-bezier(0.33, 1, 0.68, 1);
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 0 10px rgba(255, 120, 200, 0.35);
 }
 
-.ecstasy-meter__sheen {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.35) 45%,
-    transparent 55%
-  );
-  transform: translateX(-40%);
-  animation: ecstasy-sheen 2.4s ease-in-out infinite;
-  pointer-events: none;
-  mix-blend-mode: screen;
+.immersive-veil-stats {
+  margin-bottom: 1rem;
+  padding: 0.85rem 1rem;
 }
 
-@keyframes ecstasy-shimmer {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 200% 50%;
+.immersive-veil-stats__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+@media (min-width: 520px) {
+  .immersive-veil-stats__grid {
+    grid-template-columns: repeat(6, 1fr);
   }
 }
 
-@keyframes ecstasy-pulse {
-  0%,
-  100% {
-    opacity: 0.45;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.85;
-    transform: scale(1.05);
-  }
+.immersive-ability-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.45rem 0.35rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 160, 210, 0.22);
+  background: rgba(20, 8, 24, 0.45);
 }
 
-@keyframes ecstasy-sheen {
-  0% {
-    transform: translateX(-50%);
-  }
-  100% {
-    transform: translateX(50%);
-  }
+.immersive-ability-box__label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.immersive-ability-box__score {
+  font-family: var(--heading);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-h);
+  line-height: 1.2;
+}
+
+.immersive-ability-box__mod {
+  font-size: 0.78rem;
+  color: #f0a8d0;
+}
+
+.immersive-veil-stats__sexuality {
+  margin: 0.75rem 0 0;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.immersive-adventuring__lede {
+  margin: 0 0 0.5rem;
+  font-size: 0.82rem;
+}
+
+.immersive-adventuring__list {
+  margin-top: 0.35rem;
 }
 
 .immersive-key-stats {
@@ -843,6 +845,12 @@
 
 .immersive-trait-unresolved {
   margin-top: 0.75rem;
+}
+
+.endo-label-tooltip {
+  cursor: help;
+  text-decoration: underline dotted;
+  text-underline-offset: 0.15em;
 }
 
 .immersive-endo-block {

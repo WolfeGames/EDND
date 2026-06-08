@@ -1,5 +1,5 @@
 import { ADVENTURING_CLASSES } from '../data/adventuringClasses'
-import { GENDERS, isGenderOption } from '../data/identityOptions'
+import { isGenderOption, type GenderOption } from '../data/identityOptions'
 import {
   carnalClasses,
   carnalEquipment,
@@ -14,7 +14,16 @@ import {
 import { createEmptyCharacter, createEmptyEroticTraits, type EdndCharacter } from '../types/character'
 import { deriveBeautyClass, rollAllAbilityScores } from './abilityScores'
 import { normalizeCharacterBiology } from './biologicalSex'
-import { rollRandomEndowmentForBiologicalSex } from './endowment'
+import {
+  pickRandomGender,
+  rollPronounsForGender,
+  rollRandomEndowmentForGender,
+} from './anatomyGender'
+import {
+  getCarnalClassTraitSlotCount,
+  getSexualHistoryTraitSlotCount,
+  pickRandomTraitIds,
+} from './carnalTraitSelection'
 import { mergeTableProficiencies } from './mergeEroticProficiencies'
 import { resolveSpeciesTableId } from './speciesAliases'
 import { rollSexualHistoryPersonality } from './rollSexualHistoryPersonality'
@@ -145,17 +154,14 @@ function rollLevel(filters?: RandomCharacterFilters): number {
   return a + Math.floor(Math.random() * (b - a + 1))
 }
 
-/** Pronouns only come from user input (filters); never auto-generated. */
 function rollIdentity(filters?: RandomCharacterFilters): {
   genderIdentity: string
   pronouns: string
 } {
   const genderFilter = filters?.genderIdentity?.trim()
   const gender =
-    genderFilter && isGenderOption(genderFilter)
-      ? genderFilter
-      : pickRandom([...GENDERS])!
-  const pronouns = filters?.pronouns?.trim() ?? ''
+    genderFilter && isGenderOption(genderFilter) ? genderFilter : pickRandomGender()
+  const pronouns = filters?.pronouns?.trim() ?? rollPronounsForGender(gender)
   return { genderIdentity: gender, pronouns }
 }
 
@@ -209,6 +215,10 @@ export function generateRandomCharacter(
     eroticToolProficiencies: randomToolProficiencies(),
   })
 
+  const speciesId = resolveSpeciesTableId(sp.id)
+  const carnalClassId = carnalCl?.id
+  const sexualHistoryId = hist.id
+
   return normalizeCharacterBiology({
     ...createEmptyCharacter(),
     name: randomName(),
@@ -216,13 +226,29 @@ export function generateRandomCharacter(
     genderIdentity,
     level,
     abilityScores,
-    endowment: rollRandomEndowmentForBiologicalSex(genderIdentity),
+    endowment: rollRandomEndowmentForGender(genderIdentity as GenderOption),
     adventuringClass: adv,
     background: bg,
-    species: resolveSpeciesTableId(sp.id),
-    sexualHistory: hist.id,
-    sexualHistoryPersonality: rollSexualHistoryPersonality(hist.id),
-    carnalClass: carnalCl?.id,
+    species: speciesId,
+    sexualHistory: sexualHistoryId,
+    sexualHistoryPersonality: rollSexualHistoryPersonality(sexualHistoryId),
+    sexualHistoryTraitIds: pickRandomTraitIds(
+      'history',
+      getSexualHistoryTraitSlotCount(sexualHistoryId),
+      speciesId,
+      carnalClassId ?? '',
+      sexualHistoryId,
+    ),
+    carnalClass: carnalClassId,
+    carnalClassTraitIds: carnalClassId
+      ? pickRandomTraitIds(
+          'class',
+          getCarnalClassTraitSlotCount(carnalClassId),
+          speciesId,
+          carnalClassId,
+          sexualHistoryId,
+        )
+      : [],
     carnalFeatures: [sp.carnalTrait],
     eroticTraits: merged,
   })

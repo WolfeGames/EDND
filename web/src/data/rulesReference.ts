@@ -127,8 +127,10 @@ export const KEY_CONDITIONS: { name: string; text: string }[] = [
 ]
 
 export const FERTILITY_SUMMARY: string[] = [
-  'Fertility = Constitution modifier + Sexuality bonus + racial or feature modifiers your table applies.',
-  'Conception (if used): both partners roll d20 + Fertility against DC 15 (adjust for setting).',
+  'Each character has a fertility bonus (default: Constitution modifier + Sexuality bonus; override on the sheet if your table applies racial or feature modifiers).',
+  'Mothering types (Female, vagina-bearing, and other configurations that set impregnation DC): their fertility bonus is subtracted from 20 to set the DC impregnators must beat.',
+  'Impregnators roll d20 + their fertility bonus. If the total meets or exceeds the mothering partner’s DC, conception succeeds.',
+  'Example: mother with +5 fertility → DC 15; impregnator with +6 fertility rolls 10 on the d20 → total 16 → success.',
 ]
 
 export const TABLE_SAFETY_GUIDELINES: { heading: string; bullets: string[] }[] = [

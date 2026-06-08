@@ -26,6 +26,34 @@ export interface RacialSexualTraitsGroup {
   traits: RacialSexualTraitEntry[]
 }
 
+/** Structured special feature — string or nested mechanical block. */
+export type RacialSexualProfileSpecialFeature =
+  | string
+  | {
+      description?: string
+      trigger?: string
+      frequency?: string
+      effects?: string
+    }
+
+/** One race entry in `racial-sexual-profiles.json`. */
+export interface RacialSexualProfileRace {
+  sexualType?: string
+  parentRace?: string
+  coreAttitude?: string
+  orientationAndDuty?: string
+  specialFeatures?: Record<string, RacialSexualProfileSpecialFeature>
+  pregnancy?: string
+  family?: string
+  interracial?: string
+}
+
+export interface RacialSexualProfilesBundle {
+  generalNotes: string
+  sexualTypes: Record<string, string[]>
+  races: Record<string, RacialSexualProfileRace>
+}
+
 export interface SexualHistoryPositionProficiencies {
   tiers: string[]
   specific?: string[]
@@ -51,6 +79,8 @@ export interface SexualHistoryRow {
   description: string
   /** Optional: points budget for history-granted carnal traits, etc. */
   traitPoints?: number
+  /** Player-selectable carnal trait slots from this history (1–2). */
+  carnalTraitSlots?: number
   eroticArts: string[]
   positionProficiencies: SexualHistoryPositionProficiencies
   toolProficiencies?: string[]
@@ -61,10 +91,21 @@ export interface SexualHistoryRow {
   personality: SexualHistoryPersonalityTables
 }
 
+export interface CarnalTraitSources {
+  /** Included in class/history selection pools for any character. */
+  general?: boolean
+  speciesIds?: string[]
+  carnalClassIds?: string[]
+  sexualHistoryIds?: string[]
+  /** When true, only offered when a matching source is active (not in the general pool). */
+  exclusive?: boolean
+}
+
 export interface CarnalTraitRow {
   id: string
   name: string
   description: string
+  sources?: CarnalTraitSources
 }
 
 export interface CarnalClassSubclassRow {

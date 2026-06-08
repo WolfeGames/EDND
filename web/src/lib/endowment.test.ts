@@ -1,78 +1,39 @@
 import { describe, expect, it } from 'vitest'
-import {
-  coerceEndowmentForBiologicalSex,
-  formatEndowmentLines,
-  getAllowedAnatomiesForBiologicalSex,
-  normalizedEndowment,
-  phallusAllowedForBiologicalSex,
-  vaginaAllowedForBiologicalSex,
-} from './endowment'
+import { formatEndowmentLines, normalizedEndowment } from './endowment'
 
-const FULL = ['neither', 'breasts', 'phallus', 'both'] as const
-
-describe('endowment biology rules', () => {
-  it('phallus allowed for Male, Female, and unset biology', () => {
-    expect(phallusAllowedForBiologicalSex('Male')).toBe(true)
-    expect(phallusAllowedForBiologicalSex('Female')).toBe(true)
-    expect(phallusAllowedForBiologicalSex('')).toBe(true)
-  })
-
-  it('vagina allowed for Male, Female, and unset biology', () => {
-    expect(vaginaAllowedForBiologicalSex('Male')).toBe(true)
-    expect(vaginaAllowedForBiologicalSex('Female')).toBe(true)
-    expect(vaginaAllowedForBiologicalSex('')).toBe(true)
-  })
-
-  it('getAllowedAnatomiesForBiologicalSex is full set for Male and Female', () => {
-    expect(getAllowedAnatomiesForBiologicalSex('Female').sort()).toEqual([...FULL].sort())
-    expect(getAllowedAnatomiesForBiologicalSex('Male').sort()).toEqual([...FULL].sort())
-    expect(getAllowedAnatomiesForBiologicalSex('').sort()).toEqual([...FULL].sort())
-  })
-
-  it('coerceEndowmentForBiologicalSex preserves phallus for Female', () => {
+describe('normalizedEndowment', () => {
+  it('strips phallus size when anatomy is breasts', () => {
     expect(
-      coerceEndowmentForBiologicalSex('Female', { anatomy: 'phallus', phallusSize: 'Large' }),
-    ).toEqual({
-      anatomy: 'phallus',
-      phallusSize: 'Large',
-    })
-  })
-
-  it('coerce preserves both anatomy for Female', () => {
-    expect(
-      coerceEndowmentForBiologicalSex('Female', {
-        anatomy: 'both',
+      normalizedEndowment({
+        anatomy: 'breasts',
         breastsSize: 'Medium',
         phallusSize: 'Large',
       }),
     ).toEqual({
-      anatomy: 'both',
+      anatomy: 'breasts',
       breastsSize: 'Medium',
-      phallusSize: 'Large',
+      vaginaPresent: false,
     })
   })
 
-  it('coerce preserves vagina when present on Female both', () => {
+  it('clears vagina when not present', () => {
     expect(
-      coerceEndowmentForBiologicalSex('Female', {
-        anatomy: 'both',
-        breastsSize: 'Small',
-        phallusSize: 'Large',
-        vaginaPresent: true,
-        vaginaSize: 'Tiny',
+      normalizedEndowment({
+        anatomy: 'phallus',
+        phallusSize: 'Medium',
+        vaginaPresent: false,
+        vaginaSize: 'Large',
       }),
     ).toEqual({
-      anatomy: 'both',
-      breastsSize: 'Small',
-      phallusSize: 'Large',
-      vaginaPresent: true,
-      vaginaSize: 'Tiny',
+      anatomy: 'phallus',
+      phallusSize: 'Medium',
+      vaginaPresent: false,
     })
   })
 
-  it('normalizedEndowment keeps vagina for Male when set', () => {
+  it('keeps vagina when present', () => {
     expect(
-      normalizedEndowment('Male', {
+      normalizedEndowment({
         anatomy: 'phallus',
         phallusSize: 'Medium',
         vaginaPresent: true,
@@ -85,24 +46,10 @@ describe('endowment biology rules', () => {
       vaginaSize: 'Large',
     })
   })
+})
 
-  it('normalizedEndowment defaults Male vagina absent when unset', () => {
-    expect(normalizedEndowment('Male', { anatomy: 'phallus', phallusSize: 'Medium' })).toEqual({
-      anatomy: 'phallus',
-      phallusSize: 'Medium',
-      vaginaPresent: false,
-    })
-  })
-
-  it('normalizedEndowment defaults Female vagina to present when unset', () => {
-    expect(normalizedEndowment('Female', { anatomy: 'breasts', breastsSize: 'Medium' })).toEqual({
-      anatomy: 'breasts',
-      breastsSize: 'Medium',
-      vaginaPresent: true,
-    })
-  })
-
-  it('formatEndowmentLines includes vagina when present', () => {
+describe('formatEndowmentLines', () => {
+  it('includes vagina when present', () => {
     expect(
       formatEndowmentLines({
         anatomy: 'neither',

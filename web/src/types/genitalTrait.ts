@@ -26,6 +26,6 @@ export interface GenitalTraitDefinition {
   usesVaginalRules: boolean
   /** Can apply fertility bonus when impregnating another creature. */
   canImpregnateOthers: boolean
-  /** Fertility bonus sets DC when this creature is impregnated. */
+  /** Fertility bonus is subtracted from 20 to set the Conception DC when impregnated. */
   setsImpregnationDc: boolean
 }

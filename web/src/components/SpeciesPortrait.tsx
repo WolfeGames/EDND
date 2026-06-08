@@ -1,33 +1,35 @@
-import { isCanonicalBiologicalSex } from '../lib/biologicalSex'
 import { getDefaultSpeciesPortraitSrc } from '../lib/speciesPortrait'
 
 type SpeciesPortraitProps = {
-  speciesId: string
-  genderIdentity: string
+  speciesId?: string
+  genderIdentity?: string
+  /** When set, overrides species + gender default. */
+  src?: string | null
   /** Accessible label, e.g. display species name */
   alt?: string
   className?: string
   imgClassName?: string
 }
 
-/**
- * Default premade art from `public/portraits/` by species table id and biological sex.
- */
 export function SpeciesPortrait({
   speciesId,
   genderIdentity,
+  src,
   alt,
   className,
   imgClassName,
 }: SpeciesPortraitProps) {
-  if (!isCanonicalBiologicalSex(genderIdentity)) return null
-  const src = getDefaultSpeciesPortraitSrc(speciesId, genderIdentity)
-  if (!src) return null
+  const resolved =
+    src ??
+    (speciesId && genderIdentity
+      ? getDefaultSpeciesPortraitSrc(speciesId, genderIdentity)
+      : null)
+  if (!resolved) return null
   return (
     <div className={className}>
       <img
         className={imgClassName ?? 'species-portrait__img'}
-        src={src}
+        src={resolved}
         alt={alt ?? ''}
         loading="lazy"
         decoding="async"

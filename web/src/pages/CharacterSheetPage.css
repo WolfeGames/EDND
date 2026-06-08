@@ -123,6 +123,10 @@
   margin: 0.85rem 0 0.4rem;
 }
 
+.sheet-veil-stats__sexuality {
+  margin: 0.75rem 0 0;
+}
+
 .sheet-abilities {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -177,6 +181,13 @@
   font-size: 0.8rem;
   margin: 0 0 0.2rem;
   color: var(--text-h, #f0f2f7);
+}
+
+.endo-label-tooltip {
+  cursor: help;
+  text-decoration: underline dotted;
+  text-underline-offset: 0.15em;
+  width: fit-content;
 }
 
 .sheet-block-body,

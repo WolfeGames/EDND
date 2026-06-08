@@ -12,19 +12,33 @@ import { formatRuleKey } from '../lib/formatRuleKey'
 import { parseFeatureLevelRequirement } from '../lib/parseFeatureLevelRequirement'
 import { resolveCarnalTraitLabels } from '../lib/resolveCarnalTraitLabels'
 import { splitHistoryFeatureBody } from '../lib/sexualHistoryFeatureDisplay'
+import { estimateArmorClass, estimateMaxHitPoints } from '../lib/adventuringStats'
 import {
   abilityModifier,
   deriveBeautyClass,
   highestAbilityModifier,
 } from '../lib/abilityScores'
-import { isCanonicalBiologicalSex } from '../lib/biologicalSex'
 import { resolveSpeciesTableId } from '../lib/speciesAliases'
-import { getDefaultSpeciesPortraitSrc } from '../lib/speciesPortrait'
+import { getCharacterPortraitSrc } from '../lib/speciesPortrait'
 import type { AbilityScores, EdndCharacter } from '../types/character'
 import type { CarnalClassRow } from '../types/tables'
+import { getRacialProfileSheetMechanics } from '../lib/racialSexualProfiles'
+import { FertilityReadout } from './FertilityReadout'
+import { RacialSexualProfilePanel } from './RacialSexualProfilePanel'
 import { RacialSexualTraitsPanel } from './RacialSexualTraitsPanel'
+import { CarnalClassTraitNotes } from './CarnalClassTraitNotes'
+import { SelectedCarnalTraitsPanel } from './SelectedCarnalTraitsPanel'
 import { SpeciesPortrait } from './SpeciesPortrait'
 import './CharacterSummary.css'
+
+const ABILITY_GRID: Array<{ key: keyof AbilityScores; label: string }> = [
+  { key: 'strength', label: 'STR' },
+  { key: 'dexterity', label: 'DEX' },
+  { key: 'constitution', label: 'CON' },
+  { key: 'intelligence', label: 'INT' },
+  { key: 'wisdom', label: 'WIS' },
+  { key: 'charisma', label: 'CHA' },
+]
 
 const ABILITY_WORD_TO_KEY: Record<string, keyof AbilityScores> = {
   strength: 'strength',
@@ -166,7 +180,6 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
   const teaserTitleId = useId()
   const [teaserOpen, setTeaserOpen] = useState(false)
   const [teaserLines, setTeaserLines] = useState<string[]>([])
-  const [ppWave, setPpWave] = useState(0)
 
   const speciesRow = useMemo(
     () => (character.species ? getSpecies(character.species) : undefined),
@@ -206,6 +219,14 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
     [character.abilityScores, character.eroticTraits.beautyModifier],
   )
 
+  const racialBeauty = useMemo(
+    () =>
+      character.species
+        ? getRacialProfileSheetMechanics(character.species)
+        : { beautyClassBonus: 0, fertilityNotes: [], pleasureNotes: [], saveNotes: [] },
+    [character.species],
+  )
+
   const beautyTooltip = useMemo(() => {
     const bc = character.eroticTraits.beautyClass
     const bm = character.eroticTraits.beautyModifier
@@ -232,12 +253,10 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
 
   const speciesDisplayName = speciesRow?.name ?? (character.species?.trim() || '—')
 
-  const heroPortraitSrc = useMemo(() => {
-    if (!resolvedSpeciesId || !isCanonicalBiologicalSex(character.genderIdentity)) {
-      return null
-    }
-    return getDefaultSpeciesPortraitSrc(resolvedSpeciesId, character.genderIdentity)
-  }, [resolvedSpeciesId, character.genderIdentity])
+  const heroPortraitSrc = useMemo(
+    () => getCharacterPortraitSrc(character),
+    [character.portraitSrc, character.species, character.genderIdentity],
+  )
 
   const portraitAlt = speciesDisplayName !== '—' ? `${speciesDisplayName} portrait` : ''
 
@@ -256,13 +275,21 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
     return carnalClassRow.sexDie ?? `d${carnalClassRow.hitDie}`
   }, [carnalClassRow])
 
+  const adventuringHp = useMemo(
+    () => estimateMaxHitPoints(character.level, character.abilityScores),
+    [character.abilityScores, character.level],
+  )
+  const adventuringAc = useMemo(
+    () => estimateArmorClass(character.abilityScores),
+    [character.abilityScores],
+  )
+
   const stimulationList = carnalClassRow?.stimulationProficiencies ?? []
   const positionList = character.eroticTraits.positionProficiencies
 
   const openTeaser = useCallback(() => {
     setTeaserLines(pickTeaserLines(3))
     setTeaserOpen(true)
-    setPpWave((w) => w + 1)
   }, [])
 
   const closeTeaser = useCallback(() => setTeaserOpen(false), [])
@@ -288,8 +315,9 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
             : 'immersive-hero'
         }
       >
-        {heroPortraitSrc && resolvedSpeciesId ? (
+        {heroPortraitSrc ? (
           <SpeciesPortrait
+            src={heroPortraitSrc}
             speciesId={resolvedSpeciesId}
             genderIdentity={character.genderIdentity}
             alt={portraitAlt}
@@ -303,11 +331,8 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
             {character.name || 'Unnamed desire'}
             <span className="immersive-hero__sub">
               {speciesDisplayName}
-              {' · '}
-              Level {character.level}
-              {' · '}
-              {character.adventuringClass || '—'}
               {carnalClassRow ? ` · ${carnalClassRow.name}` : ''}
+              {historyRow ? ` · ${historyRow.name}` : ''}
             </span>
           </h2>
           <p className="immersive-hero__species" aria-label="Species">
@@ -345,6 +370,26 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
         </div>
       </header>
 
+      <section className="immersive-veil-stats immersive-panel" aria-label="Ability scores and sexuality">
+        <div className="immersive-veil-stats__grid">
+          {ABILITY_GRID.map(({ key, label }) => {
+            const score = character.abilityScores[key]
+            const mod = abilityModifier(score)
+            const modStr = mod >= 0 ? `+${mod}` : `${mod}`
+            return (
+              <div key={key} className="immersive-ability-box">
+                <span className="immersive-ability-box__label">{label}</span>
+                <span className="immersive-ability-box__score">{score}</span>
+                <span className="immersive-ability-box__mod">{modStr}</span>
+              </div>
+            )
+          })}
+        </div>
+        <p className="immersive-veil-stats__sexuality">
+          Sexuality bonus <strong>+{character.eroticTraits.sexualityBonus}</strong>
+        </p>
+      </section>
+
       <section className="immersive-meters" aria-label="Pleasure reserve">
         <div className="immersive-meters__head">
           <span className="immersive-meters__title">Pleasure points</span>
@@ -353,8 +398,7 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
           </span>
         </div>
         <p className="immersive-meters__rule muted">{pleasureMeta.label}</p>
-        <div className="ecstasy-meter" key={ppWave}>
-          <div className="ecstasy-meter__glow" aria-hidden />
+        <div className="ecstasy-meter ecstasy-meter--static">
           <div
             className="ecstasy-meter__fill"
             style={{ width: `${pleasurePct}%` }}
@@ -364,7 +408,6 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
             aria-valuemax={pleasureMeta.max}
             aria-label="Pleasure reserve fill"
           />
-          <div className="ecstasy-meter__sheen" aria-hidden />
         </div>
         <p className="immersive-meters__whisper muted">
           Illustrative reserve for the sheet—track current PP in play as your table prefers.
@@ -376,7 +419,7 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
           <span className="immersive-stat-card__label">Sex die</span>
           <span className="immersive-stat-card__value">{sexDieLabel}</span>
           <span className="immersive-stat-card__note muted">
-            {carnalClassRow ? 'From carnal class' : 'Select a carnal class'}
+            {carnalClassRow ? `From ${carnalClassRow.name}` : 'Select a carnal class'}
           </span>
         </div>
         <div className="immersive-stat-card">
@@ -399,35 +442,25 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
         <h3>Identity</h3>
         <ul className="review-list">
           <li>
-            <strong>{character.name || '—'}</strong>, level {character.level}{' '}
-            {character.adventuringClass || '—'}
+            <strong>{character.name || '—'}</strong>
           </li>
-          {character.background && <li>Background: {character.background}</li>}
           {character.pronouns && <li>Pronouns: {character.pronouns}</li>}
-          {character.genderIdentity && <li>Biological sex: {character.genderIdentity}</li>}
+          {character.genderIdentity && <li>Gender: {character.genderIdentity}</li>}
           <li>
-            <strong>Ability scores:</strong> STR {character.abilityScores.strength}, DEX{' '}
-            {character.abilityScores.dexterity}, CON {character.abilityScores.constitution}, INT{' '}
-            {character.abilityScores.intelligence}, WIS {character.abilityScores.wisdom}, CHA{' '}
-            {character.abilityScores.charisma}
-          </li>
-          <li>
-            <strong>Endowment</strong>
+            <strong className="endo-label-tooltip" title={ENDOWMENT_SIZE_RULE}>
+              Endowment
+            </strong>
             <div className="immersive-endo-block">
               {endowmentReadout.map((line, i) => (
                 <div key={`endo-${i}`}>{line}</div>
               ))}
             </div>
-            <p className="muted immersive-endo-note">
-              {ENDOWMENT_SIZE_RULE}
-              {endowedActive && (
-                <span>
-                  {' '}
-                  <strong>Endowed</strong> is applied here: bust and/or phallus sizes are shown one
-                  tier larger (max Gargantuan) than stored on the JSON export.
-                </span>
-              )}
-            </p>
+            {endowedActive && (
+              <p className="muted immersive-endo-note">
+                <strong>Endowed</strong> is applied here: bust and/or phallus sizes are shown one
+                tier larger (max Gargantuan) than stored on the JSON export.
+              </p>
+            )}
           </li>
         </ul>
       </div>
@@ -451,6 +484,8 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
               <p className="feature-body">{speciesRow.carnalTraitDescription}</p>
             </div>
             <RacialSexualTraitsPanel speciesId={character.species} />
+            <RacialSexualProfilePanel speciesId={character.species} />
+            <FertilityReadout character={character} />
           </>
         ) : (
           <p className="muted">No species selected.</p>
@@ -459,8 +494,14 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
         <ul className="review-list">
           <li>
             Beauty class <strong>{character.eroticTraits.beautyClass}</strong>
+            {racialBeauty.beautyClassBonus > 0 && (
+              <span className="muted">
+                {' '}
+                (+{racialBeauty.beautyClassBonus} racial
+                {racialBeauty.beautyClassNote ? ` — ${racialBeauty.beautyClassNote}` : ''})
+              </span>
+            )}
           </li>
-          <li>Sexuality bonus: +{character.eroticTraits.sexualityBonus}</li>
         </ul>
         <h4 className="immersive-subheading">Proficiencies</h4>
         <ul className="review-list">
@@ -517,7 +558,14 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
           </div>
           <p className="immersive-history__desc">{historyRow.description}</p>
 
-          <h4 className="immersive-subheading">Equipped carnal traits</h4>
+          <SelectedCarnalTraitsPanel
+            title="Selected carnal traits (history)"
+            traitIds={character.sexualHistoryTraitIds ?? []}
+            emptyMessage="No carnal traits selected from sexual history."
+            headingClassName="immersive-subheading"
+          />
+
+          <h4 className="immersive-subheading">History-granted carnal traits</h4>
           {resolvedCarnalTraits.length === 0 && unresolvedCarnalLabels.length === 0 ? (
             <p className="muted">No traits resolved from this history.</p>
           ) : (
@@ -611,6 +659,15 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
             </ul>
           </div>
 
+          <CarnalClassTraitNotes row={carnalClassRow} className="immersive-carnal__trait-notes" />
+
+          <SelectedCarnalTraitsPanel
+            title="Selected carnal traits (class)"
+            traitIds={character.carnalClassTraitIds ?? []}
+            emptyMessage="No carnal traits selected from carnal class."
+            headingClassName="immersive-subheading"
+          />
+
           <details className="immersive-carnal__features">
             <summary className="immersive-carnal__summary">
               Level features
@@ -637,6 +694,34 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
           )}
         </section>
       )}
+
+      <section className="review-section immersive-adventuring immersive-panel">
+        <h3>Adventuring statistics</h3>
+        <p className="muted immersive-adventuring__lede">
+          Standard 5e combat values — update in play when armor, features, or multiclassing apply.
+        </p>
+        <ul className="review-list immersive-adventuring__list">
+          <li>
+            <strong>Level</strong> {character.level}
+          </li>
+          <li>
+            <strong>Class</strong> {character.adventuringClass || '—'}
+          </li>
+          <li>
+            <strong>Hit points</strong> {adventuringHp} max{' '}
+            <span className="muted">(estimated, d8 hit die)</span>
+          </li>
+          <li>
+            <strong>Armor class</strong> {adventuringAc}{' '}
+            <span className="muted">(unarmored, 10 + Dex)</span>
+          </li>
+          {character.background && (
+            <li>
+              <strong>Background</strong> {character.background}
+            </li>
+          )}
+        </ul>
+      </section>
 
       {teaserOpen && (
         <div

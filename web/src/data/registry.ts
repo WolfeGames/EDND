@@ -1,6 +1,7 @@
 import bestiaryData from './tables/bestiary.json'
 import carnalClassesData from './tables/carnal-classes.json'
 import carnalEquipmentData from './tables/carnal-equipment.json'
+import carnalTraitPlaceholdersData from './tables/carnal-trait-placeholders.json'
 import carnalTraitsData from './tables/carnal-traits.json'
 import speciesData from './tables/species.json'
 import { resolveSpeciesTableId } from '../lib/speciesAliases'
@@ -39,8 +40,13 @@ export const PLAYABLE_SPECIES_IDS: readonly string[] = [
 
 export const sexualHistories: SexualHistoryRow[] = buildSexualHistories()
 
-export const carnalTraits: CarnalTraitRow[] =
-  carnalTraitsData.carnalTraits as CarnalTraitRow[]
+export const selectableCarnalTraits: CarnalTraitRow[] =
+  carnalTraitPlaceholdersData.carnalTraits as CarnalTraitRow[]
+
+export const carnalTraits: CarnalTraitRow[] = [
+  ...(carnalTraitsData.carnalTraits as CarnalTraitRow[]),
+  ...selectableCarnalTraits,
+]
 
 export const carnalClasses: CarnalClassRow[] =
   carnalClassesData.carnalClasses as unknown as CarnalClassRow[]

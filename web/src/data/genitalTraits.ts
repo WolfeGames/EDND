@@ -1,3 +1,4 @@
+import { MOTHERING_CONCEPTION_DC_RULE } from '../lib/fertilityRules'
 import type { GenitalTraitDefinition, GenitalTraitId } from '../types/genitalTrait'
 
 export const GENITAL_TRAIT_DEFINITIONS: GenitalTraitDefinition[] = [
@@ -25,7 +26,7 @@ export const GENITAL_TRAIT_DEFINITIONS: GenitalTraitDefinition[] = [
     canImpregnateOthers: false,
     setsImpregnationDc: true,
     tooltip:
-      'No default Refractory period. After each orgasm: Constitution save (DC 10, +2 per previous orgasm this encounter). Failure adds one level of Overstimulated (-2 Sexuality rolls and -5 max Pleasure Points per level). Your Fertility Bonus sets the DC when you are impregnated.',
+      `No default Refractory period. After each orgasm: Constitution save (DC 10, +2 per previous orgasm this encounter). Failure adds one level of Overstimulated (-2 Sexuality rolls and -5 max Pleasure Points per level). ${MOTHERING_CONCEPTION_DC_RULE}`,
   },
   {
     id: 'cuntboy',
@@ -37,7 +38,7 @@ export const GENITAL_TRAIT_DEFINITIONS: GenitalTraitDefinition[] = [
     canImpregnateOthers: true,
     setsImpregnationDc: true,
     tooltip:
-      'Intersex configuration: Male biology with a vagina. Uses Vaginal rules for Refractory and Overstimulation (no default Refractory; Con save after each orgasm). Still applies your Fertility Bonus when impregnating others, and sets impregnation DC when you are impregnated.',
+      `Intersex configuration: Male biology with a vagina. Uses Vaginal rules for Refractory and Overstimulation (no default Refractory; Con save after each orgasm). Still applies your Fertility Bonus when impregnating others. ${MOTHERING_CONCEPTION_DC_RULE}`,
   },
   {
     id: 'shemale',
@@ -49,7 +50,7 @@ export const GENITAL_TRAIT_DEFINITIONS: GenitalTraitDefinition[] = [
     canImpregnateOthers: false,
     setsImpregnationDc: true,
     tooltip:
-      'Intersex configuration: Female biology with a phallus. Uses Phallic rules (Refractory after climax, pleasure → Overstim while Refractory, Sexuality save to recover early). Uses your Fertility Bonus as the DC when you are impregnated.',
+      `Intersex configuration: Female biology with a phallus. Uses Phallic rules (Refractory after climax, pleasure → Overstim while Refractory, Sexuality save to recover early). ${MOTHERING_CONCEPTION_DC_RULE}`,
   },
   {
     id: 'hermaphrodite',
@@ -61,7 +62,7 @@ export const GENITAL_TRAIT_DEFINITIONS: GenitalTraitDefinition[] = [
     canImpregnateOthers: true,
     setsImpregnationDc: true,
     tooltip:
-      'Both Phallic and Vaginal traits apply. Refractory and Overstimulation are tracked separately for each configuration. Overstimulation in either track applies penalties to the whole creature (-2 Sexuality per combined level, -5 max PP per combined level). Fertility Bonus applies when impregnating others and sets DC when impregnated.',
+      `Both Phallic and Vaginal traits apply. Refractory and Overstimulation are tracked separately for each configuration. Overstimulation in either track applies penalties to the whole creature (-2 Sexuality per combined level, -5 max PP per combined level). Fertility Bonus applies when impregnating others. ${MOTHERING_CONCEPTION_DC_RULE}`,
   },
 ]
 

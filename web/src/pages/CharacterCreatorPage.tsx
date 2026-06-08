@@ -1,7 +1,7 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ChangeEventHandler } from 'react'
+import { useEffect, useMemo, useRef, useState, type ChangeEventHandler } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ADVENTURING_CLASSES } from '../data/adventuringClasses'
-import { GENDERS } from '../data/identityOptions'
+import { deriveGenderFromEndowment, withEndowmentOnCharacter } from '../lib/anatomyGender'
 import {
   carnalClasses,
   getCarnalClass,
@@ -12,13 +12,22 @@ import {
   sexualHistories,
 } from '../data/registry'
 import { CharacterSummary } from '../components/CharacterSummary'
+import { FertilityReadout } from '../components/FertilityReadout'
+import { RacialSexualProfilePanel } from '../components/RacialSexualProfilePanel'
 import { RacialSexualTraitsPanel } from '../components/RacialSexualTraitsPanel'
+import { CarnalClassTraitNotes } from '../components/CarnalClassTraitNotes'
+import { CarnalTraitPicker } from '../components/CarnalTraitPicker'
+import { PortraitPicker } from '../components/PortraitPicker'
 import { SpeciesPortrait } from '../components/SpeciesPortrait'
 import {
-  isCanonicalBiologicalSex,
-  normalizeCharacterBiology,
-  sanitizeBiologicalSexForApp,
-} from '../lib/biologicalSex'
+  carnalClassTraitSelectionLabel,
+  getCarnalClassTraitSlotCount,
+  getSexualHistoryTraitSlotCount,
+  sexualHistoryTraitSelectionLabel,
+  syncCharacterCarnalTraitSelections,
+} from '../lib/carnalTraitSelection'
+import { getCharacterPortraitSrc } from '../lib/speciesPortrait'
+import { isCanonicalGender, normalizeCharacterBiology } from '../lib/biologicalSex'
 import { mergeTableProficiencies } from '../lib/mergeEroticProficiencies'
 import {
   emptySexualHistoryPersonality,
@@ -36,19 +45,14 @@ import {
 } from '../lib/characterStorage'
 import { rollAllAbilityScores, rollStat4d6DropLowest } from '../lib/abilityScores'
 import {
+  ENDOWMENT_ANATOMY_OPTIONS,
   ENDOWMENT_SIZE_RULE,
   formatEndowmentLines,
-  getAllowedAnatomiesForBiologicalSex,
-  normalizedEndowment,
   rollEndowmentSize,
-  vaginaAllowedForBiologicalSex,
 } from '../lib/endowment'
 import { getSheetEndowmentProfile } from '../lib/endowedTrait'
 import { GENITAL_TRAIT_DEFINITIONS } from '../data/genitalTraits'
-import {
-  inferGenitalTraitFromCharacter,
-  syncGenitalTraitWithBiology,
-} from '../lib/genitalTrait'
+import { inferGenitalTraitFromCharacter } from '../lib/genitalTrait'
 import type { GenitalTraitId } from '../types/genitalTrait'
 import { createEmptyCharacter, type EdndCharacter, type SexualHistoryPersonality } from '../types/character'
 import './CharacterCreatorPage.css'
@@ -109,16 +113,6 @@ const ABILITY_LABELS: Array<[keyof EdndCharacter['abilityScores'], string]> = [
   ['intelligence', 'Intelligence'],
   ['wisdom', 'Wisdom'],
   ['charisma', 'Charisma'],
-]
-
-const ENDOWMENT_ANATOMY_OPTIONS: Array<{
-  value: EdndCharacter['endowment']['anatomy']
-  label: string
-}> = [
-  { value: 'neither', label: 'Neither' },
-  { value: 'breasts', label: 'Breasts' },
-  { value: 'phallus', label: 'Phallus' },
-  { value: 'both', label: 'Both' },
 ]
 
 function splitCsvTags(value: string): string[] {
@@ -188,9 +182,9 @@ export function CharacterCreatorPage() {
     [character.eroticTraits.repulsion],
   )
 
-  const allowedEndowmentAnatomies = useMemo(
-    () => getAllowedAnatomiesForBiologicalSex(character.genderIdentity),
-    [character.genderIdentity],
+  const derivedGender = useMemo(
+    () => deriveGenderFromEndowment(character.endowment),
+    [character.endowment],
   )
 
   const endowmentReadout = useMemo(
@@ -198,29 +192,7 @@ export function CharacterCreatorPage() {
     [character],
   )
 
-  const vaginaAllowed = useMemo(
-    () => vaginaAllowedForBiologicalSex(character.genderIdentity),
-    [character.genderIdentity],
-  )
-
-  const vaginaChecked =
-    character.endowment.vaginaPresent ?? character.genderIdentity.trim() === 'Female'
-
-  useLayoutEffect(() => {
-    setCharacter((c) => {
-      const next = normalizedEndowment(c.genderIdentity, c.endowment)
-      if (
-        next.anatomy === c.endowment.anatomy &&
-        next.breastsSize === c.endowment.breastsSize &&
-        next.phallusSize === c.endowment.phallusSize &&
-        next.vaginaPresent === c.endowment.vaginaPresent &&
-        next.vaginaSize === c.endowment.vaginaSize
-      ) {
-        return c
-      }
-      return { ...c, endowment: next }
-    })
-  }, [character.genderIdentity])
+  const vaginaChecked = character.endowment.vaginaPresent === true
 
   useEffect(() => {
     const t = window.setTimeout(() => {
@@ -235,7 +207,7 @@ export function CharacterCreatorPage() {
         return (
           character.name.trim().length > 0 &&
           character.adventuringClass.trim().length > 0 &&
-          isCanonicalBiologicalSex(character.genderIdentity)
+          isCanonicalGender(character.genderIdentity)
         )
       case 1:
         return character.species.length > 0
@@ -349,45 +321,33 @@ export function CharacterCreatorPage() {
     setCharacter((c) => {
       const e = c.endowment
       if (anatomy === 'neither') {
-        return {
-          ...c,
-          endowment: {
-            ...e,
-            anatomy: 'neither',
-            breastsSize: undefined,
-            phallusSize: undefined,
-          },
-        }
+        return withEndowmentOnCharacter(c, {
+          ...e,
+          anatomy: 'neither',
+          breastsSize: undefined,
+          phallusSize: undefined,
+        })
       }
       if (anatomy === 'breasts') {
-        return {
-          ...c,
-          endowment: {
-            ...e,
-            anatomy: 'breasts',
-            phallusSize: undefined,
-          },
-        }
+        return withEndowmentOnCharacter(c, {
+          ...e,
+          anatomy: 'breasts',
+          phallusSize: undefined,
+        })
       }
       if (anatomy === 'phallus') {
-        return {
-          ...c,
-          endowment: {
-            ...e,
-            anatomy: 'phallus',
-            breastsSize: undefined,
-          },
-        }
-      }
-      return {
-        ...c,
-        endowment: {
+        return withEndowmentOnCharacter(c, {
           ...e,
-          anatomy,
-          breastsSize: e.breastsSize,
-          phallusSize: e.phallusSize,
-        },
+          anatomy: 'phallus',
+          breastsSize: undefined,
+        })
       }
+      return withEndowmentOnCharacter(c, {
+        ...e,
+        anatomy,
+        breastsSize: e.breastsSize,
+        phallusSize: e.phallusSize,
+      })
     })
   }
 
@@ -473,34 +433,14 @@ export function CharacterCreatorPage() {
             />
           </div>
           <div className="creator-field">
-            <label htmlFor="char-gender">Biological sex</label>
-            <select
-              id="char-gender"
-              required
-              value={character.genderIdentity}
-              onChange={(e) => {
-                const genderIdentity = sanitizeBiologicalSexForApp(e.target.value)
-                setCharacter((c) =>
-                  withMergedProficiencies(
-                    syncGenitalTraitWithBiology({ ...c, genderIdentity }, {
-                      preserveExplicitChoice: true,
-                    }),
-                  ),
-                )
-              }}
-            >
-              <option value="" disabled>
-                Choose Male or Female…
-              </option>
-              {GENDERS.map((g) => (
-                <option key={g} value={g}>
-                  {g}
-                </option>
-              ))}
-            </select>
+            <label htmlFor="char-gender">Gender</label>
+            <output id="char-gender" className="creator-derived-value">
+              {derivedGender || 'Configure endowment below'}
+            </output>
             <p className="hint">
-              Male or Female for portraits and core rules. Use endowment below for specific anatomy
-              (breasts, phallus, vagina). Identity and pronouns are separate—set pronouns above.
+              Derived from endowment: phallus only = Male; phallus + vagina = Hermaphrodite; vagina
+              only = Cuntboy; vagina + breasts = Female; phallus + breasts = Shemale. Set pronouns
+              freely above.
             </p>
           </div>
           <div className="creator-field">
@@ -556,6 +496,7 @@ export function CharacterCreatorPage() {
               Shapeshifters can change configuration in play: new form clears Refractory and
               Overstim for that configuration; reverting restores the previous state.
             </p>
+            <FertilityReadout character={character} />
           </div>
           <div className="creator-field">
             <label htmlFor="char-level">Level</label>
@@ -656,17 +597,14 @@ export function CharacterCreatorPage() {
                 )
               }
             >
-              {ENDOWMENT_ANATOMY_OPTIONS.filter((opt) =>
-                allowedEndowmentAnatomies.includes(opt.value),
-              ).map((opt) => (
+              {ENDOWMENT_ANATOMY_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>
                   {opt.label}
                 </option>
               ))}
             </select>
             <p className="hint">
-              {ENDOWMENT_SIZE_RULE} Any breasts/phallus combination is allowed for Male or Female;
-              set vagina below when it applies to your character.
+              {ENDOWMENT_SIZE_RULE} Toggle vagina below when it applies—gender updates automatically.
             </p>
             <div className="hint" style={{ marginTop: '0.35rem' }}>
               <strong>Sheet readout:</strong>
@@ -753,29 +691,27 @@ export function CharacterCreatorPage() {
               </button>
             </div>
           )}
-          {vaginaAllowed && (
-            <div className="creator-field">
-              <label className="creator-checkbox-label">
-                <input
-                  type="checkbox"
-                  checked={vaginaChecked}
-                  onChange={(e) =>
-                    setCharacter((c) => ({
-                      ...c,
-                      endowment: {
-                        ...c.endowment,
-                        vaginaPresent: e.target.checked,
-                        vaginaSize: e.target.checked ? c.endowment.vaginaSize : undefined,
-                      },
-                    }))
-                  }
-                />
-                Has vagina (same 1d6 size categories)
-              </label>
-              <p className="hint" style={{ marginTop: '0.35rem' }}>
-                Not modeled for biological Male. For Female, this defaults to on until you turn it
-                off. Roll size when you are ready.
-              </p>
+          <div className="creator-field">
+            <label className="creator-checkbox-label">
+              <input
+                type="checkbox"
+                checked={vaginaChecked}
+                onChange={(e) =>
+                  setCharacter((c) =>
+                    withEndowmentOnCharacter(c, {
+                      ...c.endowment,
+                      vaginaPresent: e.target.checked,
+                      vaginaSize: e.target.checked ? c.endowment.vaginaSize : undefined,
+                    }),
+                  )
+                }
+              />
+              Has vagina (same 1d6 size categories)
+            </label>
+            <p className="hint" style={{ marginTop: '0.35rem' }}>
+              Vagina with phallus makes Hermaphrodite; vagina with breasts makes Female; vagina
+              alone makes Cuntboy. Roll size when you are ready.
+            </p>
               {vaginaChecked && (
                 <div
                   className="creator-field creator-field--inline-actions"
@@ -807,8 +743,7 @@ export function CharacterCreatorPage() {
                   </div>
                 </div>
               )}
-            </div>
-          )}
+          </div>
         </section>
       )}
 
@@ -824,7 +759,11 @@ export function CharacterCreatorPage() {
               value={character.species}
               onChange={(e) =>
                 setCharacter((c) =>
-                  withMergedProficiencies({ ...c, species: e.target.value }),
+                  withMergedProficiencies({
+                    ...c,
+                    species: e.target.value,
+                    portraitSrc: undefined,
+                  }),
                 )
               }
             >
@@ -838,8 +777,13 @@ export function CharacterCreatorPage() {
           </div>
           {speciesRow && (
             <>
+              <PortraitPicker
+                character={character}
+                onChange={(portraitSrc) => setCharacter((c) => ({ ...c, portraitSrc }))}
+              />
               <div className="creator-species-layout">
                 <SpeciesPortrait
+                  src={getCharacterPortraitSrc(character)}
                   speciesId={character.species}
                   genderIdentity={character.genderIdentity}
                   alt={speciesRow.name ? `${speciesRow.name} portrait` : ''}
@@ -860,6 +804,11 @@ export function CharacterCreatorPage() {
                 speciesId={character.species}
                 headingClassName="creator-subheading"
               />
+              <RacialSexualProfilePanel
+                speciesId={character.species}
+                showGlossaryIntro
+                headingClassName="creator-subheading"
+              />
             </>
           )}
         </section>
@@ -877,11 +826,14 @@ export function CharacterCreatorPage() {
               value={character.sexualHistory ?? ''}
               onChange={(e) =>
                 setCharacter((c) =>
-                  withMergedProficiencies({
-                    ...c,
-                    sexualHistory: e.target.value || undefined,
-                    sexualHistoryPersonality: undefined,
-                  }),
+                  syncCharacterCarnalTraitSelections(
+                    withMergedProficiencies({
+                      ...c,
+                      sexualHistory: e.target.value || undefined,
+                      sexualHistoryPersonality: undefined,
+                      sexualHistoryTraitIds: [],
+                    }),
+                  ),
                 )
               }
             >
@@ -894,9 +846,25 @@ export function CharacterCreatorPage() {
             </select>
           </div>
           {historyRow && (
-            <p className="muted" style={{ lineHeight: 1.5 }}>
-              {historyRow.description}
-            </p>
+            <>
+              <p className="muted" style={{ lineHeight: 1.5 }}>
+                {historyRow.description}
+              </p>
+              <CarnalTraitPicker
+                context="history"
+                speciesId={character.species}
+                carnalClassId={character.carnalClass ?? ''}
+                sexualHistoryId={character.sexualHistory ?? ''}
+                selectedIds={character.sexualHistoryTraitIds ?? []}
+                maxSlots={getSexualHistoryTraitSlotCount(character.sexualHistory)}
+                lede={`${sexualHistoryTraitSelectionLabel(character.sexualHistory)} Traits are small features that refine sexuality and description; some are exclusive to species, class, or history.`}
+                onChange={(sexualHistoryTraitIds) =>
+                  setCharacter((c) =>
+                    syncCharacterCarnalTraitSelections({ ...c, sexualHistoryTraitIds }),
+                  )
+                }
+              />
+            </>
           )}
           {historyRow?.personality && (
             <div className="creator-personality" style={{ marginTop: '1.25rem' }}>
@@ -1066,10 +1034,13 @@ export function CharacterCreatorPage() {
               value={character.carnalClass ?? ''}
               onChange={(e) =>
                 setCharacter((c) =>
-                  withMergedProficiencies({
-                    ...c,
-                    carnalClass: e.target.value || undefined,
-                  }),
+                  syncCharacterCarnalTraitSelections(
+                    withMergedProficiencies({
+                      ...c,
+                      carnalClass: e.target.value || undefined,
+                      carnalClassTraitIds: [],
+                    }),
+                  ),
                 )
               }
             >
@@ -1082,9 +1053,24 @@ export function CharacterCreatorPage() {
             </select>
           </div>
           {carnalClassRow && (
-            <p className="muted" style={{ lineHeight: 1.5 }}>
-              {carnalClassRow.description}
-            </p>
+            <>
+              <p className="muted" style={{ lineHeight: 1.5 }}>
+                {carnalClassRow.description}
+              </p>
+              <CarnalClassTraitNotes row={carnalClassRow} />
+              <CarnalTraitPicker
+                context="class"
+                speciesId={character.species}
+                carnalClassId={character.carnalClass ?? ''}
+                sexualHistoryId={character.sexualHistory ?? ''}
+                selectedIds={character.carnalClassTraitIds ?? []}
+                maxSlots={getCarnalClassTraitSlotCount(character.carnalClass)}
+                lede={`${carnalClassTraitSelectionLabel(character.carnalClass)} Courtesan grants 4 traits; all other carnal classes grant 3.`}
+                onChange={(carnalClassTraitIds) =>
+                  setCharacter((c) => syncCharacterCarnalTraitSelections({ ...c, carnalClassTraitIds }))
+                }
+              />
+            </>
           )}
         </section>
       )}

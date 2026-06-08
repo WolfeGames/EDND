@@ -1,12 +1,17 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import { getRacialProfileSheetMechanics } from '../lib/racialSexualProfiles'
+import { FertilityReadout } from '../components/FertilityReadout'
+import { RacialSexualProfilePanel } from '../components/RacialSexualProfilePanel'
 import { RacialSexualTraitsPanel } from '../components/RacialSexualTraitsPanel'
 import { getCarnalClass, getSexualHistory, getSpecies } from '../data/registry'
+import { estimateArmorClass, estimateMaxHitPoints } from '../lib/adventuringStats'
 import { abilityModifier } from '../lib/abilityScores'
 import { characterHasEndowedTrait, getSheetEndowmentProfile } from '../lib/endowedTrait'
 import { ENDOWMENT_SIZE_RULE, formatEndowmentLines } from '../lib/endowment'
-import { isCanonicalBiologicalSex } from '../lib/biologicalSex'
-import { getDefaultSpeciesPortraitSrc } from '../lib/speciesPortrait'
+import { CarnalClassTraitNotes } from '../components/CarnalClassTraitNotes'
+import { SelectedCarnalTraitsPanel } from '../components/SelectedCarnalTraitsPanel'
+import { getCharacterPortraitSrc } from '../lib/speciesPortrait'
 import { getFromLibrary, peekCharacterFromSheetStash } from '../lib/characterStorage'
 import { parseFeatureLevelRequirement } from '../lib/parseFeatureLevelRequirement'
 import {
@@ -81,16 +86,18 @@ export function CharacterSheetPage() {
     () => (character ? characterHasEndowedTrait(character) : false),
     [character],
   )
+  const racialBeauty = useMemo(
+    () =>
+      character?.species
+        ? getRacialProfileSheetMechanics(character.species)
+        : { beautyClassBonus: 0, fertilityNotes: [], pleasureNotes: [], saveNotes: [] },
+    [character?.species],
+  )
 
-  const sheetPortraitSrc = useMemo(() => {
-    if (
-      !character?.species ||
-      !isCanonicalBiologicalSex(character.genderIdentity)
-    ) {
-      return null
-    }
-    return getDefaultSpeciesPortraitSrc(character.species, character.genderIdentity)
-  }, [character?.species, character?.genderIdentity])
+  const sheetPortraitSrc = useMemo(
+    () => (character ? getCharacterPortraitSrc(character) : null),
+    [character?.portraitSrc, character?.species, character?.genderIdentity],
+  )
 
   if (!character && !loadMessage) {
     return (
@@ -156,7 +163,9 @@ export function CharacterSheetPage() {
             <div className="sheet-name-block">
               <h1 className="sheet-char-name">{c.name.trim() || 'Unnamed character'}</h1>
               <div className="sheet-sub">
-                {speciesRow?.name ?? '—'} · {c.adventuringClass || '—'} · Level {c.level}
+                {speciesRow?.name ?? '—'}
+                {carnalClassRow ? ` · ${carnalClassRow.name}` : ''}
+                {historyRow ? ` · ${historyRow.name}` : ''}
               </div>
             </div>
           </div>
@@ -180,53 +189,48 @@ export function CharacterSheetPage() {
               <span className="sheet-meta-value">{c.pronouns || '—'}</span>
             </div>
             <div className="sheet-meta-cell">
-              <span className="sheet-meta-label">Biological sex</span>
+              <span className="sheet-meta-label">Gender</span>
               <span className="sheet-meta-value">{c.genderIdentity || '—'}</span>
             </div>
           </div>
         </header>
+
+        <section className="sheet-section sheet-veil-stats" aria-labelledby="veil-stats-heading">
+          <h2 id="veil-stats-heading" className="sheet-section-title">
+            Ability scores &amp; sexuality
+          </h2>
+          <div className="sheet-abilities">
+            {ABILITIES.map(({ key, label }) => {
+              const score = c.abilityScores[key]
+              const mod = abilityModifier(score)
+              const modStr = mod >= 0 ? `+${mod}` : `${mod}`
+              return (
+                <div key={key} className="sheet-ability-box">
+                  <div className="sheet-ability-label">{label}</div>
+                  <div className="sheet-ability-score">{score}</div>
+                  <div className="sheet-ability-mod">{modStr}</div>
+                </div>
+              )
+            })}
+          </div>
+          <p className="sheet-block-body sheet-veil-stats__sexuality">
+            <strong>Sexuality bonus</strong> +{c.eroticTraits.sexualityBonus}
+          </p>
+        </section>
 
         <section className="sheet-section" aria-labelledby="identity-heading">
           <h2 id="identity-heading" className="sheet-section-title">
             Identity
           </h2>
           <div className="sheet-block">
-            <h3 className="sheet-block-title">Character</h3>
-            <p className="sheet-block-body">
-              <strong>{c.adventuringClass || '—'}</strong>, level {c.level}
-              {c.background ? (
-                <>
-                  <br />
-                  Background: {c.background}
-                </>
-              ) : null}
-            </p>
-          </div>
-          <div className="sheet-block">
-            <h3 className="sheet-block-title">Ability scores</h3>
-            <div className="sheet-abilities">
-              {ABILITIES.map(({ key, label }) => {
-                const score = c.abilityScores[key]
-                const mod = abilityModifier(score)
-                const modStr = mod >= 0 ? `+${mod}` : `${mod}`
-                return (
-                  <div key={key} className="sheet-ability-box">
-                    <div className="sheet-ability-label">{label}</div>
-                    <div className="sheet-ability-score">{score}</div>
-                    <div className="sheet-ability-mod">{modStr}</div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-          <div className="sheet-block">
-            <h3 className="sheet-block-title">Endowment</h3>
+            <h3 className="sheet-block-title endo-label-tooltip" title={ENDOWMENT_SIZE_RULE}>
+              Endowment
+            </h3>
             <ul className="sheet-list">
               {endowmentLines.map((line) => (
                 <li key={line}>{line}</li>
               ))}
             </ul>
-            <p className="sheet-fine-print">{ENDOWMENT_SIZE_RULE}</p>
             {endowedNote && (
               <p className="sheet-fine-print">
                 <strong>Endowed</strong> (from sexual history): bust and/or phallus sizes above are
@@ -261,6 +265,13 @@ export function CharacterSheetPage() {
                 className="racial-traits--sheet"
                 groupClassName="racial-traits__group--sheet"
               />
+              <RacialSexualProfilePanel
+                speciesId={c.species}
+                headingClassName="sheet-subheading"
+                className="racial-profile--sheet"
+                groupClassName="racial-profile__group--sheet"
+              />
+              <FertilityReadout character={c} className="fertility-readout--sheet" />
             </>
           ) : (
             <p className="sheet-prose muted">No species selected.</p>
@@ -268,10 +279,16 @@ export function CharacterSheetPage() {
           <div className="sheet-block">
             <h3 className="sheet-block-title">Beauty &amp; drive</h3>
             <p className="sheet-block-body">
-              Beauty class <strong>{c.eroticTraits.beautyClass}</strong> (modifier{' '}
-              {c.eroticTraits.beautyModifier >= 0 ? '+' : ''}
-              {c.eroticTraits.beautyModifier}). Sexuality bonus{' '}
-              <strong>+{c.eroticTraits.sexualityBonus}</strong>.
+              Beauty class <strong>{c.eroticTraits.beautyClass}</strong>
+              {racialBeauty.beautyClassBonus > 0 && (
+                <span className="sheet-fine-print">
+                  {' '}
+                  (+{racialBeauty.beautyClassBonus} racial glossary
+                  {racialBeauty.beautyClassNote ? ` — ${racialBeauty.beautyClassNote}` : ''})
+                </span>
+              )}{' '}
+              (modifier {c.eroticTraits.beautyModifier >= 0 ? '+' : ''}
+              {c.eroticTraits.beautyModifier}).
             </p>
           </div>
           <div className="sheet-block">
@@ -316,6 +333,12 @@ export function CharacterSheetPage() {
             {historyRow.traitPoints != null ? (
               <p className="sheet-fine-print">Trait points: {historyRow.traitPoints}</p>
             ) : null}
+            <SelectedCarnalTraitsPanel
+              title="Selected carnal traits"
+              traitIds={c.sexualHistoryTraitIds ?? []}
+              headingClassName="sheet-block-title"
+              className="selected-carnal-traits--sheet"
+            />
             {c.sexualHistoryPersonality && (
               <ul className="sheet-list sheet-personality">
                 <li>
@@ -356,6 +379,17 @@ export function CharacterSheetPage() {
               Carnal class — {carnalClassRow.name}
             </h2>
             <p className="sheet-prose">{carnalClassRow.description}</p>
+            <CarnalClassTraitNotes
+              row={carnalClassRow}
+              headingClassName="sheet-block-title"
+              className="carnal-trait-notes--sheet"
+            />
+            <SelectedCarnalTraitsPanel
+              title="Selected carnal traits"
+              traitIds={c.carnalClassTraitIds ?? []}
+              headingClassName="sheet-block-title"
+              className="selected-carnal-traits--sheet"
+            />
             <ul className="sheet-list">
               {Object.entries(carnalClassRow.features).map(([k, v]) => {
                 const req = parseFeatureLevelRequirement(k)
@@ -371,6 +405,34 @@ export function CharacterSheetPage() {
             </ul>
           </section>
         )}
+
+        <section className="sheet-section" aria-labelledby="adventuring-heading">
+          <h2 id="adventuring-heading" className="sheet-section-title">
+            Adventuring statistics
+          </h2>
+          <p className="sheet-fine-print">
+            Standard 5e values — adjust in play for armor, features, and multiclassing.
+          </p>
+          <div className="sheet-block">
+            <p className="sheet-block-body">
+              <strong>Level</strong> {c.level}
+              <br />
+              <strong>Class</strong> {c.adventuringClass || '—'}
+              <br />
+              <strong>Hit points</strong> {estimateMaxHitPoints(c.level, c.abilityScores)} max{' '}
+              <span className="sheet-fine-print">(estimated, d8 hit die)</span>
+              <br />
+              <strong>Armor class</strong> {estimateArmorClass(c.abilityScores)}{' '}
+              <span className="sheet-fine-print">(unarmored, 10 + Dex)</span>
+              {c.background ? (
+                <>
+                  <br />
+                  <strong>Background</strong> {c.background}
+                </>
+              ) : null}
+            </p>
+          </div>
+        </section>
 
         <section className="sheet-section sheet-notes">
           <h2 className="sheet-section-title">Notes &amp; equipment</h2>

@@ -1,0 +1,88 @@
+{
+  "carnalTraits": [
+    {
+      "id": "placeholder-trait-1",
+      "name": "Trait 1",
+      "description": "Placeholder carnal trait — refines sexuality and character description. Full rules TBD.",
+      "sources": { "general": true }
+    },
+    {
+      "id": "placeholder-trait-2",
+      "name": "Trait 2",
+      "description": "Placeholder carnal trait — refines sexuality and character description. Full rules TBD.",
+      "sources": { "general": true }
+    },
+    {
+      "id": "placeholder-trait-3",
+      "name": "Trait 3",
+      "description": "Placeholder carnal trait — refines sexuality and character description. Full rules TBD.",
+      "sources": { "general": true }
+    },
+    {
+      "id": "placeholder-trait-4",
+      "name": "Trait 4",
+      "description": "Placeholder carnal trait — refines sexuality and character description. Full rules TBD.",
+      "sources": { "general": true }
+    },
+    {
+      "id": "placeholder-trait-5",
+      "name": "Trait 5",
+      "description": "Placeholder carnal trait — refines sexuality and character description. Full rules TBD.",
+      "sources": { "general": true }
+    },
+    {
+      "id": "placeholder-trait-6",
+      "name": "Trait 6",
+      "description": "Placeholder carnal trait — refines sexuality and character description. Full rules TBD.",
+      "sources": { "general": true }
+    },
+    {
+      "id": "placeholder-trait-7",
+      "name": "Trait 7",
+      "description": "Placeholder carnal trait — refines sexuality and character description. Full rules TBD.",
+      "sources": { "general": true }
+    },
+    {
+      "id": "placeholder-trait-8",
+      "name": "Trait 8",
+      "description": "Placeholder carnal trait — refines sexuality and character description. Full rules TBD.",
+      "sources": { "general": true }
+    },
+    {
+      "id": "placeholder-trait-x",
+      "name": "Trait X",
+      "description": "Placeholder exclusive trait — Courtesan carnal class only. Full rules TBD.",
+      "sources": { "carnalClassIds": ["courtesan"], "exclusive": true }
+    },
+    {
+      "id": "placeholder-trait-y",
+      "name": "Trait Y",
+      "description": "Placeholder exclusive trait — Ravager carnal class only. Full rules TBD.",
+      "sources": { "carnalClassIds": ["ravager"], "exclusive": true }
+    },
+    {
+      "id": "placeholder-trait-z",
+      "name": "Trait Z",
+      "description": "Placeholder exclusive trait — Lustbound carnal class only. Full rules TBD.",
+      "sources": { "carnalClassIds": ["lustbound"], "exclusive": true }
+    },
+    {
+      "id": "placeholder-trait-artificer",
+      "name": "Trait A",
+      "description": "Placeholder exclusive trait — Carnal Artificer carnal class only. Full rules TBD.",
+      "sources": { "carnalClassIds": ["carnal-artificer"], "exclusive": true }
+    },
+    {
+      "id": "placeholder-trait-history",
+      "name": "Trait H",
+      "description": "Placeholder exclusive trait — Hedonist sexual history only. Full rules TBD.",
+      "sources": { "sexualHistoryIds": ["hedonist"], "exclusive": true }
+    },
+    {
+      "id": "placeholder-trait-species",
+      "name": "Trait S",
+      "description": "Placeholder exclusive trait — Human species only. Full rules TBD.",
+      "sources": { "speciesIds": ["human"], "exclusive": true }
+    }
+  ]
+}

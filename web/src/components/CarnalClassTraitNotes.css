@@ -1,0 +1,21 @@
+.carnal-trait-notes {
+  margin: 0.75rem 0 0;
+}
+
+.carnal-trait-notes__title {
+  font-size: 0.88rem;
+  margin: 0 0 0.4rem;
+  color: var(--text-h, #f0f2f7);
+}
+
+.carnal-trait-notes__list {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--text-muted, #a8b0bf);
+}
+
+.carnal-trait-notes__list li + li {
+  margin-top: 0.35rem;
+}

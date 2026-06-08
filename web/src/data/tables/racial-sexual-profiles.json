@@ -1,0 +1,128 @@
+{
+  "racialSexualProfiles": {
+    "generalNotes": "These profiles provide in-depth cultural, societal, and mechanical information about how each race approaches sex, relationships, pregnancy, and reproduction within the erotic D&D system. They are designed to support immersive roleplay, character creation, and worldbuilding in the app.",
+    "sexualTypes": {
+      "Humanoid": ["Dwarves", "Humans"],
+      "Fey": ["Elves", "High Elves", "Wood Elves", "Drow"],
+      "Giant": ["Goliaths"],
+      "Celestial": ["Aasimar"],
+      "Fiend": ["Tieflings"]
+    },
+    "races": {
+      "Dwarves": {
+        "sexualType": "Humanoid",
+        "coreAttitude": "Dwarves view sexuality through the lens of tradition, efficiency, craftsmanship, and the long-term prosperity of the clan. Sex is never treated lightly or frivolously — it is regarded as both a skilled craft and a vital duty, much like forging a masterwork blade. It requires heat, pressure, time, and expertise. Public or semi-public displays of intimacy in clan halls are common during festivals and are celebrated as healthy expressions of vitality.",
+        "orientationAndDuty": "Dwarven society is pragmatic. Homosexuality is generally accepted and not stigmatized, so long as it does not threaten the continuation of the clan. Gay and lesbian dwarves often maintain deep, passionate same-sex relationships, but all dwarves are expected to fulfill their reproductive obligations when the biological call of Stonefever arrives.",
+        "specialFeatures": {
+          "Stonefever": {
+            "description": "A powerful, once-in-a-lifetime biological imperative that overrides personality, preferences, and individuality, demanding the creation of new life for the clan.",
+            "trigger": "At the start of each new decade of life, roll a number of d100s equal to the number of centuries lived. If the total exceeds current age, make a Charisma saving throw (DC 10, increasing by 1 for every previous successful save).",
+            "effects": "Other dwarves gain +10 Beauty Class (sight only). Fertility score increases by +10 with dwarves and +5 with other humanoids. Dwarven partners gain advantage on Sexuality checks against you, deal additional pleasure equal to your Sex Die, and gain advantage on coital penetration checks."
+          }
+        },
+        "pregnancy": "Pregnancy is treated as another form of honest labor. Expectant mothers continue working, often channeling their increased vitality into crafting, believing it forges strength into the child. Complications are rare due to legendary dwarven resilience. Childbirth is a practical, communal, and proud event.",
+        "family": "Parental duties are shared according to each parent's strengths. In same-sex couples, the biological sire often becomes a welcomed household figure — assisting with physical aches, heightened appetites, household responsibilities, and continuing intimate relations with both partners.",
+        "interracial": "Dwarves are slow to trust outsiders but deeply respect those who prove sturdy and loyal. Non-dwarven partners are acceptable during Stonefever but generally considered less ideal."
+      },
+      "Elves": {
+        "sexualType": "Fey",
+        "coreAttitude": "Elves view sex as a deeply personal artistic pursuit and spiritual communion meant to create harmony, beauty, and emotional transcendence. It is built on mutual trust, respect, and aesthetic appreciation. Younger elves often treat it as whimsical self-expression and natural fun, while older elves favor slow, profound experiences.",
+        "orientationAndDuty": "There is no societal pressure to procreate. Sexuality is regarded as an innate and immutable personal trait. Same-sex relationships are common, celebrated, and often lifelong.",
+        "specialFeatures": {
+          "DiminishedFertility": "Conception rolls to impregnate an elf are made with disadvantage. Other elves may ignore this if their Fertility Bonus is equal to or higher than the mothering elf's. Humans ignore the disadvantage entirely. Other species add only half their Fertility Bonus.",
+          "ImmutableSexuality": "Elves have advantage on saving throws against any spell or effect that would alter their sexual orientation."
+        },
+        "pregnancy": "Elven pregnancies last significantly longer than human ones but are generally uncomplicated and treated as sacred magical events. Childbirth is a celebrated, mystical occasion often enhanced by magic.",
+        "family": "Children are deeply cherished. Parenting frequently involves multiple 'heart-parents' in polyamorous or close-knit circles, with strong emphasis on grace, art, and sensual awareness."
+      },
+      "HighElves": {
+        "parentRace": "Elves",
+        "coreAttitude": "High Elves treat sex as the pinnacle of refined artistic and magical expression. They favor long, graceful tantric sessions filled with magic, poetry, and intellectual connection. Aesthetics, poise, and mental compatibility are of utmost importance.",
+        "specialFeatures": {
+          "AestheticAndErotic": "High Elves gain +1 Beauty Class, increasing to +2 when interacting with other High Elves."
+        }
+      },
+      "WoodElves": {
+        "parentRace": "Elves",
+        "coreAttitude": "Wood Elves celebrate sex as a wild, primal expression of nature and life. Lovemaking is passionate, athletic, and often occurs in wild settings — under the stars, in ancient trees, or during seasonal festivals of unbound revelry."
+      },
+      "Drow": {
+        "parentRace": "Elves",
+        "coreAttitude": "Drow view sex through the lens of power, religion, and survival. It is a calculated tool, weapon, and means of leverage. True intimacy is rare and dangerous. Lower-ranking drow often indulge in wild, raucous group revelry.",
+        "specialFeatures": {
+          "SelectiveBreeding": "Gifted mothers may bear up to 3d4 children. Female births are more common (d20 roll of 8+). Males have advantage on conception rolls during selective breeding. Mothers may reduce Conception DC by 1d4 once per year.",
+          "DemandingFertility": "Male drow may increase their Fertility score by 1d4 as a survival mechanism."
+        }
+      },
+      "Humans": {
+        "sexualType": "Humanoid",
+        "coreAttitude": "Humans are the great generalists of sexuality. With no single unifying culture or biological imperative, their attitudes and practices run the full spectrum — from sacred and romantic to purely hedonistic or transactional. Humans are capable of embracing nearly any orientation, kink, or relationship style.",
+        "specialFeatures": {
+          "AdaptableFertility": "Humans can successfully conceive with any humanoid species. Pairings with non-humanoids impose disadvantage on conception rolls. Cross-species pregnancies may introduce additional complications."
+        },
+        "pregnancy": "Approximately nine months gestation. Roll a d20 during each major phase and during childbirth — on a 9 or lower, a complication arises. A dedicated human may bear roughly 1d4 children per point of Constitution modifier when actively trying."
+      },
+      "Goliaths": {
+        "sexualType": "Giant",
+        "coreAttitude": "Goliaths view sex as an athletic and physical endeavor, deriving pleasure from both sensation and raw exertion. Lovemaking is vigorous, competitive, and recreational, though committed relationships are treated as sacred.",
+        "specialFeatures": {
+          "GiantGrowth": "Goliaths count as one size larger for penetration DCs and size-related mechanics. They gain +1 to genital or bust size rolls. Once per day they may temporarily increase their size further for dramatic or erotic effect."
+        },
+        "pregnancy": "Pregnancies are frequent with fast-growing offspring, but childbirth can be difficult due to size. Up to 2d4 children in a lifetime. High risk when carrying offspring from goliath fathers for smaller mothers."
+      },
+      "Aasimar": {
+        "sexualType": "Celestial",
+        "coreAttitude": "Aasimar, descended from celestial beings, view sex as a wholesome expression of love, recreation, and emotional connection. They only engage in morally upright, consensual, and respectful acts, strongly avoiding infidelity, manipulation, or degrading taboos.",
+        "specialFeatures": {
+          "BlessedFertility": "Aasimar always produce Aasimar offspring with the Celestial sexual type regardless of the partner's species. Creatures with the Fiend type cannot apply their Fertility bonus and instead apply it as a penalty (×2) to the Aasimar's Conception DC."
+        },
+        "pregnancy": "Human-like gestation with significantly fewer complications. Aasimar mothers typically bear 1d4 + 1 children in their lifetime."
+      },
+      "Tieflings": {
+        "sexualType": "Fiend",
+        "coreAttitude": "Tieflings possess a natural acceptance of taboos, fetishes, and unconventional desires due to their fiendish heritage. Their approach to relationships and sex varies widely based on personal alignment — some are devoted, others freely promiscuous.",
+        "specialFeatures": {
+          "FiendishFertility": "Offspring conceived with a Tiefling gain the Fiend sexual type.",
+          "UnscrupulousSexuality": "Tieflings may add 2 additional taboos or fetishes beyond normal limits and gain 1 Endowment trait of their choice."
+        },
+        "pregnancy": "Often complicated and unpredictable."
+      },
+      "Halflings": {
+        "sexualType": "Humanoid",
+        "coreAttitude": "Halflings approach sex with whimsy, comfort, and infectious joy. For them, sex is a delightful journey filled with laughter, teasing, and affection as much as passionate release. They adore both their own kind and the exciting challenge of larger lovers.",
+        "specialFeatures": {
+          "SmallSizeGreatAmbition": "Medium creatures do not suffer normal penetration DC increases with halflings. Phallic halflings deal full pleasure to Medium partners with no size penalties."
+        },
+        "pregnancy": "Easy and uncomplicated pregnancies. Notably higher fertility with other halflings. Up to 2d4 children (3d4 for particularly ambitious individuals)."
+      },
+      "Gnomes": {
+        "sexualType": "Humanoid",
+        "coreAttitude": "Gnomes are inventive, curious, and intellectually playful lovers. They are often as fascinated with understanding their partner's pleasure responses as with the act itself. They liberally use illusions, mechanical toys, alchemical aids, and Eromancy to create novel experiences.",
+        "specialFeatures": {
+          "CarnalTrickster": "When using an Eromancy cantrip to deal pleasure, gnomes deal additional pleasure equal to their spellcasting modifier."
+        },
+        "pregnancy": "Low fertility. Typically 1d4 offspring. Strongly prefer mating with other gnomes or halflings due to logistical ease."
+      },
+      "Goblins": {
+        "sexualType": "Humanoid",
+        "coreAttitude": "Goblins treat sex as an impulsive need, a source of chaotic fun, and a means of clan growth. They are extremely open, rarely picky, and show little regard for taboos. Sex is enthusiastically embraced as revelry, barter, or spontaneous pleasure.",
+        "specialFeatures": {
+          "AccommodatingNature": "Goblins are highly accommodating to larger partners and suffer reduced or no size-difference penalties."
+        },
+        "pregnancy": "Extremely fertile. Pregnancies are common, expected, and rarely planned."
+      },
+      "Orcs": {
+        "sexualType": "Humanoid",
+        "coreAttitude": "Orcs approach sex with raw, primal intensity. While primitive clans rut freely, more evolved orcs understand sex as a powerful tool for clan strength, bonding, and even magic. Public and unabashed displays of lust are normal.",
+        "specialFeatures": {
+          "OrcishRut": {
+            "frequency": "Once per month",
+            "description": "A powerful heat that maximizes lust and sexual stamina for both males and females.",
+            "effects": "Refractory period is eliminated. After each climax, make a Constitution saving throw (adding Sexuality bonus). Failure while climaxing again within half an hour grants 1 level of Exhaustion. Maximum 3 Exhaustion, after which the orc becomes immune to the Aroused condition until completing a long rest."
+          }
+        },
+        "pregnancy": "Exceptionally fertile. Pregnancies are short, hardy, and often result in large broods."
+      }
+    }
+  }
+}

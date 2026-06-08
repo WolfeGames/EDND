@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { getDefaultSpeciesPortraitSrc } from './speciesPortrait'
+import { getCharacterPortraitSrc, getDefaultSpeciesPortraitSrc } from './speciesPortrait'
 
 describe('getDefaultSpeciesPortraitSrc', () => {
   it('returns paired art for Male and Female', () => {
@@ -36,5 +36,30 @@ describe('getDefaultSpeciesPortraitSrc', () => {
     expect(getDefaultSpeciesPortraitSrc('tiefling', 'Nonbinary')).toBe(
       '/portraits/tiefling-female.jpg',
     )
+  })
+
+  it('returns wood elf female art for woodelf species', () => {
+    expect(getDefaultSpeciesPortraitSrc('woodelf', 'Female')).toBe('/portraits/female-high-elf.jpg')
+  })
+})
+
+describe('getCharacterPortraitSrc', () => {
+  it('uses portraitSrc override when set', () => {
+    expect(
+      getCharacterPortraitSrc({
+        species: 'drow',
+        genderIdentity: 'Female',
+        portraitSrc: '/portraits/woodelf-female.png',
+      }),
+    ).toBe('/portraits/woodelf-female.png')
+  })
+
+  it('falls back to species default when override unset', () => {
+    expect(
+      getCharacterPortraitSrc({
+        species: 'woodelf',
+        genderIdentity: 'Female',
+      }),
+    ).toBe('/portraits/female-high-elf.jpg')
   })
 })

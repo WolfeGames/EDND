@@ -300,6 +300,73 @@
         ]
       },
       "subclasses": ["Nymph (Fey)", "Succubus/Incubus (Infernal)", "Velvet Shade (Undead)", "Alien Organ (Aberrant)"]
+    },
+    {
+      "id": "carnal-artificer",
+      "name": "Carnal Artificer",
+      "description": "Your life's work, and your sexuality's focus, revolves around the invention, creation, and imbuement of items that can be used as intimacy aids, toys, seduction material, and such like. Whether it is sleeves for insertion, olisbos for penetration, sensual garments, or imbued alchemical concoctions, you are making a name for yourself in ways everyone will (hopefully) enjoy!",
+      "hitDie": 8,
+      "primarySexualAbility": "Intelligence, Constitution",
+      "sexDie": "d8",
+      "startingPleasurePoints": "8 + Intelligence modifier",
+      "savingThrowProficiencies": ["Intelligence", "Constitution"],
+      "stimulationProficiencies": ["Object", "Vaginal or Phallic"],
+      "eroticAptitude": "Arcana, Medicine, History, Nature",
+      "positionProficiencies": {
+        "tiers": ["Basic"],
+        "specific": ["Sybian"]
+      },
+      "toolProficiencies": [
+        "Alchemist's Kit",
+        "One of: Glassblower's Tools, Mason's Tools, Carpenter's Tools, Smith's Tools, Pottery Tools"
+      ],
+      "startingEquipment": {
+        "optionA": "Simple clothing, a crafting frock, 3d4 alchemy vials, 1d4 vials of inert ooze, 1d4 vials of inert oil, 1d6 prophylactics, 1 crafting kit, 1 alchemist's kit, and 5gp",
+        "optionB": "100 gold pieces"
+      },
+      "features": {
+        "level1": {
+          "name": "Carnal Artifice",
+          "description": "You can spend 1 hour and appropriate materials to craft a Carnal Item. Examples include: Vibrating Olisbos (+1d8 pleasure on coital stimulation), Sleeve of Endless Grip (Object stimulation that also grapples), Alchemical Arousal Oil (applies Aroused on contact). As an action, you may create ex nihilo this object. It persists until you finish a long rest. The object is solid and remains either in your hand or on your person for the duration of its existence. If it leaves your possession, it disappears entirely and you must use a new action to create it again. Additionally, you may conjure any mundane intimate equipment as long as you have the requisite tools."
+        },
+        "level2": {
+          "name": "Intimate Knowledge",
+          "description": "Your study of the body and how best to stimulate it has given you deeper insight into certain knowledge domains. You have expertise in Arcana, Medicine, Nature, History, Religion, or Investigation when you use your Sexuality bonus as part of the skill check."
+        },
+        "level3": {
+          "name": "Carnal Specialty",
+          "description": "Choose from Erotic Alchemy, Intimate Craft, or Carnal Conjuration."
+        },
+        "level5": {
+          "name": "Erotic Charge",
+          "description": "You may expend a spell slot to restore charges into a magic item that would normally have charges. You restore 1d4 charges with a 1st level spell slot. For every level above first, you add a number of charges equal to the spell slot level expended to the 1d4 roll. Additionally, you may turn one of your creations into a semi-autonomous companion for 10 minutes. During this time, the creation can perform simple actions as long as it has the required \"parts.\" Creations can also perform Sexual actions on their creature, which deal 1d4 pleasure and do not require d20 checks."
+        },
+        "level7": {
+          "name": "Erotic Genius",
+          "description": "When a creature makes a Sexuality check within 30 feet of you, you may use your reaction to grant a bonus to the roll equal to your Intelligence modifier (minimum +1). You may do this a number of times equal to your Intelligence modifier. If they succeed their Sexuality check and deal pleasure, the pleasure is increased by your Sexuality bonus."
+        },
+        "level9": {
+          "name": "Eromantic Savant",
+          "description": "You may attune to a number of sexual items equal to your Sexuality bonus. While you are attuned to the maximum number of items, you have the Aroused condition. While Aroused in this way, you have no penalties from arousal and may end your Arousal to gain advantage on one Sexuality check. The Arousal returns after a number of minutes = 10 - Int modifier as long as you are still attuned to the maximum number of items. Additionally, your creations can be up to Small in size."
+        },
+        "level11": {
+          "name": "Erotically Charged Items",
+          "description": "You may infuse a non-magical item with sexual energy. Any creature that holds the item must make a Wisdom saving throw to avoid becoming Aroused (Your sex save DC). Arousal persists while they maintain control or possession of the item and persists for a number of minutes equal to your Intelligence modifier after releasing the item. The item itself deals 1d6 pleasure when used to stimulate, no matter what type of object it is."
+        },
+        "level15": {
+          "name": "Advanced Erotica",
+          "description": "When you gain the Aroused condition from another creature, you gain another use of your Erotic Genius feature (but not beyond your maximum allowed uses). When you use Erotic Genius, you may also grant advantage on Orgasm Saving throws and gain that advantage for yourself. This advantage lasts until the next Orgasm Saving Throw."
+        },
+        "level18": {
+          "name": "Creator's Spark",
+          "description": "Your creations are now permanently semi-sentient and understand your will without speaking commands. If they are destroyed, the requisite parts reassemble themselves after 1d12 minutes, unless the physical structure of each part has been compromised (such as by melting). You may have up to 3 of these creations at any given time, and their size can be medium or smaller."
+        },
+        "level20": {
+          "name": "Mastery of Erotic Artifice",
+          "description": "You may infuse erotic sentience into objects, including golems. Doing so requires a portion of your consciousness, which is lost during the ritual used to infuse this sentience. Your Intelligence, Wisdom, and Charisma scores are reduced by 3d6, to a minimum of 5, for 3d6 days, during which you may perform no other actions aside from those required to sustain life. Your Sexuality bonus is unaffected by this, but you automatically fail all saving throws and sexuality checks for the duration of this recovery time."
+        }
+      },
+      "subclasses": ["Erotic Alchemy", "Intimate Craft", "Carnal Conjuration"]
     }
   ]
 }

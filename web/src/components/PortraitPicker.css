@@ -1,0 +1,103 @@
+.portrait-picker {
+  margin: 1rem 0;
+}
+
+.portrait-picker__current {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.portrait-picker__preview {
+  flex: 0 0 auto;
+  width: 7rem;
+  height: 8.5rem;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--code-bg);
+}
+
+.portrait-picker__preview--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+.portrait-picker__current-meta {
+  flex: 1 1 12rem;
+  min-width: 0;
+}
+
+.portrait-picker__lede {
+  margin: 0 0 0.65rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.portrait-picker__default-btn {
+  font-size: 0.85rem;
+}
+
+.portrait-picker__section {
+  margin-top: 1rem;
+}
+
+.portrait-picker__heading {
+  font-family: var(--heading);
+  font-size: 0.95rem;
+  margin: 0 0 0.5rem;
+  color: var(--text-h);
+}
+
+.portrait-picker__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr));
+  gap: 0.5rem;
+}
+
+.portrait-picker__choice {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.25rem;
+  padding: 0.35rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card-bg);
+  color: var(--text-h);
+  cursor: pointer;
+  text-align: center;
+  font: inherit;
+}
+
+.portrait-picker__choice:hover {
+  border-color: var(--accent-border, rgba(138, 180, 255, 0.5));
+}
+
+.portrait-picker__choice--selected {
+  border-color: var(--accent, #8ab4ff);
+  box-shadow: 0 0 0 1px var(--accent, #8ab4ff);
+}
+
+.portrait-picker__thumb {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 4px;
+  background: var(--code-bg);
+}
+
+.portrait-picker__label {
+  font-size: 0.62rem;
+  line-height: 1.25;
+  color: var(--text-muted);
+}

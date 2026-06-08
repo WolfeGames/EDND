@@ -49,6 +49,6 @@ export function applyEndowedToEndowment(
 
 /** Biology-normalized endowment plus Endowed bumps for sheets and readouts. */
 export function getSheetEndowmentProfile(character: EdndCharacter): EndowmentProfile {
-  const base = normalizedEndowment(character.genderIdentity, character.endowment)
+  const base = normalizedEndowment(character.endowment)
   return applyEndowedToEndowment(base, characterHasEndowedTrait(character))
 }

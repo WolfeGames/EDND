@@ -30,6 +30,13 @@
   color: var(--text-h);
 }
 
+.creator-derived-value {
+  display: block;
+  font-weight: 600;
+  color: var(--text-h);
+  margin-top: 0.25rem;
+}
+
 .creator-step-title {
   font-family: var(--heading);
   font-size: 1.2rem;

@@ -18,76 +18,27 @@ export function rollEndowmentSize(): EndowmentSize {
 export const ENDOWMENT_SIZE_RULE =
   'Breasts, phallus, and vagina (when present) each use the same size roll: 1d6 where 1 = Tiny, 2 = Small, 3 = Medium, 4 = Large, 5 = Huge, 6 = Gargantuan.'
 
-/**
- * Phallus / combined anatomy is allowed whenever biology is unset or is Male/Female;
- * nuance lives in endowment configuration, not extra biological-sex labels.
- */
-export function phallusAllowedForBiologicalSex(biologicalSex: string): boolean {
-  const g = biologicalSex.trim()
-  if (!g) return true
-  return g === 'Male' || g === 'Female'
-}
+export const ENDOWMENT_ANATOMY_OPTIONS: Array<{ value: EndowmentAnatomy; label: string }> = [
+  { value: 'neither', label: 'Neither breasts nor phallus' },
+  { value: 'breasts', label: 'Breasts only' },
+  { value: 'phallus', label: 'Phallus only' },
+  { value: 'both', label: 'Breasts and phallus' },
+]
 
-/** Vagina can be configured for Male or Female (and while biology is unset). */
-export function vaginaAllowedForBiologicalSex(biologicalSex: string): boolean {
-  const g = biologicalSex.trim()
-  if (!g) return true
-  return g === 'Male' || g === 'Female'
-}
-
-export function getAllowedAnatomiesForBiologicalSex(
-  biologicalSex: string,
-): EndowmentAnatomy[] {
-  const g = biologicalSex.trim()
-  if (!g) return ['neither', 'breasts', 'phallus', 'both']
-  if (g === 'Male' || g === 'Female') {
-    return ['neither', 'breasts', 'phallus', 'both']
+/** Strip sizes that do not apply to the selected anatomy; normalize vagina flag. */
+export function normalizedEndowment(e: EndowmentProfile): EndowmentProfile {
+  const out: EndowmentProfile = { ...e, anatomy: e.anatomy }
+  if (out.anatomy === 'neither' || out.anatomy === 'breasts') {
+    out.phallusSize = undefined
   }
-  return ['neither', 'breasts', 'phallus', 'both']
-}
-
-export function coerceEndowmentForBiologicalSex(
-  biologicalSex: string,
-  e: EndowmentProfile,
-): EndowmentProfile {
-  if (phallusAllowedForBiologicalSex(biologicalSex)) return e
-  if (e.anatomy === 'neither' || e.anatomy === 'breasts') return e
-  if (e.anatomy === 'phallus') {
-    return { ...e, anatomy: 'neither', phallusSize: undefined }
+  if (out.anatomy === 'neither' || out.anatomy === 'phallus') {
+    out.breastsSize = undefined
   }
-  if (e.anatomy === 'both') {
-    if (e.breastsSize) {
-      return { ...e, anatomy: 'breasts', phallusSize: undefined }
-    }
-    return { ...e, anatomy: 'neither', breastsSize: undefined, phallusSize: undefined }
+  if (out.vaginaPresent !== true) {
+    out.vaginaPresent = false
+    out.vaginaSize = undefined
   }
-  return e
-}
-
-/**
- * Applies phallus rules, clears vagina when not allowed, and defaults vagina "present"
- * when unset for Female (legacy sheets / new picks). Male defaults vagina absent when unset.
- */
-export function normalizedEndowment(
-  biologicalSex: string,
-  e: EndowmentProfile,
-): EndowmentProfile {
-  let x = coerceEndowmentForBiologicalSex(biologicalSex, e)
-  const g = biologicalSex.trim()
-  if (!vaginaAllowedForBiologicalSex(g)) {
-    return {
-      ...x,
-      vaginaPresent: false,
-      vaginaSize: undefined,
-    }
-  }
-  if (g === 'Female' && x.vaginaPresent === undefined) {
-    x = { ...x, vaginaPresent: true }
-  }
-  if (g === 'Male' && x.vaginaPresent === undefined) {
-    x = { ...x, vaginaPresent: false }
-  }
-  return x
+  return out
 }
 
 /**
@@ -120,47 +71,4 @@ export function formatEndowmentLines(e: EndowmentProfile): string[] {
   }
   if (vaginaLine) lines.push(vaginaLine)
   return lines
-}
-
-/**
- * Random character: rolls breast/phallus anatomy and sizes valid for biological sex,
- * then rolls vagina where allowed (always for Female; sometimes for Male).
- */
-export function rollRandomEndowmentForBiologicalSex(
-  biologicalSex: string,
-): EndowmentProfile {
-  const allowed = getAllowedAnatomiesForBiologicalSex(biologicalSex)
-  const anatomy = allowed[Math.floor(Math.random() * allowed.length)]!
-  let e: EndowmentProfile
-  if (anatomy === 'neither') e = { anatomy: 'neither', vaginaPresent: false }
-  else if (anatomy === 'breasts') {
-    e = { anatomy: 'breasts', breastsSize: rollEndowmentSize(), vaginaPresent: false }
-  } else if (anatomy === 'phallus') {
-    e = { anatomy: 'phallus', phallusSize: rollEndowmentSize(), vaginaPresent: false }
-  } else {
-    e = {
-      anatomy: 'both',
-      breastsSize: rollEndowmentSize(),
-      phallusSize: rollEndowmentSize(),
-      vaginaPresent: false,
-    }
-  }
-
-  const g = biologicalSex.trim()
-  if (!vaginaAllowedForBiologicalSex(g)) {
-    return e
-  }
-  if (g === 'Female') {
-    return { ...e, vaginaPresent: true, vaginaSize: rollEndowmentSize() }
-  }
-  if (g === 'Male') {
-    if (Math.random() < 0.35) {
-      return { ...e, vaginaPresent: true, vaginaSize: rollEndowmentSize() }
-    }
-    return { ...e, vaginaPresent: false, vaginaSize: undefined }
-  }
-  if (!g && Math.random() < 0.45) {
-    return { ...e, vaginaPresent: true, vaginaSize: rollEndowmentSize() }
-  }
-  return e
 }

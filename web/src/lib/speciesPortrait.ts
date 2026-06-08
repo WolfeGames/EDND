@@ -1,5 +1,7 @@
-import { isCanonicalBiologicalSex, sanitizeBiologicalSexForApp } from './biologicalSex'
+import { portraitBinaryForGender } from './biologicalSex'
+import { getSpecies } from '../data/registry'
 import { resolveSpeciesTableId } from './speciesAliases'
+import type { EdndCharacter } from '../types/character'
 
 /** Portrait paths under `public/portraits/`; keys are species table ids (see species.json). */
 const PAIRED: Record<string, { male: string; female: string }> = {
@@ -27,16 +29,84 @@ const PAIRED: Record<string, { male: string; female: string }> = {
   tabaxi: { male: '/portraits/tabaxi-male.jpg', female: '/portraits/tabaxi-female.jpg' },
   tiefling: { male: '/portraits/tiefling-male.jpg', female: '/portraits/tiefling-female.jpg' },
   watergenasi: { male: '/portraits/watergenasi-male.jpg', female: '/portraits/watergenasi-female.jpg' },
-  woodelf: { male: '/portraits/woodelf-male.png', female: '/portraits/woodelf-female.png' },
+  woodelf: { male: '/portraits/woodelf-male.png', female: '/portraits/female-high-elf.jpg' },
 }
 
 const UNISEX: Record<string, string> = {
   satyr: '/portraits/satyr.jpg',
 }
 
+/** Alternate filenames not tied to a single species pair. */
+const EXTRA: Array<{ src: string; label: string; speciesId?: string }> = [
+  { src: '/portraits/woodelf-female.png', label: 'Wood elf (female alt)', speciesId: 'woodelf' },
+  { src: '/portraits/female-aasimar.jpg', label: 'Aasimar (alt)', speciesId: 'aasimar' },
+  { src: '/portraits/male-aasimar.jpg', label: 'Aasimar (alt)', speciesId: 'aasimar' },
+]
+
+export type PortraitVariant = 'male' | 'female' | 'unisex'
+
+export type PortraitOption = {
+  src: string
+  label: string
+  speciesId: string
+  variant: PortraitVariant
+}
+
+const KNOWN_PORTRAIT_SRCS = new Set<string>()
+
+function registerPortrait(src: string) {
+  KNOWN_PORTRAIT_SRCS.add(src)
+}
+
+function speciesDisplayName(speciesId: string): string {
+  return getSpecies(speciesId)?.name ?? speciesId
+}
+
+function buildCatalog(): PortraitOption[] {
+  const out: PortraitOption[] = []
+  for (const [speciesId, pair] of Object.entries(PAIRED)) {
+    registerPortrait(pair.male)
+    registerPortrait(pair.female)
+    const name = speciesDisplayName(speciesId)
+    out.push({ src: pair.male, label: `${name} (male)`, speciesId, variant: 'male' })
+    out.push({ src: pair.female, label: `${name} (female)`, speciesId, variant: 'female' })
+  }
+  for (const [speciesId, src] of Object.entries(UNISEX)) {
+    registerPortrait(src)
+    out.push({
+      src,
+      label: speciesDisplayName(speciesId),
+      speciesId,
+      variant: 'unisex',
+    })
+  }
+  for (const extra of EXTRA) {
+    registerPortrait(extra.src)
+    out.push({
+      src: extra.src,
+      label: extra.label,
+      speciesId: extra.speciesId ?? 'extra',
+      variant: 'unisex',
+    })
+  }
+  return out.sort((a, b) => a.label.localeCompare(b.label))
+}
+
+let catalogCache: PortraitOption[] | null = null
+
+export function listPortraitCatalog(): PortraitOption[] {
+  if (!catalogCache) catalogCache = buildCatalog()
+  return catalogCache
+}
+
+export function isKnownPortraitSrc(src: string): boolean {
+  listPortraitCatalog()
+  return KNOWN_PORTRAIT_SRCS.has(src)
+}
+
 /**
- * Default premade portrait for a species + biological sex.
- * Only Male/Female select paired art; anything else returns null (no silent mismatch).
+ * Default premade portrait for a species + anatomy-derived gender.
+ * Maps to male/female art pairs (Male/Cuntboy → male; Female/Shemale/Hermaphrodite → female).
  */
 export function getDefaultSpeciesPortraitSrc(
   speciesId: string,
@@ -48,9 +118,25 @@ export function getDefaultSpeciesPortraitSrc(
   if (uni) return uni
   const pair = PAIRED[id]
   if (!pair) return null
-  const g = sanitizeBiologicalSexForApp(genderIdentity)
-  if (!isCanonicalBiologicalSex(g)) return null
-  return g === 'Male' ? pair.male : pair.female
+  const portraitSex = portraitBinaryForGender(genderIdentity)
+  if (!portraitSex) return null
+  return portraitSex === 'Male' ? pair.male : pair.female
+}
+
+/** Player override when set; otherwise species + gender default. */
+export function getCharacterPortraitSrc(
+  character: Pick<EdndCharacter, 'species' | 'genderIdentity' | 'portraitSrc'>,
+): string | null {
+  const custom = character.portraitSrc?.trim()
+  if (custom && isKnownPortraitSrc(custom)) return custom
+  if (!character.species?.trim()) return null
+  return getDefaultSpeciesPortraitSrc(character.species, character.genderIdentity)
+}
+
+export function listPortraitOptionsForSpecies(speciesId: string): PortraitOption[] {
+  const id = resolveSpeciesTableId(speciesId.trim())
+  if (!id) return []
+  return listPortraitCatalog().filter((opt) => opt.speciesId === id)
 }
 
 export function speciesHasPortrait(speciesId: string): boolean {

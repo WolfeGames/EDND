@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ADVENTURING_CLASSES } from '../data/adventuringClasses'
 import { GENDERS, isGenderOption } from '../data/identityOptions'
-import { isCanonicalBiologicalSex } from '../lib/biologicalSex'
+import { portraitBinaryForGender } from '../lib/biologicalSex'
 import { CharacterSummary } from '../components/CharacterSummary'
 import {
   generateRandomCharacter,
@@ -59,7 +59,7 @@ export function RandomGeneratorPage() {
   const filterPortraitSrc = useMemo(() => {
     const sid = filterForm.species?.trim()
     const sex = filterForm.genderIdentity ?? ''
-    if (!sid || !getSpecies(sid) || !isCanonicalBiologicalSex(sex)) return null
+    if (!sid || !getSpecies(sid) || !portraitBinaryForGender(sex)) return null
     return getDefaultSpeciesPortraitSrc(sid, sex)
   }, [filterForm.species, filterForm.genderIdentity])
 
@@ -97,10 +97,10 @@ export function RandomGeneratorPage() {
     <div className="page random-generator">
       <h1 className="page-title">Random character</h1>
       <p className="lede">
-        Constrain the roll with the filters below (all optional). Biological sex is rolled or fixed
-        to Male or Female. Pronouns are never auto-filled: type them in the filter if you want them
-        on the sheet. Sexual history and carnal class features highlight when your rolled level meets
-        the printed level gate.
+        Constrain the roll with the filters below (all optional). Gender is rolled from anatomy
+        (Male, Hermaphrodite, Cuntboy, Female, Shemale) or fixed with the filter. Pronouns are
+        auto-filled from gender unless you type them in the filter first. Sexual history and carnal
+        class features highlight when your rolled level meets the printed level gate.
       </p>
 
       <details className="roll-filters">
@@ -193,7 +193,7 @@ export function RandomGeneratorPage() {
             </select>
           </label>
           <label className="filter-field">
-            <span>Biological sex</span>
+            <span>Gender</span>
             <select
               value={filterForm.genderIdentity ?? ''}
               onChange={(e) =>
@@ -217,7 +217,7 @@ export function RandomGeneratorPage() {
               onChange={(e) =>
                 setFilter('pronouns', e.target.value || undefined)
               }
-              placeholder="Type before rolling (optional)"
+              placeholder="Override auto pronouns (optional)"
             />
           </label>
           <label className="filter-field">

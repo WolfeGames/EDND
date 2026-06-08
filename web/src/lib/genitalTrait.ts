@@ -1,7 +1,8 @@
 import { getGenitalTraitDefinition } from '../data/genitalTraits'
 import type { EdndCharacter } from '../types/character'
 import type { GenitalTraitId, GenitalTrack } from '../types/genitalTrait'
-import { isCanonicalBiologicalSex } from './biologicalSex'
+import { endowmentFlags } from './anatomyGender'
+import { isCanonicalGender } from './biologicalSex'
 import { abilityModifier } from './abilityScores'
 import { sexualityBonusForLevel } from './applyCharacterRules'
 
@@ -9,19 +10,14 @@ import { sexualityBonusForLevel } from './applyCharacterRules'
 export function inferGenitalTraitFromCharacter(character: EdndCharacter): GenitalTraitId {
   if (character.genitalTrait) return character.genitalTrait
 
-  const g = character.genderIdentity.trim()
-  const hasPhallus =
-    character.endowment.anatomy === 'phallus' || character.endowment.anatomy === 'both'
-  const hasVagina =
-    character.endowment.vaginaPresent === true ||
-    (character.endowment.anatomy === 'both' && g === 'Female')
+  const { hasPhallus, hasBreasts, hasVagina } = endowmentFlags(character.endowment)
 
   if (hasPhallus && hasVagina) return 'hermaphrodite'
-  if (g === 'Male' && hasVagina) return 'cuntboy'
-  if (g === 'Female' && hasPhallus) return 'shemale'
-  if (g === 'Female') return 'vaginal'
-  if (g === 'Male') return 'phallic'
-  return hasPhallus ? 'phallic' : 'vaginal'
+  if (hasPhallus && hasBreasts) return 'shemale'
+  if (hasPhallus) return 'phallic'
+  if (hasVagina && hasBreasts) return 'vaginal'
+  if (hasVagina) return 'cuntboy'
+  return 'vaginal'
 }
 
 export function defaultGenitalTraitForBiologicalSex(
@@ -36,7 +32,11 @@ export function activeGenitalTracks(traitId: GenitalTraitId): GenitalTrack[] {
   return [...getGenitalTraitDefinition(traitId).tracks]
 }
 
-/** Fertility bonus for impregnation checks (extensible via character field). */
+/**
+ * Fertility bonus for conception checks.
+ * Mothering types: DC = 20 − bonus. Impregnators: d20 + bonus vs that DC.
+ * @see mechanics/fertilityEngine.ts
+ */
 export function getFertilityBonus(character: EdndCharacter): number {
   if (typeof character.fertilityBonus === 'number') return character.fertilityBonus
   return (
@@ -63,7 +63,7 @@ export function syncGenitalTraitWithBiology(
   options?: { preserveExplicitChoice?: boolean },
 ): EdndCharacter {
   if (options?.preserveExplicitChoice && c.genitalTrait) return normalizeGenitalTraitOnCharacter(c)
-  if (!isCanonicalBiologicalSex(c.genderIdentity)) return normalizeGenitalTraitOnCharacter(c)
+  if (!isCanonicalGender(c.genderIdentity)) return normalizeGenitalTraitOnCharacter(c)
   const inferred = inferGenitalTraitFromCharacter({
     ...c,
     genitalTrait: undefined,

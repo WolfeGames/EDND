@@ -1,29 +1,46 @@
 import { describe, expect, it } from 'vitest'
 import { createEmptyCharacter } from '../types/character'
-import { normalizeCharacterBiology, sanitizeBiologicalSexForApp } from './biologicalSex'
+import {
+  normalizeCharacterBiology,
+  portraitBinaryForGender,
+  sanitizeGenderForApp,
+} from './biologicalSex'
 
-describe('sanitizeBiologicalSexForApp', () => {
-  it('keeps Male and Female', () => {
-    expect(sanitizeBiologicalSexForApp('Male')).toBe('Male')
-    expect(sanitizeBiologicalSexForApp('Female')).toBe('Female')
+describe('sanitizeGenderForApp', () => {
+  it('keeps anatomy gender labels', () => {
+    expect(sanitizeGenderForApp('Male')).toBe('Male')
+    expect(sanitizeGenderForApp('Hermaphrodite')).toBe('Hermaphrodite')
+    expect(sanitizeGenderForApp('Cuntboy')).toBe('Cuntboy')
+    expect(sanitizeGenderForApp('Female')).toBe('Female')
+    expect(sanitizeGenderForApp('Shemale')).toBe('Shemale')
   })
 
-  it('maps legacy labels to binary defaults', () => {
-    expect(sanitizeBiologicalSexForApp('Transgender')).toBe('Male')
-    expect(sanitizeBiologicalSexForApp('Nonbinary')).toBe('Female')
+  it('maps legacy labels', () => {
+    expect(sanitizeGenderForApp('Transgender')).toBe('Male')
+    expect(sanitizeGenderForApp('Nonbinary')).toBe('Female')
   })
 
   it('clears unknown values', () => {
-    expect(sanitizeBiologicalSexForApp('Other')).toBe('')
-    expect(sanitizeBiologicalSexForApp('')).toBe('')
+    expect(sanitizeGenderForApp('Other')).toBe('')
+    expect(sanitizeGenderForApp('')).toBe('')
+  })
+})
+
+describe('portraitBinaryForGender', () => {
+  it('maps genders to portrait pairs', () => {
+    expect(portraitBinaryForGender('Male')).toBe('Male')
+    expect(portraitBinaryForGender('Cuntboy')).toBe('Male')
+    expect(portraitBinaryForGender('Female')).toBe('Female')
+    expect(portraitBinaryForGender('Shemale')).toBe('Female')
+    expect(portraitBinaryForGender('Hermaphrodite')).toBe('Female')
   })
 })
 
 describe('normalizeCharacterBiology', () => {
-  it('sanitizes gender and re-normalizes endowment', () => {
+  it('derives gender from endowment', () => {
     const c = createEmptyCharacter()
-    c.genderIdentity = 'Transgender'
-    c.endowment = { anatomy: 'phallus', phallusSize: 'Medium' }
+    c.genderIdentity = 'Female'
+    c.endowment = { anatomy: 'phallus', phallusSize: 'Medium', vaginaPresent: false }
     const out = normalizeCharacterBiology(c)
     expect(out.genderIdentity).toBe('Male')
     expect(out.endowment.anatomy).toBe('phallus')

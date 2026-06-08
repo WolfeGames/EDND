@@ -1,0 +1,77 @@
+.carnal-trait-picker {
+  margin: 1rem 0 0;
+}
+
+.carnal-trait-picker__lede {
+  margin: 0 0 0.35rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.carnal-trait-picker__meta {
+  margin: 0 0 0.65rem;
+  font-size: 0.85rem;
+}
+
+.carnal-trait-picker__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  gap: 0.5rem;
+}
+
+.carnal-trait-picker__card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card-bg);
+  color: var(--text-h);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.carnal-trait-picker__card:hover:not(:disabled) {
+  border-color: var(--accent-border, rgba(138, 180, 255, 0.5));
+}
+
+.carnal-trait-picker__card--selected {
+  border-color: var(--accent, #8ab4ff);
+  box-shadow: 0 0 0 1px var(--accent, #8ab4ff);
+}
+
+.carnal-trait-picker__card--disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.carnal-trait-picker__name {
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.carnal-trait-picker__tag {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.carnal-trait-picker__desc {
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: var(--text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.carnal-trait-picker__chosen {
+  margin: 0.65rem 0 0;
+  padding-left: 1.2rem;
+  font-size: 0.82rem;
+}

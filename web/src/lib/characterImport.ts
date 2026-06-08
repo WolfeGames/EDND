@@ -2,6 +2,7 @@ import { createEmptyCharacter, createEmptyEroticTraits, type EdndCharacter } fro
 import { isGenitalTraitId } from '../data/genitalTraits'
 import type { GenitalTraitId } from '../types/genitalTrait'
 import { normalizeCharacterBiology } from './biologicalSex'
+import { isKnownPortraitSrc } from './speciesPortrait'
 
 const ANATOMIES = new Set(['neither', 'breasts', 'phallus', 'both'])
 const SIZES = new Set(['Tiny', 'Small', 'Medium', 'Large', 'Huge', 'Gargantuan'])
@@ -122,12 +123,16 @@ export function parseCharacterJson(json: unknown): EdndCharacter {
       ? undefined
       : num(json.fertilityBonus, 0, -99, 99)
 
+  const portraitRaw = str(json.portraitSrc, '').trim()
+  const portraitSrc = portraitRaw && isKnownPortraitSrc(portraitRaw) ? portraitRaw : undefined
+
   const draft: EdndCharacter = {
     ...base,
     id,
     name: str(json.name, ''),
     pronouns: str(json.pronouns, ''),
     genderIdentity: str(json.genderIdentity, ''),
+    portraitSrc,
     genitalTrait,
     hasGenitalShift,
     fertilityBonus,
@@ -138,8 +143,10 @@ export function parseCharacterJson(json: unknown): EdndCharacter {
     endowment,
     background: str(json.background, ''),
     carnalClass: json.carnalClass === undefined ? undefined : str(json.carnalClass, '') || undefined,
+    carnalClassTraitIds: strArr(json.carnalClassTraitIds),
     sexualHistory:
       json.sexualHistory === undefined ? undefined : str(json.sexualHistory, '') || undefined,
+    sexualHistoryTraitIds: strArr(json.sexualHistoryTraitIds),
     sexualHistoryPersonality,
     carnalFeatures: strArr(json.carnalFeatures),
     eroticTraits,

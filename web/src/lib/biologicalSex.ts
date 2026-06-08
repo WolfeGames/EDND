@@ -1,31 +1,49 @@
+import { isGenderOption } from '../data/identityOptions'
 import type { EdndCharacter } from '../types/character'
+import { deriveGenderFromEndowment } from './anatomyGender'
+import { syncCharacterCarnalTraitSelections } from './carnalTraitSelection'
 import { normalizedEndowment } from './endowment'
 import { normalizeGenitalTraitOnCharacter } from './genitalTrait'
 
-/** Canonical biological sex in the app (portraits + rolls). */
+/** Portrait art is still paired male/female per species. */
 export type BiologicalSex = 'Male' | 'Female'
 
-/**
- * Maps legacy saves to Male/Female; unknown or empty stays empty until the player picks.
- * (Removed Nonbinary / Transgender — use endowment configuration instead.)
- */
-export function sanitizeBiologicalSexForApp(raw: string): string {
+export function sanitizeGenderForApp(raw: string): string {
   const t = raw.trim()
-  if (t === 'Male' || t === 'Female') return t
+  if (isGenderOption(t)) return t
   if (t === 'Transgender') return 'Male'
   if (t === 'Nonbinary') return 'Female'
   return ''
 }
 
+/** @deprecated Use sanitizeGenderForApp */
+export const sanitizeBiologicalSexForApp = sanitizeGenderForApp
+
+export function isCanonicalGender(g: string): boolean {
+  return isGenderOption(g)
+}
+
+export function portraitBinaryForGender(gender: string): BiologicalSex | null {
+  const g = sanitizeGenderForApp(gender)
+  if (g === 'Male' || g === 'Cuntboy') return 'Male'
+  if (g === 'Female' || g === 'Shemale' || g === 'Hermaphrodite') return 'Female'
+  return null
+}
+
+/** True when value is a portrait pair key (legacy binary saves). */
 export function isCanonicalBiologicalSex(g: string): g is BiologicalSex {
   return g === 'Male' || g === 'Female'
 }
 
 export function normalizeCharacterBiology(c: EdndCharacter): EdndCharacter {
-  const genderIdentity = sanitizeBiologicalSexForApp(c.genderIdentity)
-  return normalizeGenitalTraitOnCharacter({
-    ...c,
-    genderIdentity,
-    endowment: normalizedEndowment(genderIdentity, c.endowment),
-  })
+  const endowment = normalizedEndowment(c.endowment)
+  const derived = deriveGenderFromEndowment(endowment)
+  const genderIdentity = derived || sanitizeGenderForApp(c.genderIdentity)
+  return syncCharacterCarnalTraitSelections(
+    normalizeGenitalTraitOnCharacter({
+      ...c,
+      genderIdentity,
+      endowment,
+    }),
+  )
 }

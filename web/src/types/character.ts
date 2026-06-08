@@ -115,11 +115,14 @@ export interface EdndCharacter {
   pronouns: string
 
   /**
-   * Biological sex for portraits and endowment rules: Male or Female only (see endowment for anatomy).
-   * Pronouns and social identity are separate fields.
+   * Anatomy-derived gender (Male, Hermaphrodite, Cuntboy, Female, Shemale).
+   * Set automatically from endowment in the creator; pronouns remain a separate field.
    */
 
   genderIdentity: string
+
+  /** Optional override for sheet/creator art (`/portraits/...`). Falls back to species + gender default. */
+  portraitSrc?: string
 
   species: SpeciesId
 
@@ -139,8 +142,8 @@ export interface EdndCharacter {
   hasGenitalShift?: boolean
 
   /**
-   * Bonus applied when impregnating others (phallic-side traits) and as DC when impregnated
-   * (vaginal-side traits). Defaults to Con mod + Sexuality bonus when unset.
+   * Fertility bonus for conception: impregnators add this to d20; mothering types subtract
+   * this from 20 to set the DC (20 − bonus). Defaults to Con mod + Sexuality bonus when unset.
    */
   fertilityBonus?: number
 
@@ -148,7 +151,13 @@ export interface EdndCharacter {
 
   carnalClass?: CarnalClassId
 
+  /** Player-selected carnal traits from class budget (3, or 4 for Courtesan). */
+  carnalClassTraitIds?: string[]
+
   sexualHistory?: SexualHistoryId
+
+  /** Player-selected carnal traits from sexual history budget (1–2). */
+  sexualHistoryTraitIds?: string[]
 
   /** From sexual history tables; cleared when history changes. */
 
