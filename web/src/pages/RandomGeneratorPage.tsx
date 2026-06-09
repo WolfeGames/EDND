@@ -9,7 +9,7 @@ import {
   type RandomCharacterFilters,
 } from '../lib/generateRandomCharacter'
 import { carnalClasses, getSpecies, playableSpecies, sexualHistories } from '../data/registry'
-import { getDefaultSpeciesPortraitSrc } from '../lib/speciesPortrait'
+import { pickRandomPortraitSrc } from '../lib/speciesPortrait'
 import { downloadCharacterJson, stashCharacterForSheet, upsertLibrary } from '../lib/characterStorage'
 import type { EdndCharacter } from '../types/character'
 import './RandomGeneratorPage.css'
@@ -60,8 +60,12 @@ export function RandomGeneratorPage() {
     const sid = filterForm.species?.trim()
     const sex = filterForm.genderIdentity ?? ''
     if (!sid || !getSpecies(sid) || !portraitBinaryForGender(sex)) return null
-    return getDefaultSpeciesPortraitSrc(sid, sex)
-  }, [filterForm.species, filterForm.genderIdentity])
+    const carnal =
+      filterForm.carnalClass && filterForm.carnalClass !== 'none'
+        ? filterForm.carnalClass
+        : undefined
+    return pickRandomPortraitSrc(sid, sex, carnal)
+  }, [filterForm.species, filterForm.genderIdentity, filterForm.carnalClass])
 
   const roll = () => {
     const filters = buildFiltersFromForm(filterForm)

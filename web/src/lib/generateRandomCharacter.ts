@@ -26,6 +26,7 @@ import {
 } from './carnalTraitSelection'
 import { mergeTableProficiencies } from './mergeEroticProficiencies'
 import { resolveSpeciesTableId } from './speciesAliases'
+import { pickRandomPortraitSrc } from './speciesPortrait'
 import { rollSexualHistoryPersonality } from './rollSexualHistoryPersonality'
 
 const GENERIC_BACKGROUNDS = [
@@ -218,6 +219,8 @@ export function generateRandomCharacter(
   const speciesId = resolveSpeciesTableId(sp.id)
   const carnalClassId = carnalCl?.id
   const sexualHistoryId = hist.id
+  const portraitSrc =
+    pickRandomPortraitSrc(speciesId, genderIdentity, carnalClassId) ?? undefined
 
   return normalizeCharacterBiology({
     ...createEmptyCharacter(),
@@ -230,6 +233,7 @@ export function generateRandomCharacter(
     adventuringClass: adv,
     background: bg,
     species: speciesId,
+    portraitSrc,
     sexualHistory: sexualHistoryId,
     sexualHistoryPersonality: rollSexualHistoryPersonality(sexualHistoryId),
     sexualHistoryTraitIds: pickRandomTraitIds(

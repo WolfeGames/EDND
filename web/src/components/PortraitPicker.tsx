@@ -3,14 +3,14 @@ import {
   getCharacterPortraitSrc,
   getDefaultSpeciesPortraitSrc,
   listPortraitCatalog,
-  listPortraitOptionsForSpecies,
+  listPortraitOptionsForCharacter,
   type PortraitOption,
 } from '../lib/speciesPortrait'
 import type { EdndCharacter } from '../types/character'
 import './PortraitPicker.css'
 
 type PortraitPickerProps = {
-  character: Pick<EdndCharacter, 'species' | 'genderIdentity' | 'portraitSrc'>
+  character: Pick<EdndCharacter, 'species' | 'genderIdentity' | 'portraitSrc' | 'carnalClass'>
   onChange: (portraitSrc: string | undefined) => void
 }
 
@@ -39,13 +39,31 @@ function PortraitChoice({
 
 export function PortraitPicker({ character, onChange }: PortraitPickerProps) {
   const catalog = useMemo(() => listPortraitCatalog(), [])
-  const recommended = useMemo(
-    () => (character.species ? listPortraitOptionsForSpecies(character.species) : []),
-    [character.species],
+  const forCharacter = useMemo(
+    () =>
+      character.species
+        ? listPortraitOptionsForCharacter(
+            character.species,
+            character.genderIdentity,
+            character.carnalClass,
+          )
+        : [],
+    [character.species, character.genderIdentity, character.carnalClass],
+  )
+  const roleMatches = useMemo(
+    () =>
+      character.carnalClass
+        ? forCharacter.filter((o) => o.roleId === character.carnalClass)
+        : [],
+    [forCharacter, character.carnalClass],
   )
   const effectiveSrc = getCharacterPortraitSrc(character)
   const defaultSrc = character.species
-    ? getDefaultSpeciesPortraitSrc(character.species, character.genderIdentity)
+    ? getDefaultSpeciesPortraitSrc(
+        character.species,
+        character.genderIdentity,
+        character.carnalClass,
+      )
     : null
   const usingDefault = !character.portraitSrc?.trim() || character.portraitSrc === defaultSrc
 
@@ -78,8 +96,8 @@ export function PortraitPicker({ character, onChange }: PortraitPickerProps) {
         )}
         <div className="portrait-picker__current-meta">
           <p className="portrait-picker__lede">
-            Pick any stock portrait for your sheet. When unset, the app suggests art for your species
-            and gender.
+            Portraits are filtered by species and gender. Variants tagged with your carnal class
+            appear first when available.
           </p>
           {defaultSrc && (
             <button
@@ -94,17 +112,30 @@ export function PortraitPicker({ character, onChange }: PortraitPickerProps) {
         </div>
       </div>
 
-      {recommended.length > 0 && (
+      {forCharacter.length > 0 && (
         <div className="portrait-picker__section">
-          <h3 className="portrait-picker__heading">Recommended for your species</h3>
-          {renderGrid(recommended)}
+          <h3 className="portrait-picker__heading">
+            {character.carnalClass && roleMatches.length > 0
+              ? 'Matching species, gender & carnal class'
+              : 'Matching species & gender'}
+          </h3>
+          {renderGrid(roleMatches.length > 0 ? roleMatches : forCharacter)}
         </div>
       )}
 
-      <div className="portrait-picker__section">
-        <h3 className="portrait-picker__heading">All portraits</h3>
-        {renderGrid(catalog)}
-      </div>
+      {forCharacter.length > 0 && forCharacter.length < catalog.length && (
+        <div className="portrait-picker__section">
+          <h3 className="portrait-picker__heading">All portraits</h3>
+          {renderGrid(catalog)}
+        </div>
+      )}
+
+      {forCharacter.length === 0 && (
+        <div className="portrait-picker__section">
+          <h3 className="portrait-picker__heading">All portraits</h3>
+          {renderGrid(catalog)}
+        </div>
+      )}
     </div>
   )
 }

@@ -1,45 +1,46 @@
 import { describe, expect, it } from 'vitest'
-import { getCharacterPortraitSrc, getDefaultSpeciesPortraitSrc } from './speciesPortrait'
+import {
+  getCharacterPortraitSrc,
+  getDefaultSpeciesPortraitSrc,
+  listPortraitOptionsForCharacter,
+  pickRandomPortraitSrc,
+  speciesHasPortrait,
+} from './speciesPortrait'
 
 describe('getDefaultSpeciesPortraitSrc', () => {
-  it('returns paired art for Male and Female', () => {
-    expect(getDefaultSpeciesPortraitSrc('tiefling', 'Male')).toBe('/portraits/tiefling-male.jpg')
-    expect(getDefaultSpeciesPortraitSrc('tiefling', 'Female')).toBe(
-      '/portraits/tiefling-female.jpg',
-    )
-  })
-
-  it('returns unisex art for satyr', () => {
-    expect(getDefaultSpeciesPortraitSrc('satyr', 'Female')).toBe('/portraits/satyr.jpg')
-    expect(getDefaultSpeciesPortraitSrc('satyr', 'Male')).toBe('/portraits/satyr.jpg')
+  it('returns base species+gender portrait from manifest', () => {
+    expect(getDefaultSpeciesPortraitSrc('tiefling', 'Male')).toBe('/portraits/tiefling-m.jpg')
+    expect(getDefaultSpeciesPortraitSrc('tiefling', 'Female')).toBe('/portraits/tiefling-f.jpg')
   })
 
   it('resolves legacy dwarf id to hilldwarf portraits', () => {
-    expect(getDefaultSpeciesPortraitSrc('dwarf', 'Female')).toBe(
-      '/portraits/hilldwarf-female.png',
-    )
+    expect(getDefaultSpeciesPortraitSrc('dwarf', 'Male')).toBe('/portraits/dwarf-m.jpg')
   })
 
   it('returns null for unknown species', () => {
     expect(getDefaultSpeciesPortraitSrc('not-a-species', 'Male')).toBeNull()
   })
 
-  it('returns null when biological sex is unset or invalid', () => {
-    expect(getDefaultSpeciesPortraitSrc('tiefling', '')).toBeNull()
-    expect(getDefaultSpeciesPortraitSrc('tiefling', 'Other')).toBeNull()
-  })
-
-  it('maps legacy labels to paired art after sanitize', () => {
-    expect(getDefaultSpeciesPortraitSrc('tiefling', 'Transgender')).toBe(
-      '/portraits/tiefling-male.jpg',
-    )
-    expect(getDefaultSpeciesPortraitSrc('tiefling', 'Nonbinary')).toBe(
-      '/portraits/tiefling-female.jpg',
+  it('prefers carnal class role portrait when available', () => {
+    expect(getDefaultSpeciesPortraitSrc('tiefling', 'Female', 'courtesan')).toBe(
+      '/portraits/tiefling-f-courtesan.jpg',
     )
   })
+})
 
-  it('returns wood elf female art for woodelf species', () => {
-    expect(getDefaultSpeciesPortraitSrc('woodelf', 'Female')).toBe('/portraits/female-high-elf.jpg')
+describe('listPortraitOptionsForCharacter', () => {
+  it('only returns portraits for matching species and gender', () => {
+    const opts = listPortraitOptionsForCharacter('human', 'Female')
+    expect(opts.length).toBeGreaterThan(0)
+    expect(opts.every((o) => o.speciesId === 'human')).toBe(true)
+    expect(opts.every((o) => o.variant === 'female' || o.variant === 'they')).toBe(true)
+  })
+})
+
+describe('pickRandomPortraitSrc', () => {
+  it('returns a known portrait for valid species', () => {
+    const src = pickRandomPortraitSrc('orc', 'Male')
+    expect(src).toMatch(/^\/portraits\/orc-m/)
   })
 })
 
@@ -49,9 +50,9 @@ describe('getCharacterPortraitSrc', () => {
       getCharacterPortraitSrc({
         species: 'drow',
         genderIdentity: 'Female',
-        portraitSrc: '/portraits/woodelf-female.png',
+        portraitSrc: '/portraits/drow-f-busty.jpg',
       }),
-    ).toBe('/portraits/woodelf-female.png')
+    ).toBe('/portraits/drow-f-busty.jpg')
   })
 
   it('falls back to species default when override unset', () => {
@@ -60,6 +61,13 @@ describe('getCharacterPortraitSrc', () => {
         species: 'woodelf',
         genderIdentity: 'Female',
       }),
-    ).toBe('/portraits/female-high-elf.jpg')
+    ).toBe('/portraits/woodelf-f.jpg')
+  })
+})
+
+describe('speciesHasPortrait', () => {
+  it('returns true for species with manifest art', () => {
+    expect(speciesHasPortrait('tiefling')).toBe(true)
+    expect(speciesHasPortrait('dwarf')).toBe(true)
   })
 })

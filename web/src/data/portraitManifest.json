@@ -1,0 +1,642 @@
+{
+  "generatedAt": "2026-06-09T02:54:54.451Z",
+  "sourceDir": "C:\\Users\\nicho\\EDND\\web\\public\\portraits",
+  "count": 71,
+  "entries": [
+    {
+      "filename": "dragonborn-f-red.jpg",
+      "src": "/portraits/dragonborn-f-red.jpg",
+      "speciesId": "dragonborn",
+      "genderToken": "f",
+      "variantTags": [
+        "red"
+      ],
+      "label": "Dragonborn (female) — Red"
+    },
+    {
+      "filename": "dragonborn-f.jpg",
+      "src": "/portraits/dragonborn-f.jpg",
+      "speciesId": "dragonborn",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Dragonborn (female)"
+    },
+    {
+      "filename": "dragonborn-m-blue.jpg",
+      "src": "/portraits/dragonborn-m-blue.jpg",
+      "speciesId": "dragonborn",
+      "genderToken": "m",
+      "variantTags": [
+        "blue"
+      ],
+      "label": "Dragonborn (male) — Blue"
+    },
+    {
+      "filename": "dragonborn-m-copper.jpg",
+      "src": "/portraits/dragonborn-m-copper.jpg",
+      "speciesId": "dragonborn",
+      "genderToken": "m",
+      "variantTags": [
+        "copper"
+      ],
+      "label": "Dragonborn (male) — Copper"
+    },
+    {
+      "filename": "dragonborn-m-ravager.jpg",
+      "src": "/portraits/dragonborn-m-ravager.jpg",
+      "speciesId": "dragonborn",
+      "genderToken": "m",
+      "roleId": "ravager",
+      "variantTags": [],
+      "label": "Dragonborn (male) — Ravager"
+    },
+    {
+      "filename": "dragonborn-m-red.jpg",
+      "src": "/portraits/dragonborn-m-red.jpg",
+      "speciesId": "dragonborn",
+      "genderToken": "m",
+      "variantTags": [
+        "red"
+      ],
+      "label": "Dragonborn (male) — Red"
+    },
+    {
+      "filename": "dragonborn-m.jpg",
+      "src": "/portraits/dragonborn-m.jpg",
+      "speciesId": "dragonborn",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Dragonborn (male)"
+    },
+    {
+      "filename": "dragpmborn-f-courtesan-purple.jpg",
+      "src": "/portraits/dragpmborn-f-courtesan-purple.jpg",
+      "speciesId": "dragonborn",
+      "genderToken": "f",
+      "roleId": "courtesan",
+      "variantTags": [
+        "purple"
+      ],
+      "label": "Dragonborn (female) — Courtesan"
+    },
+    {
+      "filename": "drow-evil-f-elegant.jpg",
+      "src": "/portraits/drow-evil-f-elegant.jpg",
+      "speciesId": "drow",
+      "genderToken": "f",
+      "variantTags": [
+        "elegant"
+      ],
+      "label": "Drow (female) — Elegant"
+    },
+    {
+      "filename": "drow-evil-f-lustborn.jpg",
+      "src": "/portraits/drow-evil-f-lustborn.jpg",
+      "speciesId": "drow",
+      "genderToken": "f",
+      "roleId": "lustbound",
+      "variantTags": [],
+      "label": "Drow (female) — Lustbound"
+    },
+    {
+      "filename": "drow-evil-f-sadist.jpg",
+      "src": "/portraits/drow-evil-f-sadist.jpg",
+      "speciesId": "drow",
+      "genderToken": "f",
+      "variantTags": [
+        "sadist"
+      ],
+      "label": "Drow (female) — Sadist"
+    },
+    {
+      "filename": "drow-evil-f.jpg",
+      "src": "/portraits/drow-evil-f.jpg",
+      "speciesId": "drow",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Drow (female)"
+    },
+    {
+      "filename": "drow-f-busty.jpg",
+      "src": "/portraits/drow-f-busty.jpg",
+      "speciesId": "drow",
+      "genderToken": "f",
+      "variantTags": [
+        "busty"
+      ],
+      "label": "Drow (female) — Busty"
+    },
+    {
+      "filename": "drow-f-buxom.jpg",
+      "src": "/portraits/drow-f-buxom.jpg",
+      "speciesId": "drow",
+      "genderToken": "f",
+      "variantTags": [
+        "buxom"
+      ],
+      "label": "Drow (female) — Buxom"
+    },
+    {
+      "filename": "drow-f-cruel.jpg",
+      "src": "/portraits/drow-f-cruel.jpg",
+      "speciesId": "drow",
+      "genderToken": "f",
+      "variantTags": [
+        "cruel"
+      ],
+      "label": "Drow (female) — Cruel"
+    },
+    {
+      "filename": "drow-f-haughty.jpg",
+      "src": "/portraits/drow-f-haughty.jpg",
+      "speciesId": "drow",
+      "genderToken": "f",
+      "variantTags": [
+        "haughty"
+      ],
+      "label": "Drow (female) — Haughty"
+    },
+    {
+      "filename": "drow-f-powerful.jpg",
+      "src": "/portraits/drow-f-powerful.jpg",
+      "speciesId": "drow",
+      "genderToken": "f",
+      "variantTags": [
+        "powerful"
+      ],
+      "label": "Drow (female) — Powerful"
+    },
+    {
+      "filename": "drow-f-thin.jpg",
+      "src": "/portraits/drow-f-thin.jpg",
+      "speciesId": "drow",
+      "genderToken": "f",
+      "variantTags": [
+        "thin"
+      ],
+      "label": "Drow (female) — Thin"
+    },
+    {
+      "filename": "drow-f.jpg",
+      "src": "/portraits/drow-f.jpg",
+      "speciesId": "drow",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Drow (female)"
+    },
+    {
+      "filename": "drow-m-eromancer.jpg",
+      "src": "/portraits/drow-m-eromancer.jpg",
+      "speciesId": "drow",
+      "genderToken": "m",
+      "variantTags": [
+        "eromancer"
+      ],
+      "label": "Drow (male) — Eromancer"
+    },
+    {
+      "filename": "drow-m-gladiator.jpg",
+      "src": "/portraits/drow-m-gladiator.jpg",
+      "speciesId": "drow",
+      "genderToken": "m",
+      "variantTags": [
+        "gladiator"
+      ],
+      "label": "Drow (male) — Gladiator"
+    },
+    {
+      "filename": "drow-m.jpg",
+      "src": "/portraits/drow-m.jpg",
+      "speciesId": "drow",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Drow (male)"
+    },
+    {
+      "filename": "drow-m2.jpg",
+      "src": "/portraits/drow-m2.jpg",
+      "speciesId": "drow",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Drow (male)"
+    },
+    {
+      "filename": "dwarf-f-courtesan.jpg",
+      "src": "/portraits/dwarf-f-courtesan.jpg",
+      "speciesId": "hilldwarf",
+      "genderToken": "f",
+      "roleId": "courtesan",
+      "variantTags": [],
+      "label": "Hilldwarf (female) — Courtesan"
+    },
+    {
+      "filename": "dwarf-m-ravager.jpg",
+      "src": "/portraits/dwarf-m-ravager.jpg",
+      "speciesId": "hilldwarf",
+      "genderToken": "m",
+      "roleId": "ravager",
+      "variantTags": [],
+      "label": "Hilldwarf (male) — Ravager"
+    },
+    {
+      "filename": "dwarf-m.jpg",
+      "src": "/portraits/dwarf-m.jpg",
+      "speciesId": "hilldwarf",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Hilldwarf (male)"
+    },
+    {
+      "filename": "dwarf-they.jpg",
+      "src": "/portraits/dwarf-they.jpg",
+      "speciesId": "hilldwarf",
+      "genderToken": "they",
+      "variantTags": [],
+      "label": "Hilldwarf (they/them)"
+    },
+    {
+      "filename": "elf-f-divineconsort.jpg",
+      "src": "/portraits/elf-f-divineconsort.jpg",
+      "speciesId": "highelf",
+      "genderToken": "f",
+      "roleId": "divine-consort",
+      "variantTags": [],
+      "label": "Highelf (female) — Divine Consort"
+    },
+    {
+      "filename": "gnome-f-carnalartificer.jpg",
+      "src": "/portraits/gnome-f-carnalartificer.jpg",
+      "speciesId": "gnome",
+      "genderToken": "f",
+      "roleId": "carnal-artificer",
+      "variantTags": [],
+      "label": "Gnome (female) — Carnal Artificer"
+    },
+    {
+      "filename": "gnome-f.jpg",
+      "src": "/portraits/gnome-f.jpg",
+      "speciesId": "gnome",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Gnome (female)"
+    },
+    {
+      "filename": "gnome-m-carnalartificer.jpg",
+      "src": "/portraits/gnome-m-carnalartificer.jpg",
+      "speciesId": "gnome",
+      "genderToken": "m",
+      "roleId": "carnal-artificer",
+      "variantTags": [],
+      "label": "Gnome (male) — Carnal Artificer"
+    },
+    {
+      "filename": "gnome-m.jpg",
+      "src": "/portraits/gnome-m.jpg",
+      "speciesId": "gnome",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Gnome (male)"
+    },
+    {
+      "filename": "goblin-f.jpg",
+      "src": "/portraits/goblin-f.jpg",
+      "speciesId": "goblin",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Goblin (female)"
+    },
+    {
+      "filename": "goblin-m.jpg",
+      "src": "/portraits/goblin-m.jpg",
+      "speciesId": "goblin",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Goblin (male)"
+    },
+    {
+      "filename": "halfling-f-lustbound.jpg",
+      "src": "/portraits/halfling-f-lustbound.jpg",
+      "speciesId": "halfling",
+      "genderToken": "f",
+      "roleId": "lustbound",
+      "variantTags": [],
+      "label": "Halfling (female) — Lustbound"
+    },
+    {
+      "filename": "halfling-f.jpg",
+      "src": "/portraits/halfling-f.jpg",
+      "speciesId": "halfling",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Halfling (female)"
+    },
+    {
+      "filename": "halfling-m-bard.jpg",
+      "src": "/portraits/halfling-m-bard.jpg",
+      "speciesId": "halfling",
+      "genderToken": "m",
+      "variantTags": [
+        "bard"
+      ],
+      "label": "Halfling (male) — Bard"
+    },
+    {
+      "filename": "halfling-m-courtesan.jpg",
+      "src": "/portraits/halfling-m-courtesan.jpg",
+      "speciesId": "halfling",
+      "genderToken": "m",
+      "roleId": "courtesan",
+      "variantTags": [],
+      "label": "Halfling (male) — Courtesan"
+    },
+    {
+      "filename": "highelf-f-carnalartificer.jpg",
+      "src": "/portraits/highelf-f-carnalartificer.jpg",
+      "speciesId": "highelf",
+      "genderToken": "f",
+      "roleId": "carnal-artificer",
+      "variantTags": [],
+      "label": "Highelf (female) — Carnal Artificer"
+    },
+    {
+      "filename": "highelf-f-lustbound.jpg",
+      "src": "/portraits/highelf-f-lustbound.jpg",
+      "speciesId": "highelf",
+      "genderToken": "f",
+      "roleId": "lustbound",
+      "variantTags": [],
+      "label": "Highelf (female) — Lustbound"
+    },
+    {
+      "filename": "highelf-m-2.jpg",
+      "src": "/portraits/highelf-m-2.jpg",
+      "speciesId": "highelf",
+      "genderToken": "m",
+      "variantTags": [
+        "2"
+      ],
+      "label": "Highelf (male) — 2"
+    },
+    {
+      "filename": "highelf-m-divineconsort.jpg",
+      "src": "/portraits/highelf-m-divineconsort.jpg",
+      "speciesId": "highelf",
+      "genderToken": "m",
+      "roleId": "divine-consort",
+      "variantTags": [],
+      "label": "Highelf (male) — Divine Consort"
+    },
+    {
+      "filename": "highelf-m-lustbound.jpg",
+      "src": "/portraits/highelf-m-lustbound.jpg",
+      "speciesId": "highelf",
+      "genderToken": "m",
+      "roleId": "lustbound",
+      "variantTags": [],
+      "label": "Highelf (male) — Lustbound"
+    },
+    {
+      "filename": "highelf-m-lustbound2.jpg",
+      "src": "/portraits/highelf-m-lustbound2.jpg",
+      "speciesId": "highelf",
+      "genderToken": "m",
+      "roleId": "lustbound",
+      "variantTags": [],
+      "label": "Highelf (male) — Lustbound"
+    },
+    {
+      "filename": "highelf-m.jpg",
+      "src": "/portraits/highelf-m.jpg",
+      "speciesId": "highelf",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Highelf (male)"
+    },
+    {
+      "filename": "human-dwarf-m-courtesan.jpg",
+      "src": "/portraits/human-dwarf-m-courtesan.jpg",
+      "speciesId": "human",
+      "genderToken": "m",
+      "roleId": "courtesan",
+      "variantTags": [],
+      "label": "Human (male) — Courtesan"
+    },
+    {
+      "filename": "human-f-courtesan.jpg",
+      "src": "/portraits/human-f-courtesan.jpg",
+      "speciesId": "human",
+      "genderToken": "f",
+      "roleId": "courtesan",
+      "variantTags": [],
+      "label": "Human (female) — Courtesan"
+    },
+    {
+      "filename": "human-f-lustbound.jpg",
+      "src": "/portraits/human-f-lustbound.jpg",
+      "speciesId": "human",
+      "genderToken": "f",
+      "roleId": "lustbound",
+      "variantTags": [],
+      "label": "Human (female) — Lustbound"
+    },
+    {
+      "filename": "human-f.jpg",
+      "src": "/portraits/human-f.jpg",
+      "speciesId": "human",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Human (female)"
+    },
+    {
+      "filename": "human-m-carnalartificer.jpg",
+      "src": "/portraits/human-m-carnalartificer.jpg",
+      "speciesId": "human",
+      "genderToken": "m",
+      "roleId": "carnal-artificer",
+      "variantTags": [],
+      "label": "Human (male) — Carnal Artificer"
+    },
+    {
+      "filename": "human-m.jpg",
+      "src": "/portraits/human-m.jpg",
+      "speciesId": "human",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Human (male)"
+    },
+    {
+      "filename": "orc-f-2.jpg",
+      "src": "/portraits/orc-f-2.jpg",
+      "speciesId": "orc",
+      "genderToken": "f",
+      "variantTags": [
+        "2"
+      ],
+      "label": "Orc (female) — 2"
+    },
+    {
+      "filename": "orc-f-ravager.jpg",
+      "src": "/portraits/orc-f-ravager.jpg",
+      "speciesId": "orc",
+      "genderToken": "f",
+      "roleId": "ravager",
+      "variantTags": [],
+      "label": "Orc (female) — Ravager"
+    },
+    {
+      "filename": "orc-f.jpg",
+      "src": "/portraits/orc-f.jpg",
+      "speciesId": "orc",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Orc (female)"
+    },
+    {
+      "filename": "orc-f2.jpg",
+      "src": "/portraits/orc-f2.jpg",
+      "speciesId": "orc",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Orc (female)"
+    },
+    {
+      "filename": "orc-f3.jpg",
+      "src": "/portraits/orc-f3.jpg",
+      "speciesId": "orc",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Orc (female)"
+    },
+    {
+      "filename": "orc-m-divineconsort.jpg",
+      "src": "/portraits/orc-m-divineconsort.jpg",
+      "speciesId": "orc",
+      "genderToken": "m",
+      "roleId": "divine-consort",
+      "variantTags": [],
+      "label": "Orc (male) — Divine Consort"
+    },
+    {
+      "filename": "orc-m.jpg",
+      "src": "/portraits/orc-m.jpg",
+      "speciesId": "orc",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Orc (male)"
+    },
+    {
+      "filename": "orc-m2.jpg",
+      "src": "/portraits/orc-m2.jpg",
+      "speciesId": "orc",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Orc (male)"
+    },
+    {
+      "filename": "tiefling-f-2.jpg",
+      "src": "/portraits/tiefling-f-2.jpg",
+      "speciesId": "tiefling",
+      "genderToken": "f",
+      "variantTags": [
+        "2"
+      ],
+      "label": "Tiefling (female) — 2"
+    },
+    {
+      "filename": "tiefling-f-courtesan.jpg",
+      "src": "/portraits/tiefling-f-courtesan.jpg",
+      "speciesId": "tiefling",
+      "genderToken": "f",
+      "roleId": "courtesan",
+      "variantTags": [],
+      "label": "Tiefling (female) — Courtesan"
+    },
+    {
+      "filename": "tiefling-f-infernal.jpg",
+      "src": "/portraits/tiefling-f-infernal.jpg",
+      "speciesId": "tiefling",
+      "genderToken": "f",
+      "variantTags": [
+        "infernal"
+      ],
+      "label": "Tiefling (female) — Infernal"
+    },
+    {
+      "filename": "tiefling-f-lustbound.jpg",
+      "src": "/portraits/tiefling-f-lustbound.jpg",
+      "speciesId": "tiefling",
+      "genderToken": "f",
+      "roleId": "lustbound",
+      "variantTags": [],
+      "label": "Tiefling (female) — Lustbound"
+    },
+    {
+      "filename": "tiefling-f.jpg",
+      "src": "/portraits/tiefling-f.jpg",
+      "speciesId": "tiefling",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Tiefling (female)"
+    },
+    {
+      "filename": "tiefling-m-divineconsort.jpg",
+      "src": "/portraits/tiefling-m-divineconsort.jpg",
+      "speciesId": "tiefling",
+      "genderToken": "m",
+      "roleId": "divine-consort",
+      "variantTags": [],
+      "label": "Tiefling (male) — Divine Consort"
+    },
+    {
+      "filename": "tiefling-m-lustbound.jpg",
+      "src": "/portraits/tiefling-m-lustbound.jpg",
+      "speciesId": "tiefling",
+      "genderToken": "m",
+      "roleId": "lustbound",
+      "variantTags": [],
+      "label": "Tiefling (male) — Lustbound"
+    },
+    {
+      "filename": "tiefling-m-ravager.jpg",
+      "src": "/portraits/tiefling-m-ravager.jpg",
+      "speciesId": "tiefling",
+      "genderToken": "m",
+      "roleId": "ravager",
+      "variantTags": [],
+      "label": "Tiefling (male) — Ravager"
+    },
+    {
+      "filename": "tiefling-m.jpg",
+      "src": "/portraits/tiefling-m.jpg",
+      "speciesId": "tiefling",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Tiefling (male)"
+    },
+    {
+      "filename": "tiefling-m2.jpg",
+      "src": "/portraits/tiefling-m2.jpg",
+      "speciesId": "tiefling",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Tiefling (male)"
+    },
+    {
+      "filename": "woodelf-f-courtesan.jpg",
+      "src": "/portraits/woodelf-f-courtesan.jpg",
+      "speciesId": "woodelf",
+      "genderToken": "f",
+      "roleId": "courtesan",
+      "variantTags": [],
+      "label": "Woodelf (female) — Courtesan"
+    },
+    {
+      "filename": "woodelf-f.jpg",
+      "src": "/portraits/woodelf-f.jpg",
+      "speciesId": "woodelf",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Woodelf (female)"
+    }
+  ]
+}
