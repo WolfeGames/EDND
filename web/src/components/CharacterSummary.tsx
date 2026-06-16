@@ -326,7 +326,7 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
           />
         ) : null}
         <div className="immersive-hero__identity">
-          <p className="immersive-hero__eyebrow">Character veil</p>
+          <p className="immersive-hero__kicker">Character sheet</p>
           <h2 className="immersive-hero__title">
             {character.name || 'Unnamed desire'}
             <span className="immersive-hero__sub">
@@ -370,8 +370,9 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
         </div>
       </header>
 
-      <section className="immersive-veil-stats immersive-panel" aria-label="Ability scores and sexuality">
-        <div className="immersive-veil-stats__grid">
+      <section className="immersive-sheet-stats immersive-panel" aria-label="Ability scores and sexuality">
+        <h3 className="immersive-sheet-stats__heading">Ability scores</h3>
+        <div className="immersive-sheet-stats__grid">
           {ABILITY_GRID.map(({ key, label }) => {
             const score = character.abilityScores[key]
             const mod = abilityModifier(score)
@@ -385,7 +386,7 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
             )
           })}
         </div>
-        <p className="immersive-veil-stats__sexuality">
+        <p className="immersive-sheet-stats__sexuality">
           Sexuality bonus <strong>+{character.eroticTraits.sexualityBonus}</strong>
         </p>
       </section>

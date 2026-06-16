@@ -1,5 +1,5 @@
 import { portraitBinaryForGender } from './biologicalSex'
-import { resolveSpeciesTableId } from './speciesAliases'
+import { portraitSpeciesLookupOrder } from './portraitSpeciesFallback'
 
 export type PortraitGenderToken = 'f' | 'm' | 'they'
 
@@ -32,14 +32,21 @@ export function filterPortraitsForCharacter(
   genderIdentity: string,
   carnalClassId?: string,
 ): PortraitManifestEntry[] {
-  const id = resolveSpeciesTableId(speciesId.trim())
-  if (!id) return []
-  const bySpecies = entries.filter((e) => e.speciesId === id)
-  const byGender = bySpecies.filter((e) => portraitMatchesGender(e.genderToken, genderIdentity))
-  if (!carnalClassId?.trim()) return byGender
-  const cls = carnalClassId.trim()
-  const withRole = byGender.filter((e) => e.roleId === cls)
-  return withRole.length > 0 ? withRole : byGender
+  const lookupOrder = portraitSpeciesLookupOrder(speciesId)
+  if (!lookupOrder.length) return []
+
+  for (const id of lookupOrder) {
+    const bySpecies = entries.filter((e) => e.speciesId === id)
+    const byGender = bySpecies.filter((e) => portraitMatchesGender(e.genderToken, genderIdentity))
+    if (!byGender.length) continue
+
+    if (!carnalClassId?.trim()) return byGender
+    const cls = carnalClassId.trim()
+    const withRole = byGender.filter((e) => e.roleId === cls)
+    return withRole.length > 0 ? withRole : byGender
+  }
+
+  return []
 }
 
 /** Prefer base species+gender portraits (no role/variant tags). */

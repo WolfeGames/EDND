@@ -13,6 +13,7 @@
     "portraits:sync": "node scripts/sync-portraits.mjs",
     "portraits:manifest": "node scripts/build-portrait-manifest.mjs",
     "portraits:refresh": "npm run portraits:sync && npm run portraits:manifest",
+    "names:fetch": "node scripts/fetch-fng-names.mjs",
     "ci": "npm run validate:data && npm run test && npm run build"
   },
   "dependencies": {

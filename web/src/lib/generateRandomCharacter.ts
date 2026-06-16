@@ -27,6 +27,7 @@ import {
 import { mergeTableProficiencies } from './mergeEroticProficiencies'
 import { resolveSpeciesTableId } from './speciesAliases'
 import { pickRandomPortraitSrc } from './speciesPortrait'
+import { rollFantasyNameForSpecies } from './fantasyNameGenerator'
 import { rollSexualHistoryPersonality } from './rollSexualHistoryPersonality'
 
 const GENERIC_BACKGROUNDS = [
@@ -43,42 +44,6 @@ const GENERIC_BACKGROUNDS = [
   'Sailor',
   'Soldier',
   'Urchin',
-] as const
-
-const FIRST_NAMES = [
-  'Mira',
-  'Dorian',
-  'Selene',
-  'Thorne',
-  'Lyra',
-  'Cassian',
-  'Iris',
-  'Rowan',
-  'Sable',
-  'Ember',
-  'Orin',
-  'Vesper',
-  'Nadia',
-  'Kael',
-  'Zara',
-] as const
-
-const LAST_NAMES = [
-  'Vale',
-  'Ash',
-  'Blackwood',
-  'Storm',
-  'Riven',
-  'Marrow',
-  'Quill',
-  'Hollow',
-  'Cross',
-  'Drift',
-  'Vance',
-  'Locke',
-  'Fair',
-  'Grim',
-  'Sable',
 ] as const
 
 const ATTRACTIONS = [
@@ -130,10 +95,6 @@ export type RandomCharacterFilters = {
 export type RandomCharacterOptions = {
   carnalClassChance?: number
   filters?: RandomCharacterFilters
-}
-
-function randomName(): string {
-  return `${pickRandom(FIRST_NAMES)!} ${pickRandom(LAST_NAMES)!}`
 }
 
 function randomToolProficiencies(): string[] {
@@ -224,7 +185,7 @@ export function generateRandomCharacter(
 
   return normalizeCharacterBiology({
     ...createEmptyCharacter(),
-    name: randomName(),
+    name: rollFantasyNameForSpecies(speciesId),
     pronouns,
     genderIdentity,
     level,

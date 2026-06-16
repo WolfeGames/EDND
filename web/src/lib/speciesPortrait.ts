@@ -7,6 +7,7 @@ import {
   pickRandomPortraitEntry,
   type PortraitManifestEntry,
 } from './portraitFilename'
+import { portraitSpeciesLookupOrder } from './portraitSpeciesFallback'
 
 export type PortraitVariant = 'male' | 'female' | 'they' | 'unisex'
 
@@ -102,6 +103,6 @@ export function getCharacterPortraitSrc(
 }
 
 export function speciesHasPortrait(speciesId: string): boolean {
-  const id = resolveSpeciesTableId(speciesId.trim())
-  return ENTRIES.some((e) => e.speciesId === id)
+  const order = portraitSpeciesLookupOrder(speciesId)
+  return order.some((id) => ENTRIES.some((e) => e.speciesId === id))
 }

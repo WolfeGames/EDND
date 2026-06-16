@@ -161,6 +161,7 @@ export function CharacterSheetPage() {
               />
             ) : null}
             <div className="sheet-name-block">
+              <p className="sheet-kicker">Character sheet</p>
               <h1 className="sheet-char-name">{c.name.trim() || 'Unnamed character'}</h1>
               <div className="sheet-sub">
                 {speciesRow?.name ?? '—'}
@@ -195,8 +196,8 @@ export function CharacterSheetPage() {
           </div>
         </header>
 
-        <section className="sheet-section sheet-veil-stats" aria-labelledby="veil-stats-heading">
-          <h2 id="veil-stats-heading" className="sheet-section-title">
+        <section className="sheet-section sheet-core-stats" aria-labelledby="core-stats-heading">
+          <h2 id="core-stats-heading" className="sheet-section-title">
             Ability scores &amp; sexuality
           </h2>
           <div className="sheet-abilities">
@@ -213,7 +214,7 @@ export function CharacterSheetPage() {
               )
             })}
           </div>
-          <p className="sheet-block-body sheet-veil-stats__sexuality">
+          <p className="sheet-block-body sheet-core-stats__sexuality">
             <strong>Sexuality bonus</strong> +{c.eroticTraits.sexualityBonus}
           </p>
         </section>

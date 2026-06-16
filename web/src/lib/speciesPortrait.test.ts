@@ -63,6 +63,14 @@ describe('getCharacterPortraitSrc', () => {
       }),
     ).toBe('/portraits/woodelf-f.jpg')
   })
+
+  it('falls back to highelf portrait for aasimar', () => {
+    const src = getCharacterPortraitSrc({
+      species: 'aasimar',
+      genderIdentity: 'Male',
+    })
+    expect(src).toMatch(/\/portraits\/highelf-m/)
+  })
 })
 
 describe('speciesHasPortrait', () => {
