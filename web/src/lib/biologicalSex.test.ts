@@ -7,17 +7,19 @@ import {
 } from './biologicalSex'
 
 describe('sanitizeGenderForApp', () => {
-  it('keeps anatomy gender labels', () => {
+  it('keeps identity gender labels', () => {
     expect(sanitizeGenderForApp('Male')).toBe('Male')
-    expect(sanitizeGenderForApp('Hermaphrodite')).toBe('Hermaphrodite')
-    expect(sanitizeGenderForApp('Cuntboy')).toBe('Cuntboy')
     expect(sanitizeGenderForApp('Female')).toBe('Female')
-    expect(sanitizeGenderForApp('Shemale')).toBe('Shemale')
+    expect(sanitizeGenderForApp('Intersex')).toBe('Intersex')
+    expect(sanitizeGenderForApp('Agender')).toBe('Agender')
   })
 
   it('maps legacy labels', () => {
+    expect(sanitizeGenderForApp('Hermaphrodite')).toBe('Intersex')
+    expect(sanitizeGenderForApp('Cuntboy')).toBe('Male')
+    expect(sanitizeGenderForApp('Shemale')).toBe('Female')
     expect(sanitizeGenderForApp('Transgender')).toBe('Male')
-    expect(sanitizeGenderForApp('Nonbinary')).toBe('Female')
+    expect(sanitizeGenderForApp('Nonbinary')).toBe('Agender')
   })
 
   it('clears unknown values', () => {
@@ -29,20 +31,22 @@ describe('sanitizeGenderForApp', () => {
 describe('portraitBinaryForGender', () => {
   it('maps genders to portrait pairs', () => {
     expect(portraitBinaryForGender('Male')).toBe('Male')
-    expect(portraitBinaryForGender('Cuntboy')).toBe('Male')
     expect(portraitBinaryForGender('Female')).toBe('Female')
+    expect(portraitBinaryForGender('Intersex')).toBeNull()
+    expect(portraitBinaryForGender('Agender')).toBeNull()
+    expect(portraitBinaryForGender('Cuntboy')).toBe('Male')
     expect(portraitBinaryForGender('Shemale')).toBe('Female')
-    expect(portraitBinaryForGender('Hermaphrodite')).toBe('Female')
+    expect(portraitBinaryForGender('Hermaphrodite')).toBeNull()
   })
 })
 
 describe('normalizeCharacterBiology', () => {
-  it('derives gender from endowment', () => {
+  it('preserves chosen gender independent of endowment', () => {
     const c = createEmptyCharacter()
     c.genderIdentity = 'Female'
     c.endowment = { anatomy: 'phallus', phallusSize: 'Medium', vaginaPresent: false }
     const out = normalizeCharacterBiology(c)
-    expect(out.genderIdentity).toBe('Male')
+    expect(out.genderIdentity).toBe('Female')
     expect(out.endowment.anatomy).toBe('phallus')
   })
 })

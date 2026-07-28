@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ADVENTURING_CLASSES } from '../data/adventuringClasses'
-import { GENDERS, isGenderOption } from '../data/identityOptions'
+import { GENDERS, PRONOUNS, isGenderOption } from '../data/identityOptions'
 import { portraitBinaryForGender } from '../lib/biologicalSex'
 import { CharacterSummary } from '../components/CharacterSummary'
 import {
@@ -101,9 +101,10 @@ export function RandomGeneratorPage() {
     <div className="page random-generator">
       <h1 className="page-title">Random character</h1>
       <p className="lede">
-        Constrain the roll with the filters below (all optional). Gender is rolled from anatomy
-        (Male, Hermaphrodite, Cuntboy, Female, Shemale) or fixed with the filter. Pronouns are
-        auto-filled from gender unless you type them in the filter first. Sexual history and carnal
+        Constrain the roll with the filters below (all optional). Gender is rolled from Male,
+        Female, Intersex, or Agender (or fixed with the filter). Pronouns are auto-filled from
+        gender unless you pick them in the filter first. Body type is rolled on 1d10 and height
+        / weight use traditional D&D species tables scaled by body type. Sexual history and carnal
         class features highlight when your rolled level meets the printed level gate.
       </p>
 
@@ -214,15 +215,19 @@ export function RandomGeneratorPage() {
           </label>
           <label className="filter-field">
             <span>Pronouns</span>
-            <input
-              type="text"
-              autoComplete="off"
+            <select
               value={filterForm.pronouns ?? ''}
               onChange={(e) =>
                 setFilter('pronouns', e.target.value || undefined)
               }
-              placeholder="Override auto pronouns (optional)"
-            />
+            >
+              <option value="">Auto from gender</option>
+              {PRONOUNS.map((p) => (
+                <option key={p} value={p}>
+                  {p}
+                </option>
+              ))}
+            </select>
           </label>
           <label className="filter-field">
             <span>Level min</span>

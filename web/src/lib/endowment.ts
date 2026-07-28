@@ -1,6 +1,6 @@
 import type { EndowmentAnatomy, EndowmentProfile, EndowmentSize } from '../types/character'
 
-const ENDOWMENT_TABLE: EndowmentSize[] = [
+export const ENDOWMENT_SIZES: EndowmentSize[] = [
   'Tiny',
   'Small',
   'Medium',
@@ -12,11 +12,15 @@ const ENDOWMENT_TABLE: EndowmentSize[] = [
 /** Roll 1d6: 1 = Tiny … 6 = Gargantuan. */
 export function rollEndowmentSize(): EndowmentSize {
   const d6 = 1 + Math.floor(Math.random() * 6)
-  return ENDOWMENT_TABLE[d6 - 1]!
+  return ENDOWMENT_SIZES[d6 - 1]!
+}
+
+export function isEndowmentSize(value: string): value is EndowmentSize {
+  return (ENDOWMENT_SIZES as readonly string[]).includes(value)
 }
 
 export const ENDOWMENT_SIZE_RULE =
-  'Breasts, phallus, and vagina (when present) each use the same size roll: 1d6 where 1 = Tiny, 2 = Small, 3 = Medium, 4 = Large, 5 = Huge, 6 = Gargantuan.'
+  'Breasts, phallus, and vagina (when present) each use the same size scale: 1d6 where 1 = Tiny, 2 = Small, 3 = Medium, 4 = Large, 5 = Huge, 6 = Gargantuan.'
 
 export const ENDOWMENT_ANATOMY_OPTIONS: Array<{ value: EndowmentAnatomy; label: string }> = [
   { value: 'neither', label: 'Neither breasts nor phallus' },
@@ -50,7 +54,7 @@ export function formatEndowmentLines(e: EndowmentProfile): string[] {
     e.vaginaPresent === true
       ? e.vaginaSize
         ? `Vagina: ${e.vaginaSize}.`
-        : 'Vagina: present (size not rolled).'
+        : 'Vagina: present (size not set).'
       : null
 
   if (e.anatomy === 'neither') {
@@ -62,12 +66,12 @@ export function formatEndowmentLines(e: EndowmentProfile): string[] {
     return lines
   }
   if (e.anatomy === 'breasts') {
-    lines.push(`Breasts: ${e.breastsSize ?? '— (not rolled)'}.`)
+    lines.push(`Breasts: ${e.breastsSize ?? '— (not set)'}.`)
   } else if (e.anatomy === 'phallus') {
-    lines.push(`Phallus: ${e.phallusSize ?? '— (not rolled)'}.`)
+    lines.push(`Phallus: ${e.phallusSize ?? '— (not set)'}.`)
   } else {
-    lines.push(`Breasts: ${e.breastsSize ?? '— (not rolled)'}.`)
-    lines.push(`Phallus: ${e.phallusSize ?? '— (not rolled)'}.`)
+    lines.push(`Breasts: ${e.breastsSize ?? '— (not set)'}.`)
+    lines.push(`Phallus: ${e.phallusSize ?? '— (not set)'}.`)
   }
   if (vaginaLine) lines.push(vaginaLine)
   return lines

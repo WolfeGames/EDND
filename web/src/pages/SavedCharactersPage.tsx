@@ -44,7 +44,11 @@ export function SavedCharactersPage() {
       </p>
 
       <div className="saved-toolbar">
-        <button type="button" className="btn btn-primary" onClick={() => navigate('/create')}>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={() => navigate(`/create?new=1&_=${Date.now()}`)}
+        >
           New character
         </button>
         <button type="button" className="btn" onClick={() => importRef.current?.click()}>
@@ -58,7 +62,7 @@ export function SavedCharactersPage() {
           aria-hidden
           onChange={handleImport}
         />
-        <Link to="/create" className="btn">
+        <Link to="/create?new=1" className="btn">
           Open creator
         </Link>
       </div>

@@ -9,6 +9,8 @@ import { estimateArmorClass, estimateMaxHitPoints } from '../lib/adventuringStat
 import { abilityModifier } from '../lib/abilityScores'
 import { characterHasEndowedTrait, getSheetEndowmentProfile } from '../lib/endowedTrait'
 import { ENDOWMENT_SIZE_RULE, formatEndowmentLines } from '../lib/endowment'
+import { formatHeightInches, formatWeightLbs } from '../lib/physique'
+import { BODY_TYPE_DESCRIPTIONS, isBodyType } from '../data/bodyTypes'
 import { CarnalClassTraitNotes } from '../components/CarnalClassTraitNotes'
 import { SelectedCarnalTraitsPanel } from '../components/SelectedCarnalTraitsPanel'
 import { getCharacterPortraitSrc } from '../lib/speciesPortrait'
@@ -105,7 +107,7 @@ export function CharacterSheetPage() {
         <div className="sheet-missing sheet-no-print">
           <h1>Character sheet</h1>
           <p>
-            Open a sheet from <Link to="/create">Create</Link> (Printable sheet), from{' '}
+            Open a sheet from <Link to="/create?new=1">Create</Link> (Printable sheet), from{' '}
             <Link to="/characters">Saved</Link>, or use a saved link with <code>?id=…</code> in the
             URL.
           </p>
@@ -193,6 +195,18 @@ export function CharacterSheetPage() {
               <span className="sheet-meta-label">Gender</span>
               <span className="sheet-meta-value">{c.genderIdentity || '—'}</span>
             </div>
+            <div className="sheet-meta-cell">
+              <span className="sheet-meta-label">Body type</span>
+              <span className="sheet-meta-value">{c.bodyType || '—'}</span>
+            </div>
+            <div className="sheet-meta-cell">
+              <span className="sheet-meta-label">Height / weight</span>
+              <span className="sheet-meta-value">
+                {typeof c.heightInches === 'number' && typeof c.weightLbs === 'number'
+                  ? `${formatHeightInches(c.heightInches)} · ${formatWeightLbs(c.weightLbs)}`
+                  : '—'}
+              </span>
+            </div>
           </div>
         </header>
 
@@ -224,6 +238,12 @@ export function CharacterSheetPage() {
             Identity
           </h2>
           <div className="sheet-block">
+            {isBodyType(c.bodyType ?? '') && (
+              <>
+                <h3 className="sheet-block-title">Body type — {c.bodyType}</h3>
+                <p className="sheet-prose">{BODY_TYPE_DESCRIPTIONS[c.bodyType!]}</p>
+              </>
+            )}
             <h3 className="sheet-block-title endo-label-tooltip" title={ENDOWMENT_SIZE_RULE}>
               Endowment
             </h3>

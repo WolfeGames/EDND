@@ -1,7 +1,14 @@
-import { useEffect, useMemo, useRef, useState, type ChangeEventHandler } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEventHandler } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ADVENTURING_CLASSES } from '../data/adventuringClasses'
-import { deriveGenderFromEndowment, withEndowmentOnCharacter } from '../lib/anatomyGender'
+import { withEndowmentOnCharacter } from '../lib/anatomyGender'
+import { GENDERS, PRONOUNS, isPronounOption } from '../data/identityOptions'
+import {
+  BODY_TYPES,
+  BODY_TYPE_DESCRIPTIONS,
+  isBodyType,
+  type BodyType,
+} from '../data/bodyTypes'
 import {
   carnalClasses,
   getCarnalClass,
@@ -43,17 +50,48 @@ import {
   stashCharacterForSheet,
   upsertLibrary,
 } from '../lib/characterStorage'
-import { rollAllAbilityScores, rollStat4d6DropLowest } from '../lib/abilityScores'
 import {
-  ENDOWMENT_ANATOMY_OPTIONS,
+  abilityRollsToSpectacle,
+  rollAllAbilityScoresDetailed,
+  rollStat4d6DropLowestDetailed,
+} from '../lib/abilityScores'
+import {
+  DICE_SIDES,
+  labelForSides,
+  makeSpectacleDie,
+  rollDice,
+  type DiceSides,
+  type SpectacleDie,
+} from '../lib/dice'
+import {
+  describeSpeciesHeightWeightFormula,
+  formatHeightInches,
+  formatWeightLbs,
+  physiqueRollToSpectacle,
+  reweightPhysique,
+  rollPhysiqueForSpecies,
+  rollRandomBodyType,
+} from '../lib/physique'
+import { DiceRollOverlay } from '../components/DiceRollOverlay'
+import {
   ENDOWMENT_SIZE_RULE,
+  ENDOWMENT_SIZES,
   formatEndowmentLines,
+  isEndowmentSize,
   rollEndowmentSize,
 } from '../lib/endowment'
 import { getSheetEndowmentProfile } from '../lib/endowedTrait'
 import { GENITAL_TRAIT_DEFINITIONS } from '../data/genitalTraits'
-import { inferGenitalTraitFromCharacter } from '../lib/genitalTrait'
+import {
+  applyGenitalTraitSelection,
+  defaultGenitalTraitForGender,
+  describeEndowmentShape,
+  endowmentShapeFromGenitalTrait,
+  inferGenitalTraitFromCharacter,
+} from '../lib/genitalTrait'
+import { generateRandomCharacter } from '../lib/generateRandomCharacter'
 import type { GenitalTraitId } from '../types/genitalTrait'
+import type { EndowmentSize } from '../types/character'
 import { createEmptyCharacter, type EdndCharacter, type SexualHistoryPersonality } from '../types/character'
 import './CharacterCreatorPage.css'
 
@@ -134,7 +172,24 @@ export function CharacterCreatorPage() {
   const [step, setStep] = useState(0)
   const [copyHint, setCopyHint] = useState<string | null>(null)
   const [persistHint, setPersistHint] = useState<string | null>(null)
+  const [spectacle, setSpectacle] = useState<{
+    dice: SpectacleDie[]
+    title: string
+    subtitle?: string
+    apply: () => void
+  } | null>(null)
+  const [funDieSides, setFunDieSides] = useState<DiceSides>(20)
+  const [funDieCount, setFunDieCount] = useState(1)
   const importInputRef = useRef<HTMLInputElement>(null)
+
+  // Drop ?new=1 from the address bar without remounting, so a refresh can restore the draft.
+  useEffect(() => {
+    const url = new URL(window.location.href)
+    if (url.searchParams.get('new') !== '1') return
+    if (url.searchParams.get('id')) return
+    url.search = ''
+    window.history.replaceState(window.history.state, '', `${url.pathname}${url.hash}`)
+  }, [])
 
   const withMergedProficiencies = (c: EdndCharacter): EdndCharacter => {
     const c0 = normalizeCharacterBiology(c)
@@ -182,17 +237,20 @@ export function CharacterCreatorPage() {
     [character.eroticTraits.repulsion],
   )
 
-  const derivedGender = useMemo(
-    () => deriveGenderFromEndowment(character.endowment),
-    [character.endowment],
-  )
-
   const endowmentReadout = useMemo(
     () => formatEndowmentLines(getSheetEndowmentProfile(character)),
     [character],
   )
 
-  const vaginaChecked = character.endowment.vaginaPresent === true
+  const activeGenitalTrait = useMemo(
+    () => character.genitalTrait ?? inferGenitalTraitFromCharacter(character),
+    [character],
+  )
+
+  const endowmentShape = useMemo(
+    () => endowmentShapeFromGenitalTrait(activeGenitalTrait),
+    [activeGenitalTrait],
+  )
 
   useEffect(() => {
     const t = window.setTimeout(() => {
@@ -207,10 +265,16 @@ export function CharacterCreatorPage() {
         return (
           character.name.trim().length > 0 &&
           character.adventuringClass.trim().length > 0 &&
-          isCanonicalGender(character.genderIdentity)
+          isCanonicalGender(character.genderIdentity) &&
+          isPronounOption(character.pronouns)
         )
       case 1:
-        return character.species.length > 0
+        return (
+          character.species.length > 0 &&
+          isBodyType(character.bodyType ?? '') &&
+          typeof character.heightInches === 'number' &&
+          typeof character.weightLbs === 'number'
+        )
       case 2: {
         if (!(character.sexualHistory ?? '').trim()) return false
         const row = getSexualHistory(character.sexualHistory!)
@@ -306,6 +370,120 @@ export function CharacterCreatorPage() {
     )
   }
 
+  const finishSpectacle = useCallback(() => {
+    setSpectacle((current) => {
+      if (current) current.apply()
+      return null
+    })
+  }, [])
+
+  const rollOneAbilityWithSpectacle = (key: keyof EdndCharacter['abilityScores'], label: string) => {
+    const detail = rollStat4d6DropLowestDetailed()
+    setSpectacle({
+      dice: abilityRollsToSpectacle({ [key]: detail }, { [key]: label }),
+      title: `Roll ${label}`,
+      subtitle: '4d6, drop the lowest',
+      apply: () => updateAbilityScore(key, detail.total),
+    })
+  }
+
+  const rollAllAbilitiesWithSpectacle = () => {
+    const details = rollAllAbilityScoresDetailed()
+    const labels = Object.fromEntries(ABILITY_LABELS) as Record<
+      keyof EdndCharacter['abilityScores'],
+      string
+    >
+    setSpectacle({
+      dice: abilityRollsToSpectacle(details, labels),
+      title: 'Ability scores',
+      subtitle: 'Six times 4d6, drop the lowest',
+      apply: () =>
+        setCharacter((c) =>
+          applyDerivedCharacterRules({
+            ...c,
+            abilityScores: {
+              strength: details.strength.total,
+              dexterity: details.dexterity.total,
+              constitution: details.constitution.total,
+              intelligence: details.intelligence.total,
+              wisdom: details.wisdom.total,
+              charisma: details.charisma.total,
+            },
+          }),
+        ),
+    })
+  }
+
+  const rollFunDiceWithSpectacle = () => {
+    const values = rollDice(funDieCount, funDieSides)
+    const dice = values.map((value) => makeSpectacleDie(funDieSides, value))
+    const total = values.reduce((a, b) => a + b, 0)
+    setSpectacle({
+      dice,
+      title: `${values.length}${labelForSides(funDieSides)}`,
+      subtitle:
+        values.length === 1
+          ? `A single ${labelForSides(funDieSides)} takes flight`
+          : `Total ${total}`,
+      apply: () => undefined,
+    })
+  }
+
+  const applyBodyType = (bodyType: BodyType) => {
+    setCharacter((c) => {
+      if (
+        typeof c.heightModifierRoll === 'number' &&
+        typeof c.weightModifierRoll === 'number' &&
+        typeof c.heightInches === 'number' &&
+        c.species
+      ) {
+        const next = reweightPhysique({
+          speciesId: c.species,
+          bodyType,
+          heightInches: c.heightInches,
+          heightModifier: c.heightModifierRoll,
+          weightModifier: c.weightModifierRoll,
+        })
+        return { ...c, bodyType, ...next }
+      }
+      return { ...c, bodyType }
+    })
+  }
+
+  const rollBodyTypeWithSpectacle = () => {
+    const { bodyType, d10 } = rollRandomBodyType()
+    setSpectacle({
+      dice: [makeSpectacleDie(10, d10, { group: 'BODY' })],
+      title: 'Body type',
+      subtitle: `1d10 → ${bodyType}`,
+      apply: () => applyBodyType(bodyType),
+    })
+  }
+
+  const rollHeightWeightWithSpectacle = () => {
+    if (!character.species || !isBodyType(character.bodyType ?? '')) return
+    const bodyType = character.bodyType as BodyType
+    const result = rollPhysiqueForSpecies(character.species, bodyType)
+    const dice = physiqueRollToSpectacle(result)
+    setSpectacle({
+      dice:
+        dice.length > 0
+          ? dice
+          : [makeSpectacleDie(6, result.heightModifier, { group: 'HT' })],
+      title: 'Height & weight',
+      subtitle: `${formatHeightInches(result.heightInches)} · ${formatWeightLbs(result.weightLbs)} (${bodyType})`,
+      apply: () =>
+        setCharacter((c) => ({
+          ...c,
+          bodyType: result.bodyType,
+          heightInches: result.heightInches,
+          weightLbs: result.weightLbs,
+          heightModifierRoll: result.heightModifier,
+          weightModifierRoll: result.weightModifier,
+        })),
+    })
+  }
+
   const patchSexualHistoryPersonality = (patch: Partial<SexualHistoryPersonality>) => {
     setCharacter((c) => ({
       ...c,
@@ -317,38 +495,49 @@ export function CharacterCreatorPage() {
     }))
   }
 
-  const setEndowmentAnatomy = (anatomy: EdndCharacter['endowment']['anatomy']) => {
-    setCharacter((c) => {
-      const e = c.endowment
-      if (anatomy === 'neither') {
-        return withEndowmentOnCharacter(c, {
-          ...e,
-          anatomy: 'neither',
-          breastsSize: undefined,
-          phallusSize: undefined,
-        })
-      }
-      if (anatomy === 'breasts') {
-        return withEndowmentOnCharacter(c, {
-          ...e,
-          anatomy: 'breasts',
-          phallusSize: undefined,
-        })
-      }
-      if (anatomy === 'phallus') {
-        return withEndowmentOnCharacter(c, {
-          ...e,
-          anatomy: 'phallus',
-          breastsSize: undefined,
-        })
-      }
-      return withEndowmentOnCharacter(c, {
-        ...e,
-        anatomy,
-        breastsSize: e.breastsSize,
-        phallusSize: e.phallusSize,
-      })
-    })
+  const setEndowmentSize = (
+    key: 'breastsSize' | 'phallusSize' | 'vaginaSize',
+    size: EndowmentSize | undefined,
+  ) => {
+    setCharacter((c) =>
+      withEndowmentOnCharacter(c, {
+        ...c.endowment,
+        [key]: size,
+        ...(key === 'vaginaSize' && size
+          ? { vaginaPresent: true }
+          : {}),
+      }),
+    )
+  }
+
+  const handleGenderChange = (gender: string) => {
+    const trait =
+      gender === 'Agender' && character.genitalTrait
+        ? character.genitalTrait
+        : defaultGenitalTraitForGender(gender)
+    setCharacter((c) =>
+      applyGenitalTraitSelection({ ...c, genderIdentity: gender }, trait),
+    )
+  }
+
+  const handleGenitalTraitChange = (trait: GenitalTraitId) => {
+    setCharacter((c) => applyGenitalTraitSelection(c, trait))
+  }
+
+  const handleRandomizeAll = () => {
+    if (
+      !window.confirm(
+        'Replace this sheet with a fully randomized character? Unsaved edits will be lost.',
+      )
+    ) {
+      return
+    }
+    clearDraft()
+    setCharacter(withMergedProficiencies(generateRandomCharacter()))
+    setStep(0)
+    setCopyHint(null)
+    setPersistHint('Randomized a full character.')
+    window.setTimeout(() => setPersistHint(null), 2500)
   }
 
   return (
@@ -356,6 +545,9 @@ export function CharacterCreatorPage() {
       <h1 className="page-title">Create character</h1>
 
       <div className="creator-persist-toolbar" role="region" aria-label="Save and export">
+        <button type="button" className="btn btn-primary" onClick={handleRandomizeAll}>
+          Randomize all
+        </button>
         <button type="button" className="btn" onClick={handleSaveToLibrary}>
           Save to this device
         </button>
@@ -384,8 +576,9 @@ export function CharacterCreatorPage() {
           onChange={handleImportJsonFile}
         />
         <p className="hint" style={{ margin: 0, flex: '1 1 12rem' }}>
-          Your work autosaves as a draft on this browser. Use <strong>Save to this device</strong>{' '}
-          to pin a copy in the saved list.
+          Opening <strong>Create</strong> starts a new character. Your work autosaves while you
+          edit (refresh restores it). Use <strong>Save to this device</strong> to pin a copy in
+          the saved list.
         </p>
         {persistHint && <span className="muted">{persistHint}</span>}
       </div>
@@ -421,38 +614,51 @@ export function CharacterCreatorPage() {
           </div>
           <div className="creator-field">
             <label htmlFor="char-pronouns">Pronouns</label>
-            <input
+            <select
               id="char-pronouns"
-              type="text"
-              autoComplete="off"
-              value={character.pronouns}
+              value={isPronounOption(character.pronouns) ? character.pronouns : ''}
               onChange={(e) =>
                 setCharacter((c) => ({ ...c, pronouns: e.target.value }))
               }
-              placeholder="e.g. she/her, they/them"
-            />
+            >
+              <option value="" disabled>
+                Select pronouns
+              </option>
+              {PRONOUNS.map((p) => (
+                <option key={p} value={p}>
+                  {p}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="creator-field">
             <label htmlFor="char-gender">Gender</label>
-            <output id="char-gender" className="creator-derived-value">
-              {derivedGender || 'Configure endowment below'}
-            </output>
+            <select
+              id="char-gender"
+              value={isCanonicalGender(character.genderIdentity) ? character.genderIdentity : ''}
+              onChange={(e) => handleGenderChange(e.target.value)}
+            >
+              <option value="" disabled>
+                Select gender
+              </option>
+              {GENDERS.map((g) => (
+                <option key={g} value={g}>
+                  {g}
+                </option>
+              ))}
+            </select>
             <p className="hint">
-              Derived from endowment: phallus only = Male; phallus + vagina = Hermaphrodite; vagina
-              only = Cuntboy; vagina + breasts = Female; phallus + breasts = Shemale. Set pronouns
-              freely above.
+              Gender sets a default genital trait (Male → Phallic, Female → Vaginal, Intersex →
+              Hermaphrodite). You can override the trait below.
             </p>
           </div>
           <div className="creator-field">
             <label htmlFor="char-genital-trait">Genital trait</label>
             <select
               id="char-genital-trait"
-              value={character.genitalTrait ?? inferGenitalTraitFromCharacter(character)}
+              value={activeGenitalTrait}
               onChange={(e) =>
-                setCharacter((c) => ({
-                  ...c,
-                  genitalTrait: e.target.value as GenitalTraitId,
-                }))
+                handleGenitalTraitChange(e.target.value as GenitalTraitId)
               }
             >
               {GENITAL_TRAIT_DEFINITIONS.map((def) => (
@@ -462,24 +668,13 @@ export function CharacterCreatorPage() {
               ))}
             </select>
             <p className="hint">
-              {
-                GENITAL_TRAIT_DEFINITIONS.find(
-                  (d) =>
-                    d.id ===
-                    (character.genitalTrait ?? inferGenitalTraitFromCharacter(character)),
-                )?.summary
-              }
+              {GENITAL_TRAIT_DEFINITIONS.find((d) => d.id === activeGenitalTrait)?.summary}
             </p>
+            <p className="hint">{describeEndowmentShape(activeGenitalTrait)}</p>
             <details className="creator-genital-tooltip">
               <summary>Rules for this genital trait</summary>
               <p>
-                {
-                  GENITAL_TRAIT_DEFINITIONS.find(
-                    (d) =>
-                      d.id ===
-                      (character.genitalTrait ?? inferGenitalTraitFromCharacter(character)),
-                  )?.tooltip
-                }
+                {GENITAL_TRAIT_DEFINITIONS.find((d) => d.id === activeGenitalTrait)?.tooltip}
               </p>
             </details>
             <label className="creator-checkbox" style={{ marginTop: '0.5rem' }}>
@@ -528,7 +723,7 @@ export function CharacterCreatorPage() {
                   <button
                     type="button"
                     className="btn"
-                    onClick={() => updateAbilityScore(key, rollStat4d6DropLowest())}
+                    onClick={() => rollOneAbilityWithSpectacle(key, label)}
                   >
                     Roll
                   </button>
@@ -538,18 +733,47 @@ export function CharacterCreatorPage() {
             <div style={{ marginTop: '0.5rem' }}>
               <button
                 type="button"
-                className="btn"
-                onClick={() =>
-                  setCharacter((c) =>
-                    applyDerivedCharacterRules({
-                      ...c,
-                      abilityScores: rollAllAbilityScores(),
-                    }),
-                  )
-                }
+                className="btn btn-primary"
+                onClick={rollAllAbilitiesWithSpectacle}
               >
                 Roll all abilities (4d6 drop lowest)
               </button>
+            </div>
+            <div className="creator-dice-tray" style={{ marginTop: '0.85rem' }}>
+              <label htmlFor="fun-die-sides">Dice tray</label>
+              <p className="hint" style={{ marginTop: 0 }}>
+                Send fantasy polyhedrals tumbling across the screen — d4 through d100.
+              </p>
+              <div className="creator-inline-row" style={{ flexWrap: 'wrap', gap: '0.5rem' }}>
+                <select
+                  id="fun-die-sides"
+                  value={funDieSides}
+                  onChange={(e) => setFunDieSides(Number(e.target.value) as DiceSides)}
+                >
+                  {DICE_SIDES.map((sides) => (
+                    <option key={sides} value={sides}>
+                      {labelForSides(sides)}
+                    </option>
+                  ))}
+                </select>
+                <label className="creator-inline-label" htmlFor="fun-die-count">
+                  Count
+                  <input
+                    id="fun-die-count"
+                    type="number"
+                    min={1}
+                    max={20}
+                    value={funDieCount}
+                    onChange={(e) =>
+                      setFunDieCount(Math.max(1, Math.min(20, Number(e.target.value) || 1)))
+                    }
+                    style={{ width: '4.5rem', marginLeft: '0.35rem' }}
+                  />
+                </label>
+                <button type="button" className="btn" onClick={rollFunDiceWithSpectacle}>
+                  Roll across screen
+                </button>
+              </div>
             </div>
           </div>
           <div className="creator-field">
@@ -587,24 +811,9 @@ export function CharacterCreatorPage() {
             />
           </div>
           <div className="creator-field">
-            <label htmlFor="endowment-anatomy">Breasts &amp; phallus</label>
-            <select
-              id="endowment-anatomy"
-              value={character.endowment.anatomy}
-              onChange={(e) =>
-                setEndowmentAnatomy(
-                  e.target.value as EdndCharacter['endowment']['anatomy'],
-                )
-              }
-            >
-              {ENDOWMENT_ANATOMY_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-            <p className="hint">
-              {ENDOWMENT_SIZE_RULE} Toggle vagina below when it applies—gender updates automatically.
+            <label>Endowment measurements</label>
+            <p className="hint" style={{ marginTop: 0 }}>
+              {describeEndowmentShape(activeGenitalTrait)} {ENDOWMENT_SIZE_RULE}
             </p>
             <div className="hint" style={{ marginTop: '0.35rem' }}>
               <strong>Sheet readout:</strong>
@@ -615,135 +824,135 @@ export function CharacterCreatorPage() {
               </ul>
             </div>
           </div>
-          {(character.endowment.anatomy === 'breasts' ||
-            character.endowment.anatomy === 'both') && (
+          {endowmentShape.hasBreasts && (
             <div className="creator-field creator-field--inline-actions">
-              <label>Breasts endowment (1d6)</label>
+              <label htmlFor="endowment-breasts">Breasts size</label>
               <div className="creator-inline-row">
-                <input
-                  type="text"
-                  readOnly
-                  value={character.endowment.breastsSize ?? 'Not rolled'}
-                />
+                <select
+                  id="endowment-breasts"
+                  value={character.endowment.breastsSize ?? ''}
+                  onChange={(e) =>
+                    setEndowmentSize(
+                      'breastsSize',
+                      isEndowmentSize(e.target.value) ? e.target.value : undefined,
+                    )
+                  }
+                >
+                  <option value="" disabled>
+                    Select size
+                  </option>
+                  {ENDOWMENT_SIZES.map((size) => (
+                    <option key={size} value={size}>
+                      {size}
+                    </option>
+                  ))}
+                </select>
                 <button
                   type="button"
                   className="btn"
-                  onClick={() =>
-                    setCharacter((c) => ({
-                      ...c,
-                      endowment: {
-                        ...c.endowment,
-                        breastsSize: rollEndowmentSize(),
-                      },
-                    }))
-                  }
+                  onClick={() => setEndowmentSize('breastsSize', rollEndowmentSize())}
                 >
-                  Roll breasts
+                  Roll (1d6)
                 </button>
               </div>
             </div>
           )}
-          {(character.endowment.anatomy === 'phallus' ||
-            character.endowment.anatomy === 'both') && (
+          {endowmentShape.hasPhallus && (
             <div className="creator-field creator-field--inline-actions">
-              <label>Phallus endowment (1d6)</label>
+              <label htmlFor="endowment-phallus">Phallus size</label>
               <div className="creator-inline-row">
-                <input
-                  type="text"
-                  readOnly
-                  value={character.endowment.phallusSize ?? 'Not rolled'}
-                />
+                <select
+                  id="endowment-phallus"
+                  value={character.endowment.phallusSize ?? ''}
+                  onChange={(e) =>
+                    setEndowmentSize(
+                      'phallusSize',
+                      isEndowmentSize(e.target.value) ? e.target.value : undefined,
+                    )
+                  }
+                >
+                  <option value="" disabled>
+                    Select size
+                  </option>
+                  {ENDOWMENT_SIZES.map((size) => (
+                    <option key={size} value={size}>
+                      {size}
+                    </option>
+                  ))}
+                </select>
                 <button
                   type="button"
                   className="btn"
-                  onClick={() =>
-                    setCharacter((c) => ({
-                      ...c,
-                      endowment: {
-                        ...c.endowment,
-                        phallusSize: rollEndowmentSize(),
-                      },
-                    }))
-                  }
+                  onClick={() => setEndowmentSize('phallusSize', rollEndowmentSize())}
                 >
-                  Roll phallus
+                  Roll (1d6)
                 </button>
               </div>
             </div>
           )}
-          {character.endowment.anatomy === 'both' && (
+          {endowmentShape.hasVagina && (
+            <div className="creator-field creator-field--inline-actions">
+              <label htmlFor="endowment-vagina">Vagina size</label>
+              <div className="creator-inline-row">
+                <select
+                  id="endowment-vagina"
+                  value={character.endowment.vaginaSize ?? ''}
+                  onChange={(e) =>
+                    setEndowmentSize(
+                      'vaginaSize',
+                      isEndowmentSize(e.target.value) ? e.target.value : undefined,
+                    )
+                  }
+                >
+                  <option value="" disabled>
+                    Select size
+                  </option>
+                  {ENDOWMENT_SIZES.map((size) => (
+                    <option key={size} value={size}>
+                      {size}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={() => setEndowmentSize('vaginaSize', rollEndowmentSize())}
+                >
+                  Roll (1d6)
+                </button>
+              </div>
+            </div>
+          )}
+          {(endowmentShape.hasBreasts ||
+            endowmentShape.hasPhallus ||
+            endowmentShape.hasVagina) && (
             <div className="creator-field">
               <button
                 type="button"
                 className="btn"
                 onClick={() =>
-                  setCharacter((c) => ({
-                    ...c,
-                    endowment: {
+                  setCharacter((c) => {
+                    const shape = endowmentShapeFromGenitalTrait(
+                      c.genitalTrait ?? inferGenitalTraitFromCharacter(c),
+                    )
+                    return withEndowmentOnCharacter(c, {
                       ...c.endowment,
-                      breastsSize: rollEndowmentSize(),
-                      phallusSize: rollEndowmentSize(),
-                    },
-                  }))
+                      breastsSize: shape.hasBreasts
+                        ? rollEndowmentSize()
+                        : undefined,
+                      phallusSize: shape.hasPhallus
+                        ? rollEndowmentSize()
+                        : undefined,
+                      vaginaPresent: shape.hasVagina,
+                      vaginaSize: shape.hasVagina ? rollEndowmentSize() : undefined,
+                    })
+                  })
                 }
               >
-                Roll both endowments
+                Roll all present endowments
               </button>
             </div>
           )}
-          <div className="creator-field">
-            <label className="creator-checkbox-label">
-              <input
-                type="checkbox"
-                checked={vaginaChecked}
-                onChange={(e) =>
-                  setCharacter((c) =>
-                    withEndowmentOnCharacter(c, {
-                      ...c.endowment,
-                      vaginaPresent: e.target.checked,
-                      vaginaSize: e.target.checked ? c.endowment.vaginaSize : undefined,
-                    }),
-                  )
-                }
-              />
-              Has vagina (same 1d6 size categories)
-            </label>
-            <p className="hint" style={{ marginTop: '0.35rem' }}>
-              Vagina with phallus makes Hermaphrodite; vagina with breasts makes Female; vagina
-              alone makes Cuntboy. Roll size when you are ready.
-            </p>
-              {vaginaChecked && (
-                <div
-                  className="creator-field creator-field--inline-actions"
-                  style={{ marginTop: '0.5rem' }}
-                >
-                  <label>Vagina endowment (1d6)</label>
-                  <div className="creator-inline-row">
-                    <input
-                      type="text"
-                      readOnly
-                      value={character.endowment.vaginaSize ?? 'Not rolled'}
-                    />
-                    <button
-                      type="button"
-                      className="btn"
-                      onClick={() =>
-                        setCharacter((c) => ({
-                          ...c,
-                          endowment: {
-                            ...c.endowment,
-                            vaginaPresent: true,
-                            vaginaSize: rollEndowmentSize(),
-                          },
-                        }))
-                      }
-                    >
-                      Roll vagina
-                    </button>
-                  </div>
-                </div>
-              )}
-          </div>
         </section>
       )}
 
@@ -763,6 +972,10 @@ export function CharacterCreatorPage() {
                     ...c,
                     species: e.target.value,
                     portraitSrc: undefined,
+                    heightInches: undefined,
+                    weightLbs: undefined,
+                    heightModifierRoll: undefined,
+                    weightModifierRoll: undefined,
                   }),
                 )
               }
@@ -777,6 +990,61 @@ export function CharacterCreatorPage() {
           </div>
           {speciesRow && (
             <>
+              <div className="creator-field">
+                <label htmlFor="char-body-type">Body type</label>
+                <div className="creator-inline-row" style={{ flexWrap: 'wrap', gap: '0.5rem' }}>
+                  <select
+                    id="char-body-type"
+                    value={isBodyType(character.bodyType ?? '') ? character.bodyType : ''}
+                    onChange={(e) => {
+                      if (isBodyType(e.target.value)) applyBodyType(e.target.value)
+                    }}
+                  >
+                    <option value="" disabled>
+                      Select body type
+                    </option>
+                    {BODY_TYPES.map((t) => (
+                      <option key={t} value={t}>
+                        {t}
+                      </option>
+                    ))}
+                  </select>
+                  <button type="button" className="btn" onClick={rollBodyTypeWithSpectacle}>
+                    Roll body type (1d10)
+                  </button>
+                </div>
+                {isBodyType(character.bodyType ?? '') && (
+                  <p className="hint" style={{ marginTop: '0.45rem' }}>
+                    <strong>{character.bodyType}.</strong>{' '}
+                    {BODY_TYPE_DESCRIPTIONS[character.bodyType as BodyType]}
+                  </p>
+                )}
+              </div>
+              <div className="creator-field">
+                <label>Height &amp; weight</label>
+                <p className="hint" style={{ marginTop: 0 }}>
+                  {describeSpeciesHeightWeightFormula(character.species)} Body type scales the
+                  final weight.
+                </p>
+                <div className="creator-inline-row" style={{ flexWrap: 'wrap', gap: '0.5rem' }}>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    disabled={!isBodyType(character.bodyType ?? '')}
+                    onClick={rollHeightWeightWithSpectacle}
+                  >
+                    Roll height &amp; weight
+                  </button>
+                  {typeof character.heightInches === 'number' &&
+                    typeof character.weightLbs === 'number' && (
+                      <span className="creator-derived-value">
+                        {formatHeightInches(character.heightInches)} ·{' '}
+                        {formatWeightLbs(character.weightLbs)}
+                        {character.bodyType ? ` · ${character.bodyType}` : ''}
+                      </span>
+                    )}
+                </div>
+              </div>
               <PortraitPicker
                 character={character}
                 onChange={(portraitSrc) => setCharacter((c) => ({ ...c, portraitSrc }))}
@@ -1252,6 +1520,15 @@ export function CharacterCreatorPage() {
           </button>
         )}
       </div>
+
+      {spectacle && (
+        <DiceRollOverlay
+          dice={spectacle.dice}
+          title={spectacle.title}
+          subtitle={spectacle.subtitle}
+          onComplete={finishSpectacle}
+        />
+      )}
     </div>
   )
 }

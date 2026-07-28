@@ -115,14 +115,31 @@ export interface EdndCharacter {
   pronouns: string
 
   /**
-   * Anatomy-derived gender (Male, Hermaphrodite, Cuntboy, Female, Shemale).
-   * Set automatically from endowment in the creator; pronouns remain a separate field.
+   * Player-chosen gender identity (Male, Female, Intersex, Agender).
+   * Independent of endowment / genital trait configuration.
    */
 
   genderIdentity: string
 
   /** Optional override for sheet/creator art (`/portraits/...`). Falls back to species + gender default. */
   portraitSrc?: string
+
+  /**
+   * Body build (Frail…Giant). Affects weight after traditional height/weight rolls.
+   */
+  bodyType?: string
+
+  /** Total height in inches (base + height modifier). */
+  heightInches?: number
+
+  /** Final weight in pounds after body-type factor. */
+  weightLbs?: number
+
+  /** Raw height-modifier dice total (for re-applying body type to weight). */
+  heightModifierRoll?: number
+
+  /** Raw weight-modifier dice/quantity total. */
+  weightModifierRoll?: number
 
   species: SpeciesId
 

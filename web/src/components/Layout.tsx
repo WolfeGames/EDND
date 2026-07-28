@@ -1,7 +1,14 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import './Layout.css'
 
+function createPath(): string {
+  return `/create?new=1&_=${Date.now()}`
+}
+
 export function Layout() {
+  const location = useLocation()
+  const navigate = useNavigate()
+
   return (
     <div className="app-shell">
       <header className="app-header">
@@ -16,8 +23,15 @@ export function Layout() {
             Saved
           </NavLink>
           <NavLink
-            to="/create"
-            className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+            to="/create?new=1"
+            className={({ isActive }) =>
+              isActive || location.pathname === '/create' ? 'nav-link active' : 'nav-link'
+            }
+            onClick={(e) => {
+              // Always start a new sheet, even when Create is already open.
+              e.preventDefault()
+              navigate(createPath())
+            }}
           >
             Create
           </NavLink>

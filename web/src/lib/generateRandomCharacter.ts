@@ -17,8 +17,13 @@ import { normalizeCharacterBiology } from './biologicalSex'
 import {
   pickRandomGender,
   rollPronounsForGender,
-  rollRandomEndowmentForGender,
 } from './anatomyGender'
+import { rollEndowmentSize, normalizedEndowment } from './endowment'
+import {
+  defaultGenitalTraitForGender,
+  endowmentShapeFromGenitalTrait,
+} from './genitalTrait'
+import { rollPhysiqueForSpecies, rollRandomBodyType } from './physique'
 import {
   getCarnalClassTraitSlotCount,
   getSexualHistoryTraitSlotCount,
@@ -162,6 +167,15 @@ export function generateRandomCharacter(
 
   const { genderIdentity, pronouns } = rollIdentity(f)
   const abilityScores = rollAllAbilityScores()
+  const genitalTrait = defaultGenitalTraitForGender(genderIdentity)
+  const endowmentShape = endowmentShapeFromGenitalTrait(genitalTrait)
+  const endowment = normalizedEndowment({
+    anatomy: endowmentShape.anatomy,
+    vaginaPresent: endowmentShape.vaginaPresent,
+    breastsSize: endowmentShape.hasBreasts ? rollEndowmentSize() : undefined,
+    phallusSize: endowmentShape.hasPhallus ? rollEndowmentSize() : undefined,
+    vaginaSize: endowmentShape.hasVagina ? rollEndowmentSize() : undefined,
+  })
 
   const baseTraits = createEmptyEroticTraits()
   const merged = mergeTableProficiencies(sp.id, hist.id, carnalCl?.id, {
@@ -178,6 +192,8 @@ export function generateRandomCharacter(
   })
 
   const speciesId = resolveSpeciesTableId(sp.id)
+  const { bodyType } = rollRandomBodyType()
+  const physique = rollPhysiqueForSpecies(speciesId, bodyType)
   const carnalClassId = carnalCl?.id
   const sexualHistoryId = hist.id
   const portraitSrc =
@@ -188,9 +204,15 @@ export function generateRandomCharacter(
     name: rollFantasyNameForSpecies(speciesId),
     pronouns,
     genderIdentity,
+    genitalTrait,
+    bodyType: physique.bodyType,
+    heightInches: physique.heightInches,
+    weightLbs: physique.weightLbs,
+    heightModifierRoll: physique.heightModifier,
+    weightModifierRoll: physique.weightModifier,
     level,
     abilityScores,
-    endowment: rollRandomEndowmentForGender(genderIdentity as GenderOption),
+    endowment,
     adventuringClass: adv,
     background: bg,
     species: speciesId,

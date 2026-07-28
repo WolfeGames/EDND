@@ -10,21 +10,7 @@ export function endowmentFlags(e: EndowmentProfile) {
   return { hasPhallus, hasBreasts, hasVagina }
 }
 
-/**
- * Gender is derived from endowment:
- * phallus only → Male; phallus + vagina → Hermaphrodite; vagina only → Cuntboy;
- * vagina + breasts → Female; phallus + breasts → Shemale.
- */
-export function deriveGenderFromEndowment(e: EndowmentProfile): GenderOption | '' {
-  const { hasPhallus, hasBreasts, hasVagina } = endowmentFlags(e)
-  if (hasPhallus && hasVagina) return 'Hermaphrodite'
-  if (hasPhallus && hasBreasts) return 'Shemale'
-  if (hasPhallus) return 'Male'
-  if (hasVagina && hasBreasts) return 'Female'
-  if (hasVagina) return 'Cuntboy'
-  return ''
-}
-
+/** Typical endowment rolled for a gender when generating a random character. */
 export function rollRandomEndowmentForGender(gender: GenderOption): EndowmentProfile {
   switch (gender) {
     case 'Male':
@@ -33,19 +19,6 @@ export function rollRandomEndowmentForGender(gender: GenderOption): EndowmentPro
         phallusSize: rollEndowmentSize(),
         vaginaPresent: false,
       }
-    case 'Hermaphrodite':
-      return {
-        anatomy: 'phallus',
-        phallusSize: rollEndowmentSize(),
-        vaginaPresent: true,
-        vaginaSize: rollEndowmentSize(),
-      }
-    case 'Cuntboy':
-      return {
-        anatomy: 'neither',
-        vaginaPresent: true,
-        vaginaSize: rollEndowmentSize(),
-      }
     case 'Female':
       return {
         anatomy: 'breasts',
@@ -53,13 +26,18 @@ export function rollRandomEndowmentForGender(gender: GenderOption): EndowmentPro
         vaginaPresent: true,
         vaginaSize: rollEndowmentSize(),
       }
-    case 'Shemale':
+    case 'Intersex':
       return {
         anatomy: 'both',
         breastsSize: rollEndowmentSize(),
         phallusSize: rollEndowmentSize(),
-        vaginaPresent: false,
+        vaginaPresent: true,
+        vaginaSize: rollEndowmentSize(),
       }
+    case 'Agender': {
+      const pool: GenderOption[] = ['Male', 'Female', 'Intersex']
+      return rollRandomEndowmentForGender(pool[Math.floor(Math.random() * pool.length)]!)
+    }
   }
 }
 
@@ -72,15 +50,17 @@ export function pickRandomGender(): GenderOption {
   return GENDERS[Math.floor(Math.random() * GENDERS.length)]!
 }
 
+/** Update endowment without overwriting the player's chosen gender identity. */
 export function withEndowmentOnCharacter(
   c: EdndCharacter,
   endowment: EndowmentProfile,
 ): EdndCharacter {
   const normalized = normalizedEndowment(endowment)
-  const genderIdentity = deriveGenderFromEndowment(normalized)
-  return syncGenitalTraitWithBiology({
-    ...c,
-    endowment: normalized,
-    genderIdentity,
-  })
+  return syncGenitalTraitWithBiology(
+    {
+      ...c,
+      endowment: normalized,
+    },
+    { preserveExplicitChoice: true },
+  )
 }

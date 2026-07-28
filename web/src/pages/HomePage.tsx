@@ -18,7 +18,7 @@ export function HomePage() {
           </Link>
         </li>
         <li>
-          <Link to="/create" className="card-link">
+          <Link to="/create?new=1" className="card-link">
             <span className="card-link-title">Character creation</span>
             <span className="card-link-desc">
               Step through species, class, background, carnal options, and erotic traits.

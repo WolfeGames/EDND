@@ -126,6 +126,22 @@ export function parseCharacterJson(json: unknown): EdndCharacter {
   const portraitRaw = str(json.portraitSrc, '').trim()
   const portraitSrc = portraitRaw && isKnownPortraitSrc(portraitRaw) ? portraitRaw : undefined
 
+  const bodyType = str(json.bodyType, '').trim() || undefined
+  const heightInches =
+    json.heightInches === undefined
+      ? undefined
+      : num(json.heightInches, 0, 1, 200)
+  const weightLbs =
+    json.weightLbs === undefined ? undefined : num(json.weightLbs, 0, 1, 2000)
+  const heightModifierRoll =
+    json.heightModifierRoll === undefined
+      ? undefined
+      : num(json.heightModifierRoll, 0, 0, 100)
+  const weightModifierRoll =
+    json.weightModifierRoll === undefined
+      ? undefined
+      : num(json.weightModifierRoll, 0, 0, 100)
+
   const draft: EdndCharacter = {
     ...base,
     id,
@@ -133,6 +149,11 @@ export function parseCharacterJson(json: unknown): EdndCharacter {
     pronouns: str(json.pronouns, ''),
     genderIdentity: str(json.genderIdentity, ''),
     portraitSrc,
+    bodyType,
+    heightInches,
+    weightLbs,
+    heightModifierRoll,
+    weightModifierRoll,
     genitalTrait,
     hasGenitalShift,
     fertilityBonus,

@@ -17,7 +17,12 @@ import './App.css'
 
 function CreateCharacterRoute() {
   const loc = useLocation()
-  return <CharacterCreatorPage key={`${loc.pathname}${loc.search}`} />
+  const params = new URLSearchParams(loc.search)
+  const id = params.get('id')
+  const bust = params.get('_')
+  // Remount when editing a save or explicitly starting a new sheet.
+  const key = id ? `edit-${id}` : bust ? `new-${bust}` : `create-${loc.key}`
+  return <CharacterCreatorPage key={key} />
 }
 
 export default function App() {

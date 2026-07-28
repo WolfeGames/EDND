@@ -4,10 +4,9 @@ import {
   characterHasEndowedTrait,
   getSheetEndowmentProfile,
 } from '../lib/endowedTrait'
-import {
-  ENDOWMENT_SIZE_RULE,
-  formatEndowmentLines,
-} from '../lib/endowment'
+import { ENDOWMENT_SIZE_RULE, formatEndowmentLines } from '../lib/endowment'
+import { formatHeightInches, formatWeightLbs } from '../lib/physique'
+import { BODY_TYPE_DESCRIPTIONS, isBodyType } from '../data/bodyTypes'
 import { formatRuleKey } from '../lib/formatRuleKey'
 import { parseFeatureLevelRequirement } from '../lib/parseFeatureLevelRequirement'
 import { resolveCarnalTraitLabels } from '../lib/resolveCarnalTraitLabels'
@@ -178,7 +177,9 @@ function FeatureRuleBlock({
 
 export function CharacterSummary({ character }: { character: EdndCharacter }) {
   const teaserTitleId = useId()
+  const beautyMathId = useId()
   const [teaserOpen, setTeaserOpen] = useState(false)
+  const [beautyMathPinned, setBeautyMathPinned] = useState(false)
   const [teaserLines, setTeaserLines] = useState<string[]>([])
 
   const speciesRow = useMemo(
@@ -227,18 +228,17 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
     [character.species],
   )
 
-  const beautyTooltip = useMemo(() => {
+  const beautyMathLines = useMemo(() => {
     const bc = character.eroticTraits.beautyClass
     const bm = character.eroticTraits.beautyModifier
     return [
       'Beauty class sums your presence, allure, and how the world reads your desirability.',
-      '',
-      `Formula: 10 + highest ability modifier (${highestMod}) + beauty modifier from tables and features (${bm}).`,
+      `Formula: 10 + highest ability modifier (${highestMod >= 0 ? '+' : ''}${highestMod}) + beauty modifier from tables and features (${bm >= 0 ? '+' : ''}${bm}).`,
       `Recomputed baseline: ${beautyFormulaValue}.`,
       bc === beautyFormulaValue
         ? 'Stored value matches the formula.'
         : `Note: sheet shows ${bc}; if this differs from ${beautyFormulaValue}, re-apply rules or refresh the character.`,
-    ].join('\n')
+    ]
   }, [
     beautyFormulaValue,
     character.eroticTraits.beautyClass,
@@ -303,6 +303,15 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
     return () => window.removeEventListener('keydown', onKey)
   }, [closeTeaser, teaserOpen])
 
+  useEffect(() => {
+    if (!beautyMathPinned) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setBeautyMathPinned(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [beautyMathPinned])
+
   return (
     <div className="character-summary immersive-sheet">
       <div className="immersive-sheet__ambient" aria-hidden />
@@ -349,13 +358,36 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
           </div>
         </div>
 
-        <div className="immersive-hero__beauty" title={beautyTooltip}>
-          <span className="immersive-hero__beauty-label">Beauty class</span>
-          <span className="immersive-hero__beauty-value">
-            {character.eroticTraits.beautyClass}
-          </span>
-          <span className="immersive-hero__beauty-hint">Hover for the math</span>
-        </div>
+        <button
+          type="button"
+          className={
+            beautyMathPinned
+              ? 'immersive-hero__beauty immersive-hero__beauty--pinned'
+              : 'immersive-hero__beauty'
+          }
+          aria-describedby={beautyMathId}
+          aria-expanded={beautyMathPinned}
+          aria-label={`Beauty class ${character.eroticTraits.beautyClass}. Show formula.`}
+          onClick={() => setBeautyMathPinned((open) => !open)}
+          onBlur={(e) => {
+            if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+              setBeautyMathPinned(false)
+            }
+          }}
+        >
+          <div className="immersive-hero__beauty-face" aria-hidden>
+            <span className="immersive-hero__beauty-label">Beauty class</span>
+            <span className="immersive-hero__beauty-value">
+              {character.eroticTraits.beautyClass}
+            </span>
+            <span className="immersive-hero__beauty-hint">Hover or tap for the math</span>
+          </div>
+          <div id={beautyMathId} className="immersive-hero__beauty-math" role="tooltip">
+            {beautyMathLines.map((line) => (
+              <p key={line}>{line}</p>
+            ))}
+          </div>
+        </button>
 
         <div className="immersive-hero__cta">
           <button
@@ -447,6 +479,19 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
           </li>
           {character.pronouns && <li>Pronouns: {character.pronouns}</li>}
           {character.genderIdentity && <li>Gender: {character.genderIdentity}</li>}
+          {isBodyType(character.bodyType ?? '') && (
+            <li>
+              Body type: {character.bodyType}
+              <span className="muted"> — {BODY_TYPE_DESCRIPTIONS[character.bodyType!]}</span>
+            </li>
+          )}
+          {typeof character.heightInches === 'number' &&
+            typeof character.weightLbs === 'number' && (
+              <li>
+                Height / weight: {formatHeightInches(character.heightInches)} ·{' '}
+                {formatWeightLbs(character.weightLbs)}
+              </li>
+            )}
           <li>
             <strong className="endo-label-tooltip" title={ENDOWMENT_SIZE_RULE}>
               Endowment
