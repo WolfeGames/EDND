@@ -1,8 +1,72 @@
 {
-  "generatedAt": "2026-06-09T02:54:54.451Z",
-  "sourceDir": "C:\\Users\\nicho\\EDND\\web\\public\\portraits",
-  "count": 71,
+  "generatedAt": "2026-07-29T15:03:32.225Z",
+  "sourceDir": "C:\\Users\\nicho\\Documents\\ednd-app\\web\\public\\portraits",
+  "count": 101,
   "entries": [
+    {
+      "filename": "aasimar-f.jpg",
+      "src": "/portraits/aasimar-f.jpg",
+      "speciesId": "aasimar",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Aasimar (female)"
+    },
+    {
+      "filename": "aasimar-m.jpg",
+      "src": "/portraits/aasimar-m.jpg",
+      "speciesId": "aasimar",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Aasimar (male)"
+    },
+    {
+      "filename": "airgenasi-f.jpg",
+      "src": "/portraits/airgenasi-f.jpg",
+      "speciesId": "airgenasi",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Airgenasi (female)"
+    },
+    {
+      "filename": "airgenasi-m.jpg",
+      "src": "/portraits/airgenasi-m.jpg",
+      "speciesId": "airgenasi",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Airgenasi (male)"
+    },
+    {
+      "filename": "bugbear-f.jpg",
+      "src": "/portraits/bugbear-f.jpg",
+      "speciesId": "bugbear",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Bugbear (female)"
+    },
+    {
+      "filename": "bugbear-m.jpg",
+      "src": "/portraits/bugbear-m.jpg",
+      "speciesId": "bugbear",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Bugbear (male)"
+    },
+    {
+      "filename": "centaur-f.jpg",
+      "src": "/portraits/centaur-f.jpg",
+      "speciesId": "centaur",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Centaur (female)"
+    },
+    {
+      "filename": "centaur-m.jpg",
+      "src": "/portraits/centaur-m.jpg",
+      "speciesId": "centaur",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Centaur (male)"
+    },
     {
       "filename": "dragonborn-f-red.jpg",
       "src": "/portraits/dragonborn-f-red.jpg",
@@ -221,6 +285,22 @@
       "label": "Drow (male)"
     },
     {
+      "filename": "duergar-f.jpg",
+      "src": "/portraits/duergar-f.jpg",
+      "speciesId": "duergar",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Duergar (female)"
+    },
+    {
+      "filename": "duergar-m.jpg",
+      "src": "/portraits/duergar-m.jpg",
+      "speciesId": "duergar",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Duergar (male)"
+    },
+    {
       "filename": "dwarf-f-courtesan.jpg",
       "src": "/portraits/dwarf-f-courtesan.jpg",
       "speciesId": "hilldwarf",
@@ -255,6 +335,22 @@
       "label": "Hilldwarf (they/them)"
     },
     {
+      "filename": "earthgenasi-f.jpg",
+      "src": "/portraits/earthgenasi-f.jpg",
+      "speciesId": "earthgenasi",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Earthgenasi (female)"
+    },
+    {
+      "filename": "earthgenasi-m.jpg",
+      "src": "/portraits/earthgenasi-m.jpg",
+      "speciesId": "earthgenasi",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Earthgenasi (male)"
+    },
+    {
       "filename": "elf-f-divineconsort.jpg",
       "src": "/portraits/elf-f-divineconsort.jpg",
       "speciesId": "highelf",
@@ -262,6 +358,38 @@
       "roleId": "divine-consort",
       "variantTags": [],
       "label": "Highelf (female) — Divine Consort"
+    },
+    {
+      "filename": "firbolg-f.jpg",
+      "src": "/portraits/firbolg-f.jpg",
+      "speciesId": "firbolg",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Firbolg (female)"
+    },
+    {
+      "filename": "firbolg-m.jpg",
+      "src": "/portraits/firbolg-m.jpg",
+      "speciesId": "firbolg",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Firbolg (male)"
+    },
+    {
+      "filename": "firegenasi-f.jpg",
+      "src": "/portraits/firegenasi-f.jpg",
+      "speciesId": "firegenasi",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Firegenasi (female)"
+    },
+    {
+      "filename": "firegenasi-m.jpg",
+      "src": "/portraits/firegenasi-m.jpg",
+      "speciesId": "firegenasi",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Firegenasi (male)"
     },
     {
       "filename": "gnome-f-carnalartificer.jpg",
@@ -312,6 +440,22 @@
       "genderToken": "m",
       "variantTags": [],
       "label": "Goblin (male)"
+    },
+    {
+      "filename": "goliath-f.jpg",
+      "src": "/portraits/goliath-f.jpg",
+      "speciesId": "goliath",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Goliath (female)"
+    },
+    {
+      "filename": "goliath-m.jpg",
+      "src": "/portraits/goliath-m.jpg",
+      "speciesId": "goliath",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Goliath (male)"
     },
     {
       "filename": "halfling-f-lustbound.jpg",
@@ -413,6 +557,22 @@
       "label": "Highelf (male)"
     },
     {
+      "filename": "hobgoblin-f.jpg",
+      "src": "/portraits/hobgoblin-f.jpg",
+      "speciesId": "hobgoblin",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Hobgoblin (female)"
+    },
+    {
+      "filename": "hobgoblin-m.jpg",
+      "src": "/portraits/hobgoblin-m.jpg",
+      "speciesId": "hobgoblin",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Hobgoblin (male)"
+    },
+    {
       "filename": "human-dwarf-m-courtesan.jpg",
       "src": "/portraits/human-dwarf-m-courtesan.jpg",
       "speciesId": "human",
@@ -463,6 +623,38 @@
       "genderToken": "m",
       "variantTags": [],
       "label": "Human (male)"
+    },
+    {
+      "filename": "minotaur-f.jpg",
+      "src": "/portraits/minotaur-f.jpg",
+      "speciesId": "minotaur",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Minotaur (female)"
+    },
+    {
+      "filename": "minotaur-m.jpg",
+      "src": "/portraits/minotaur-m.jpg",
+      "speciesId": "minotaur",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Minotaur (male)"
+    },
+    {
+      "filename": "mountaindwarf-f.jpg",
+      "src": "/portraits/mountaindwarf-f.jpg",
+      "speciesId": "mountaindwarf",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Mountaindwarf (female)"
+    },
+    {
+      "filename": "mountaindwarf-m.jpg",
+      "src": "/portraits/mountaindwarf-m.jpg",
+      "speciesId": "mountaindwarf",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Mountaindwarf (male)"
     },
     {
       "filename": "orc-f-2.jpg",
@@ -531,6 +723,38 @@
       "genderToken": "m",
       "variantTags": [],
       "label": "Orc (male)"
+    },
+    {
+      "filename": "satyr-f.jpg",
+      "src": "/portraits/satyr-f.jpg",
+      "speciesId": "satyr",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Satyr (female)"
+    },
+    {
+      "filename": "satyr-m.jpg",
+      "src": "/portraits/satyr-m.jpg",
+      "speciesId": "satyr",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Satyr (male)"
+    },
+    {
+      "filename": "tabaxi-f.jpg",
+      "src": "/portraits/tabaxi-f.jpg",
+      "speciesId": "tabaxi",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Tabaxi (female)"
+    },
+    {
+      "filename": "tabaxi-m.jpg",
+      "src": "/portraits/tabaxi-m.jpg",
+      "speciesId": "tabaxi",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Tabaxi (male)"
     },
     {
       "filename": "tiefling-f-2.jpg",
@@ -620,6 +844,22 @@
       "genderToken": "m",
       "variantTags": [],
       "label": "Tiefling (male)"
+    },
+    {
+      "filename": "watergenasi-f.jpg",
+      "src": "/portraits/watergenasi-f.jpg",
+      "speciesId": "watergenasi",
+      "genderToken": "f",
+      "variantTags": [],
+      "label": "Watergenasi (female)"
+    },
+    {
+      "filename": "watergenasi-m.jpg",
+      "src": "/portraits/watergenasi-m.jpg",
+      "speciesId": "watergenasi",
+      "genderToken": "m",
+      "variantTags": [],
+      "label": "Watergenasi (male)"
     },
     {
       "filename": "woodelf-f-courtesan.jpg",

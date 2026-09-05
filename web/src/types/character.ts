@@ -41,6 +41,11 @@ export interface EndowmentProfile {
   anatomy: EndowmentAnatomy
   breastsSize?: EndowmentSize
   phallusSize?: EndowmentSize
+  /**
+   * Optional 1d20 fine measurement for phallus length.
+   * Exact inches = category base (min) + die × 0.1" (a 20 adds 2").
+   */
+  phallusLengthDie?: number
   /** Same 1d6 size categories as breasts/phallus; not used for biological Male in this app. */
   vaginaPresent?: boolean
   vaginaSize?: EndowmentSize
@@ -125,17 +130,34 @@ export interface EdndCharacter {
   portraitSrc?: string
 
   /**
-   * Body build (Frail…Giant). Affects weight after traditional height/weight rolls.
+   * Body build (Frail…Giant). Adjusts base weight / height and may add Str or Dex to height mod.
    */
   bodyType?: string
 
-  /** Total height in inches (base + height modifier). */
+  /**
+   * Creature size category. Humans, elves, and dwarves may choose Medium or Small;
+   * other species use their table default (omitted here).
+   */
+  creatureSize?: 'Medium' | 'Small'
+
+  /**
+   * Continuous paper-doll morph sliders (0–1). When omitted, defaults from body type.
+   */
+  physiqueMorph?: {
+    muscle?: number
+    fat?: number
+    hipWidth?: number
+    legGirth?: number
+    breastScale?: number
+  }
+
+  /** Total height in inches (adjusted base + effective height modifier). */
   heightInches?: number
 
-  /** Final weight in pounds after body-type factor. */
+  /** Final weight in pounds after body-type base-weight factor and height×weight mods. */
   weightLbs?: number
 
-  /** Raw height-modifier dice total (for re-applying body type to weight). */
+  /** Raw height-modifier dice total (ability bonuses reapplied from body type + scores). */
   heightModifierRoll?: number
 
   /** Raw weight-modifier dice/quantity total. */

@@ -1,5 +1,7 @@
 import {
-  BODY_TYPE_WEIGHT_FACTOR,
+  BODY_TYPE_BASE_HEIGHT_BONUS_INCHES,
+  BODY_TYPE_BASE_WEIGHT_FACTOR,
+  BODY_TYPE_HEIGHT_MOD_ABILITY,
   bodyTypeFromD10,
   isBodyType,
   type BodyType,
@@ -9,7 +11,9 @@ import {
   getSpeciesHeightWeightRow,
   type HeightWeightDice,
 } from '../data/heightWeightTables'
+import { abilityModifier } from './abilityScores'
 import { makeSpectacleDie, type DiceSides, type SpectacleDie } from './dice'
+import type { AbilityScores } from '../types/character'
 
 export type DiceExprRoll = {
   total: number
@@ -48,51 +52,106 @@ export type PhysiqueRollResult = {
   bodyType: BodyType
   heightInches: number
   weightLbs: number
+  /** Raw height-dice total (before ability-mod bonuses). */
   heightModifier: number
   weightModifier: number
+  /** Height mod after Lithe/Athletic ability bonuses. */
+  effectiveHeightModifier: number
   heightDiceRolls: number[]
   weightDiceRolls: number[]
   heightDiceSides: DiceSides | 1
   weightDiceSides: DiceSides | 1
   baseWeightLb: number
+  adjustedBaseWeightLb: number
+  adjustedBaseHeightInches: number
 }
 
+export function heightModAbilityBonus(
+  bodyType: BodyType,
+  abilityScores?: Pick<AbilityScores, 'strength' | 'dexterity'>,
+): number {
+  const key = BODY_TYPE_HEIGHT_MOD_ABILITY[bodyType]
+  if (!key || !abilityScores) return 0
+  return abilityModifier(abilityScores[key])
+}
+
+export function computePhysiqueFromMods(args: {
+  speciesId: string
+  bodyType: BodyType
+  /** Raw height-dice total. */
+  heightModifier: number
+  weightModifier: number
+  abilityScores?: Pick<AbilityScores, 'strength' | 'dexterity'>
+}): {
+  heightInches: number
+  weightLbs: number
+  effectiveHeightModifier: number
+  adjustedBaseWeightLb: number
+  adjustedBaseHeightInches: number
+  baseWeightLb: number
+} {
+  const row = getSpeciesHeightWeightRow(args.speciesId)
+  const adjustedBaseHeightInches =
+    row.baseHeightInches + BODY_TYPE_BASE_HEIGHT_BONUS_INCHES[args.bodyType]
+  const adjustedBaseWeightLb =
+    row.baseWeightLb * BODY_TYPE_BASE_WEIGHT_FACTOR[args.bodyType]
+  const effectiveHeightModifier =
+    args.heightModifier + heightModAbilityBonus(args.bodyType, args.abilityScores)
+  const heightInches = adjustedBaseHeightInches + effectiveHeightModifier
+  const weightLbs = Math.max(
+    1,
+    Math.round(adjustedBaseWeightLb + effectiveHeightModifier * args.weightModifier),
+  )
+  return {
+    heightInches,
+    weightLbs,
+    effectiveHeightModifier,
+    adjustedBaseWeightLb,
+    adjustedBaseHeightInches,
+    baseWeightLb: row.baseWeightLb,
+  }
+}
+
+/** @deprecated Use computePhysiqueFromMods — weight is no longer a post-hoc factor on the full total. */
 export function computeWeightLbs(args: {
   baseWeightLb: number
   heightModifier: number
   weightModifier: number
   bodyType: BodyType
 }): number {
-  const traditional = args.baseWeightLb + args.heightModifier * args.weightModifier
-  const factor = BODY_TYPE_WEIGHT_FACTOR[args.bodyType]
-  return Math.max(1, Math.round(traditional * factor))
+  const adjustedBase = args.baseWeightLb * BODY_TYPE_BASE_WEIGHT_FACTOR[args.bodyType]
+  return Math.max(1, Math.round(adjustedBase + args.heightModifier * args.weightModifier))
 }
 
 export function rollPhysiqueForSpecies(
   speciesId: string,
   bodyType: BodyType,
+  abilityScores?: Pick<AbilityScores, 'strength' | 'dexterity'>,
 ): PhysiqueRollResult {
   const row = getSpeciesHeightWeightRow(speciesId)
   const height = rollHeightWeightDice(row.heightDice)
   const weight = rollHeightWeightDice(row.weightDice)
-  const heightInches = row.baseHeightInches + height.total
-  const weightLbs = computeWeightLbs({
-    baseWeightLb: row.baseWeightLb,
+  const computed = computePhysiqueFromMods({
+    speciesId,
+    bodyType,
     heightModifier: height.total,
     weightModifier: weight.total,
-    bodyType,
+    abilityScores,
   })
   return {
     bodyType,
-    heightInches,
-    weightLbs,
+    heightInches: computed.heightInches,
+    weightLbs: computed.weightLbs,
     heightModifier: height.total,
     weightModifier: weight.total,
+    effectiveHeightModifier: computed.effectiveHeightModifier,
     heightDiceRolls: height.rolls,
     weightDiceRolls: weight.rolls,
     heightDiceSides: height.sides,
     weightDiceSides: weight.sides,
-    baseWeightLb: row.baseWeightLb,
+    baseWeightLb: computed.baseWeightLb,
+    adjustedBaseWeightLb: computed.adjustedBaseWeightLb,
+    adjustedBaseHeightInches: computed.adjustedBaseHeightInches,
   }
 }
 
@@ -104,19 +163,14 @@ export function rollRandomBodyType(): { bodyType: BodyType; d10: number } {
 export function reweightPhysique(args: {
   speciesId: string
   bodyType: BodyType
-  heightInches: number
   heightModifier: number
   weightModifier: number
+  abilityScores?: Pick<AbilityScores, 'strength' | 'dexterity'>
 }): { weightLbs: number; heightInches: number } {
-  const row = getSpeciesHeightWeightRow(args.speciesId)
+  const computed = computePhysiqueFromMods(args)
   return {
-    heightInches: args.heightInches,
-    weightLbs: computeWeightLbs({
-      baseWeightLb: row.baseWeightLb,
-      heightModifier: args.heightModifier,
-      weightModifier: args.weightModifier,
-      bodyType: args.bodyType,
-    }),
+    heightInches: computed.heightInches,
+    weightLbs: computed.weightLbs,
   }
 }
 
@@ -144,7 +198,7 @@ export function describeSpeciesHeightWeightFormula(speciesId: string): string {
   const row = getSpeciesHeightWeightRow(speciesId)
   const h = formatHeightWeightDice(row.heightDice)
   const w = formatHeightWeightDice(row.weightDice)
-  return `Base ${formatHeightInches(row.baseHeightInches)} + ${h}; weight ${row.baseWeightLb} lb + (height mod × ${w}), then × body type.`
+  return `Base ${formatHeightInches(row.baseHeightInches)} + ${h} (+ body-type height rules); weight (base × body type) + (height mod × ${w}). Lithe adds Dex mod to height mod; Athletic adds Str mod; Giant adds +1′ to base height.`
 }
 
 export function sanitizeBodyType(raw: string): BodyType | '' {

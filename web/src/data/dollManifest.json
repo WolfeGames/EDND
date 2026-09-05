@@ -1,0 +1,292 @@
+{
+  "canvas": {
+    "width": 512,
+    "height": 1024
+  },
+  "anchors": {
+    "breasts": {
+      "x": 0.5,
+      "y": 0.32
+    },
+    "phallus": {
+      "x": 0.5,
+      "y": 0.52
+    },
+    "vagina": {
+      "x": 0.5,
+      "y": 0.515
+    },
+    "hair": {
+      "x": 0.5,
+      "y": 0.12
+    },
+    "features": {
+      "x": 0.5,
+      "y": 0.14
+    }
+  },
+  "entries": [
+    {
+      "id": "base-masc-slim",
+      "slot": "base",
+      "src": "/dolls/base/masc/slim.png",
+      "presentation": "masc",
+      "bodyArt": "slim",
+      "tint": "none"
+    },
+    {
+      "id": "base-masc-fit",
+      "slot": "base",
+      "src": "/dolls/base/masc/fit.png",
+      "presentation": "masc",
+      "bodyArt": "fit",
+      "tint": "none"
+    },
+    {
+      "id": "base-masc-soft",
+      "slot": "base",
+      "src": "/dolls/base/masc/soft.png",
+      "presentation": "masc",
+      "bodyArt": "soft",
+      "tint": "none"
+    },
+    {
+      "id": "base-masc-muscular",
+      "slot": "base",
+      "src": "/dolls/base/masc/muscular.png",
+      "presentation": "masc",
+      "bodyArt": "muscular",
+      "tint": "none"
+    },
+    {
+      "id": "base-fem-slim",
+      "slot": "base",
+      "src": "/dolls/base/fem/slim.png",
+      "presentation": "fem",
+      "bodyArt": "slim",
+      "tint": "none"
+    },
+    {
+      "id": "base-fem-fit",
+      "slot": "base",
+      "src": "/dolls/base/fem/fit.png",
+      "presentation": "fem",
+      "bodyArt": "fit",
+      "tint": "none"
+    },
+    {
+      "id": "base-fem-soft",
+      "slot": "base",
+      "src": "/dolls/base/fem/soft.png",
+      "presentation": "fem",
+      "bodyArt": "soft",
+      "tint": "none"
+    },
+    {
+      "id": "base-fem-muscular",
+      "slot": "base",
+      "src": "/dolls/base/fem/muscular.png",
+      "presentation": "fem",
+      "bodyArt": "muscular",
+      "tint": "none"
+    },
+    {
+      "id": "base-andro-slim",
+      "slot": "base",
+      "src": "/dolls/base/andro/slim.png",
+      "presentation": "andro",
+      "bodyArt": "slim",
+      "tint": "none"
+    },
+    {
+      "id": "base-andro-fit",
+      "slot": "base",
+      "src": "/dolls/base/andro/fit.png",
+      "presentation": "andro",
+      "bodyArt": "fit",
+      "tint": "none"
+    },
+    {
+      "id": "base-andro-soft",
+      "slot": "base",
+      "src": "/dolls/base/andro/soft.png",
+      "presentation": "andro",
+      "bodyArt": "soft",
+      "tint": "none"
+    },
+    {
+      "id": "base-andro-muscular",
+      "slot": "base",
+      "src": "/dolls/base/andro/muscular.png",
+      "presentation": "andro",
+      "bodyArt": "muscular",
+      "tint": "none"
+    },
+    {
+      "id": "hair-short",
+      "slot": "hair",
+      "src": "/dolls/hair/short/neutral.png",
+      "hairStyle": "short",
+      "tint": "hair"
+    },
+    {
+      "id": "hair-long",
+      "slot": "hair",
+      "src": "/dolls/hair/long/neutral.png",
+      "hairStyle": "long",
+      "tint": "hair"
+    },
+    {
+      "id": "breasts-tiny",
+      "slot": "breasts",
+      "src": "/dolls/breasts/tiny.png",
+      "tier": "Tiny",
+      "tint": "skin",
+      "anchor": "breasts"
+    },
+    {
+      "id": "breasts-small",
+      "slot": "breasts",
+      "src": "/dolls/breasts/small.png",
+      "tier": "Small",
+      "tint": "skin",
+      "anchor": "breasts"
+    },
+    {
+      "id": "breasts-medium",
+      "slot": "breasts",
+      "src": "/dolls/breasts/medium.png",
+      "tier": "Medium",
+      "tint": "skin",
+      "anchor": "breasts"
+    },
+    {
+      "id": "breasts-large",
+      "slot": "breasts",
+      "src": "/dolls/breasts/large.png",
+      "tier": "Large",
+      "tint": "skin",
+      "anchor": "breasts"
+    },
+    {
+      "id": "breasts-huge",
+      "slot": "breasts",
+      "src": "/dolls/breasts/huge.png",
+      "tier": "Huge",
+      "tint": "skin",
+      "anchor": "breasts"
+    },
+    {
+      "id": "breasts-gargantuan",
+      "slot": "breasts",
+      "src": "/dolls/breasts/gargantuan.png",
+      "tier": "Gargantuan",
+      "tint": "skin",
+      "anchor": "breasts"
+    },
+    {
+      "id": "phallus-tiny",
+      "slot": "phallus",
+      "src": "/dolls/phallus/tiny.png",
+      "tier": "Tiny",
+      "tint": "phallus",
+      "anchor": "phallus"
+    },
+    {
+      "id": "phallus-small",
+      "slot": "phallus",
+      "src": "/dolls/phallus/small.png",
+      "tier": "Small",
+      "tint": "phallus",
+      "anchor": "phallus"
+    },
+    {
+      "id": "phallus-medium",
+      "slot": "phallus",
+      "src": "/dolls/phallus/medium.png",
+      "tier": "Medium",
+      "tint": "phallus",
+      "anchor": "phallus"
+    },
+    {
+      "id": "phallus-large",
+      "slot": "phallus",
+      "src": "/dolls/phallus/large.png",
+      "tier": "Large",
+      "tint": "phallus",
+      "anchor": "phallus"
+    },
+    {
+      "id": "phallus-huge",
+      "slot": "phallus",
+      "src": "/dolls/phallus/huge.png",
+      "tier": "Huge",
+      "tint": "phallus",
+      "anchor": "phallus"
+    },
+    {
+      "id": "phallus-gargantuan",
+      "slot": "phallus",
+      "src": "/dolls/phallus/gargantuan.png",
+      "tier": "Gargantuan",
+      "tint": "phallus",
+      "anchor": "phallus"
+    },
+    {
+      "id": "vagina-present",
+      "slot": "vagina",
+      "src": "/dolls/vagina/present.png",
+      "tint": "skin",
+      "anchor": "vagina"
+    },
+    {
+      "id": "feature-ears-pointed",
+      "slot": "features",
+      "src": "/dolls/features/ears-pointed.png",
+      "feature": "ears-pointed",
+      "tint": "skin"
+    },
+    {
+      "id": "feature-ears-long-pointed",
+      "slot": "features",
+      "src": "/dolls/features/ears-long-pointed.png",
+      "feature": "ears-long-pointed",
+      "tint": "skin"
+    },
+    {
+      "id": "feature-ears-droopy",
+      "slot": "features",
+      "src": "/dolls/features/ears-droopy.png",
+      "feature": "ears-droopy",
+      "tint": "skin"
+    },
+    {
+      "id": "feature-horns",
+      "slot": "features",
+      "src": "/dolls/features/horns.png",
+      "feature": "horns",
+      "tint": "none"
+    },
+    {
+      "id": "feature-tusks",
+      "slot": "features",
+      "src": "/dolls/features/tusks.png",
+      "feature": "tusks",
+      "tint": "none"
+    },
+    {
+      "id": "feature-tail-thin",
+      "slot": "tail",
+      "src": "/dolls/features/tail-thin.png",
+      "feature": "tail-thin",
+      "tint": "skin"
+    },
+    {
+      "id": "feature-tail-thick",
+      "slot": "tail",
+      "src": "/dolls/features/tail-thick.png",
+      "feature": "tail-thick",
+      "tint": "skin"
+    }
+  ]
+}

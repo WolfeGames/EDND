@@ -89,6 +89,7 @@ export function applyGenitalTraitSelection(
     vaginaPresent: shape.vaginaPresent,
     breastsSize: shape.hasBreasts ? prev.breastsSize : undefined,
     phallusSize: shape.hasPhallus ? prev.phallusSize : undefined,
+    phallusLengthDie: shape.hasPhallus ? prev.phallusLengthDie : undefined,
     vaginaSize: shape.hasVagina ? prev.vaginaSize : undefined,
   }
   return normalizeGenitalTraitOnCharacter({
@@ -99,7 +100,9 @@ export function applyGenitalTraitSelection(
 }
 
 /** Suggest genital trait from endowment configuration when trait is unset. */
-export function inferGenitalTraitFromCharacter(character: EdndCharacter): GenitalTraitId {
+export function inferGenitalTraitFromCharacter(
+  character: Pick<EdndCharacter, 'genitalTrait' | 'endowment'>,
+): GenitalTraitId {
   if (character.genitalTrait) return character.genitalTrait
 
   const { hasPhallus, hasBreasts, hasVagina } = endowmentFlags(character.endowment)

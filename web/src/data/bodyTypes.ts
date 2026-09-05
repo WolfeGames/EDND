@@ -25,31 +25,58 @@ export function bodyTypeFromD10(roll: number): BodyType {
 }
 
 export const BODY_TYPE_DESCRIPTIONS: Record<BodyType, string> = {
-  Frail: 'You are thin to the point of malnourishment and severely underweight.',
-  Slim: 'You are skinny but not unhealthy.',
-  Lithe: 'Your frame is compact but strong.',
-  Fit: 'You are durably built for function.',
-  Athletic: 'You are built for action and adventure.',
-  Soft: 'You are shapely without purposeful muscle.',
-  Heavyset: 'You are softly built but robust in stature.',
-  Muscular: 'You are built for strength and size.',
-  Burly: 'You are large in stature and robust in musculature.',
-  Giant: 'You are immense in height and width, packed with muscle.',
+  Frail: 'Thin to the point of malnourishment. Base weight 50% of normal.',
+  Slim: 'Skinny but not unhealthy. Base weight 70% of normal.',
+  Lithe:
+    'Compact and agile. Height mod + Dexterity modifier; base weight 70% of normal.',
+  Fit: 'Durably built for function. No physique change.',
+  Athletic:
+    'Built for action. Base weight +10%; height mod + Strength modifier.',
+  Soft: 'Shapely without purposeful muscle. Base weight +20%.',
+  Heavyset: 'Softly built but robust. Base weight +50%.',
+  Muscular: 'Built for strength and size. Base weight +20%.',
+  Burly: 'Large stature and robust musculature. Base weight +30%.',
+  Giant: 'Immense height and width. Base weight +30%; base height +1 foot.',
 }
 
 /**
- * Multiplier applied to the traditional D&D rolled weight after height×weight mods.
+ * Multiplier applied to the species table base weight (before height×weight mods).
  * Fit is the baseline (1.0).
  */
-export const BODY_TYPE_WEIGHT_FACTOR: Record<BodyType, number> = {
-  Frail: 0.72,
-  Slim: 0.85,
-  Lithe: 0.92,
+export const BODY_TYPE_BASE_WEIGHT_FACTOR: Record<BodyType, number> = {
+  Frail: 0.5,
+  Slim: 0.7,
+  Lithe: 0.7,
   Fit: 1.0,
-  Athletic: 1.06,
-  Soft: 1.12,
-  Heavyset: 1.24,
+  Athletic: 1.1,
+  Soft: 1.2,
+  Heavyset: 1.5,
   Muscular: 1.2,
-  Burly: 1.35,
-  Giant: 1.55,
+  Burly: 1.3,
+  Giant: 1.3,
 }
+
+/** Extra inches added to species table base height for this body type. */
+export const BODY_TYPE_BASE_HEIGHT_BONUS_INCHES: Record<BodyType, number> = {
+  Frail: 0,
+  Slim: 0,
+  Lithe: 0,
+  Fit: 0,
+  Athletic: 0,
+  Soft: 0,
+  Heavyset: 0,
+  Muscular: 0,
+  Burly: 0,
+  Giant: 12,
+}
+
+/** Which ability (if any) is added to the rolled height modifier. */
+export const BODY_TYPE_HEIGHT_MOD_ABILITY: Partial<
+  Record<BodyType, 'strength' | 'dexterity'>
+> = {
+  Lithe: 'dexterity',
+  Athletic: 'strength',
+}
+
+/** @deprecated Prefer BODY_TYPE_BASE_WEIGHT_FACTOR — kept for older imports. */
+export const BODY_TYPE_WEIGHT_FACTOR = BODY_TYPE_BASE_WEIGHT_FACTOR

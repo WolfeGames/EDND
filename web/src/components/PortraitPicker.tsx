@@ -1,11 +1,13 @@
-import { useMemo } from 'react'
+import { useEffect, useId, useMemo, useState } from 'react'
+import { getSpecies, species as speciesTable } from '../data/registry'
+import { portraitMatchesGender, type PortraitGenderToken } from '../lib/portraitFilename'
 import {
   getCharacterPortraitSrc,
   getDefaultSpeciesPortraitSrc,
   listPortraitCatalog,
-  listPortraitOptionsForCharacter,
   type PortraitOption,
 } from '../lib/speciesPortrait'
+import { resolveSpeciesTableId } from '../lib/speciesAliases'
 import type { EdndCharacter } from '../types/character'
 import './PortraitPicker.css'
 
@@ -13,6 +15,8 @@ type PortraitPickerProps = {
   character: Pick<EdndCharacter, 'species' | 'genderIdentity' | 'portraitSrc' | 'carnalClass'>
   onChange: (portraitSrc: string | undefined) => void
 }
+
+type GenderFilter = 'match' | 'f' | 'm' | 'any'
 
 function PortraitChoice({
   option,
@@ -37,26 +41,86 @@ function PortraitChoice({
   )
 }
 
+function speciesDisplayName(speciesId: string): string {
+  return getSpecies(speciesId)?.name ?? speciesId
+}
+
+function genderTokenFromVariant(variant: PortraitOption['variant']): PortraitGenderToken {
+  if (variant === 'female') return 'f'
+  if (variant === 'male') return 'm'
+  return 'they'
+}
+
+function matchesGenderFilter(
+  option: PortraitOption,
+  filter: GenderFilter,
+  genderIdentity: string,
+): boolean {
+  if (filter === 'any') return true
+  const token = genderTokenFromVariant(option.variant)
+  if (filter === 'f' || filter === 'm') {
+    return token === filter || token === 'they'
+  }
+  return portraitMatchesGender(token, genderIdentity)
+}
+
 export function PortraitPicker({ character, onChange }: PortraitPickerProps) {
+  const speciesFilterId = useId()
+  const genderFilterId = useId()
   const catalog = useMemo(() => listPortraitCatalog(), [])
-  const forCharacter = useMemo(
-    () =>
-      character.species
-        ? listPortraitOptionsForCharacter(
-            character.species,
-            character.genderIdentity,
-            character.carnalClass,
-          )
-        : [],
-    [character.species, character.genderIdentity, character.carnalClass],
-  )
-  const roleMatches = useMemo(
-    () =>
-      character.carnalClass
-        ? forCharacter.filter((o) => o.roleId === character.carnalClass)
-        : [],
-    [forCharacter, character.carnalClass],
-  )
+
+  const speciesOptions = useMemo(() => {
+    const ids = [...new Set(catalog.map((o) => o.speciesId))]
+    const knownOrder = speciesTable.map((s) => s.id)
+    ids.sort((a, b) => {
+      const ai = knownOrder.indexOf(a)
+      const bi = knownOrder.indexOf(b)
+      if (ai >= 0 && bi >= 0) return ai - bi
+      if (ai >= 0) return -1
+      if (bi >= 0) return 1
+      return speciesDisplayName(a).localeCompare(speciesDisplayName(b))
+    })
+    return ids.map((id) => ({ id, name: speciesDisplayName(id) }))
+  }, [catalog])
+
+  const characterSpeciesId = character.species
+    ? resolveSpeciesTableId(character.species)
+    : ''
+
+  const [filterSpecies, setFilterSpecies] = useState(characterSpeciesId)
+  const [filterGender, setFilterGender] = useState<GenderFilter>('match')
+
+  useEffect(() => {
+    setFilterSpecies(characterSpeciesId)
+  }, [characterSpeciesId])
+
+  const filtered = useMemo(() => {
+    let pool = catalog
+    if (filterSpecies) {
+      pool = pool.filter((o) => o.speciesId === filterSpecies)
+    }
+    pool = pool.filter((o) =>
+      matchesGenderFilter(o, filterGender, character.genderIdentity),
+    )
+
+    if (character.carnalClass && filterSpecies === characterSpeciesId) {
+      const role = character.carnalClass
+      const withRole = pool.filter((o) => o.roleId === role)
+      const withoutRole = pool.filter((o) => o.roleId !== role)
+      if (withRole.length > 0) {
+        return [...withRole, ...withoutRole]
+      }
+    }
+    return pool
+  }, [
+    catalog,
+    filterSpecies,
+    filterGender,
+    character.genderIdentity,
+    character.carnalClass,
+    characterSpeciesId,
+  ])
+
   const effectiveSrc = getCharacterPortraitSrc(character)
   const defaultSrc = character.species
     ? getDefaultSpeciesPortraitSrc(
@@ -67,18 +131,9 @@ export function PortraitPicker({ character, onChange }: PortraitPickerProps) {
     : null
   const usingDefault = !character.portraitSrc?.trim() || character.portraitSrc === defaultSrc
 
-  const renderGrid = (options: PortraitOption[]) => (
-    <div className="portrait-picker__grid" role="list">
-      {options.map((option) => (
-        <PortraitChoice
-          key={option.src}
-          option={option}
-          selected={effectiveSrc === option.src}
-          onSelect={() => onChange(option.src)}
-        />
-      ))}
-    </div>
-  )
+  const filterLabel = filterSpecies
+    ? speciesDisplayName(filterSpecies)
+    : 'all species'
 
   return (
     <div className="portrait-picker">
@@ -96,8 +151,8 @@ export function PortraitPicker({ character, onChange }: PortraitPickerProps) {
         )}
         <div className="portrait-picker__current-meta">
           <p className="portrait-picker__lede">
-            Portraits are filtered by species and gender. Variants tagged with your carnal class
-            appear first when available.
+            Pick a race to browse matching portraits. Gender filter defaults to your character;
+            carnal-class variants sort first when available.
           </p>
           {defaultSrc && (
             <button
@@ -112,30 +167,58 @@ export function PortraitPicker({ character, onChange }: PortraitPickerProps) {
         </div>
       </div>
 
-      {forCharacter.length > 0 && (
-        <div className="portrait-picker__section">
-          <h3 className="portrait-picker__heading">
-            {character.carnalClass && roleMatches.length > 0
-              ? 'Matching species, gender & carnal class'
-              : 'Matching species & gender'}
-          </h3>
-          {renderGrid(roleMatches.length > 0 ? roleMatches : forCharacter)}
+      <div className="portrait-picker__filters">
+        <div className="portrait-picker__filter">
+          <label htmlFor={speciesFilterId}>Race</label>
+          <select
+            id={speciesFilterId}
+            value={filterSpecies}
+            onChange={(e) => setFilterSpecies(e.target.value)}
+          >
+            <option value="">All races</option>
+            {speciesOptions.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.name}
+              </option>
+            ))}
+          </select>
         </div>
-      )}
+        <div className="portrait-picker__filter">
+          <label htmlFor={genderFilterId}>Gender</label>
+          <select
+            id={genderFilterId}
+            value={filterGender}
+            onChange={(e) => setFilterGender(e.target.value as GenderFilter)}
+          >
+            <option value="match">Match character</option>
+            <option value="f">Female</option>
+            <option value="m">Male</option>
+            <option value="any">Any</option>
+          </select>
+        </div>
+      </div>
 
-      {forCharacter.length > 0 && forCharacter.length < catalog.length && (
-        <div className="portrait-picker__section">
-          <h3 className="portrait-picker__heading">All portraits</h3>
-          {renderGrid(catalog)}
-        </div>
-      )}
-
-      {forCharacter.length === 0 && (
-        <div className="portrait-picker__section">
-          <h3 className="portrait-picker__heading">All portraits</h3>
-          {renderGrid(catalog)}
-        </div>
-      )}
+      <div className="portrait-picker__section">
+        <h3 className="portrait-picker__heading">
+          {filtered.length} portrait{filtered.length === 1 ? '' : 's'} · {filterLabel}
+        </h3>
+        {filtered.length > 0 ? (
+          <div className="portrait-picker__grid" role="list">
+            {filtered.map((option) => (
+              <PortraitChoice
+                key={option.src}
+                option={option}
+                selected={effectiveSrc === option.src}
+                onSelect={() => onChange(option.src)}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="portrait-picker__empty muted">
+            No portraits for this race and gender filter. Try another race or set gender to Any.
+          </p>
+        )}
+      </div>
     </div>
   )
 }

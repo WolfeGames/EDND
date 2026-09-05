@@ -58,4 +58,35 @@ describe('formatEndowmentLines', () => {
       }),
     ).toEqual(['No breast or phallus size category (neither).', 'Vagina: Huge.'])
   })
+
+  it('annotates phallus with inch range for creature size', () => {
+    expect(
+      formatEndowmentLines(
+        { anatomy: 'phallus', phallusSize: 'Medium', vaginaPresent: false },
+        'Medium',
+      ),
+    ).toEqual(['Phallus: Medium (4–6").'])
+    expect(
+      formatEndowmentLines(
+        { anatomy: 'phallus', phallusSize: 'Medium', vaginaPresent: false },
+        'Large',
+      ),
+    ).toEqual(['Phallus: Medium (6–8").'])
+  })
+
+  it('includes exact length when 1d20 fine measurement is set', () => {
+    expect(
+      formatEndowmentLines(
+        {
+          anatomy: 'phallus',
+          phallusSize: 'Medium',
+          phallusLengthDie: 20,
+          vaginaPresent: false,
+        },
+        'Medium',
+      ),
+    ).toEqual([
+      'Phallus: Medium (4–6") · 6" (base 4" + 1d20→20 × 0.1").',
+    ])
+  })
 })

@@ -68,6 +68,17 @@ export function parseCharacterJson(json: unknown): EdndCharacter {
     }
     endowment.phallusSize = phallusSize as EdndCharacter['endowment']['phallusSize']
   }
+  const lengthDieRaw = endRaw.phallusLengthDie
+  if (lengthDieRaw !== undefined) {
+    if (typeof lengthDieRaw !== 'number' || !Number.isFinite(lengthDieRaw)) {
+      throw new Error(`Invalid endowment.phallusLengthDie: ${String(lengthDieRaw)}`)
+    }
+    const die = Math.round(lengthDieRaw)
+    if (die < 1 || die > 20) {
+      throw new Error(`Invalid endowment.phallusLengthDie (must be 1–20): ${String(lengthDieRaw)}`)
+    }
+    endowment.phallusLengthDie = die
+  }
 
   const vp = endRaw.vaginaPresent
   if (vp !== undefined && typeof vp !== 'boolean') {
@@ -127,6 +138,11 @@ export function parseCharacterJson(json: unknown): EdndCharacter {
   const portraitSrc = portraitRaw && isKnownPortraitSrc(portraitRaw) ? portraitRaw : undefined
 
   const bodyType = str(json.bodyType, '').trim() || undefined
+  const creatureSizeRaw = str(json.creatureSize, '').trim()
+  const creatureSize =
+    creatureSizeRaw === 'Medium' || creatureSizeRaw === 'Small'
+      ? creatureSizeRaw
+      : undefined
   const heightInches =
     json.heightInches === undefined
       ? undefined
@@ -142,6 +158,20 @@ export function parseCharacterJson(json: unknown): EdndCharacter {
       ? undefined
       : num(json.weightModifierRoll, 0, 0, 100)
 
+  let physiqueMorph: EdndCharacter['physiqueMorph']
+  if (isRecord(json.physiqueMorph)) {
+    const pm = json.physiqueMorph
+    const unit = (v: unknown) =>
+      typeof v === 'number' && Number.isFinite(v) ? Math.min(1, Math.max(0, v)) : undefined
+    physiqueMorph = {
+      muscle: unit(pm.muscle),
+      fat: unit(pm.fat),
+      hipWidth: unit(pm.hipWidth),
+      legGirth: unit(pm.legGirth),
+      breastScale: unit(pm.breastScale),
+    }
+  }
+
   const draft: EdndCharacter = {
     ...base,
     id,
@@ -150,10 +180,12 @@ export function parseCharacterJson(json: unknown): EdndCharacter {
     genderIdentity: str(json.genderIdentity, ''),
     portraitSrc,
     bodyType,
+    creatureSize,
     heightInches,
     weightLbs,
     heightModifierRoll,
     weightModifierRoll,
+    physiqueMorph,
     genitalTrait,
     hasGenitalShift,
     fertilityBonus,

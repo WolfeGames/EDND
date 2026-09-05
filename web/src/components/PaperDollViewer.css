@@ -1,0 +1,105 @@
+.paper-doll {
+  margin: 0.75rem 0 1.25rem;
+}
+
+.paper-doll__frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 18rem;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background:
+    radial-gradient(ellipse at 50% 20%, color-mix(in srgb, var(--accent-bg, #2a3344) 80%, transparent), transparent 70%),
+    var(--code-bg);
+  overflow: hidden;
+}
+
+.paper-doll__stack {
+  position: relative;
+  width: min(100%, 12rem);
+  aspect-ratio: 512 / 1024;
+  transform-origin: center bottom;
+}
+
+.paper-doll__base-stack {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+}
+
+.paper-doll__base-variant {
+  position: absolute;
+  inset: 0;
+}
+
+.paper-doll__layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.paper-doll__layer--base-full {
+  /* full figure underlay */
+}
+
+.paper-doll__layer--base-lower {
+  clip-path: inset(50% 0 0 0);
+  z-index: 2;
+}
+
+.paper-doll__layer--base-upper {
+  clip-path: ellipse(38% 18% at 50% 30%);
+  z-index: 3;
+}
+
+.paper-doll__layer--bust {
+  clip-path: ellipse(28% 11% at 50% 31%);
+  z-index: 4;
+}
+
+.paper-doll__empty {
+  padding: 2rem 1rem;
+  text-align: center;
+  font-size: 0.88rem;
+}
+
+.paper-doll__caption {
+  margin: 0.45rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.physique-sliders {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.5rem;
+}
+
+.physique-slider {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr 2.5rem;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.physique-slider label {
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.physique-slider input[type='range'] {
+  width: 100%;
+}
+
+.physique-slider__value {
+  font-size: 0.78rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}

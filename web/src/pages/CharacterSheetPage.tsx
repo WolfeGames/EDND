@@ -9,6 +9,7 @@ import { estimateArmorClass, estimateMaxHitPoints } from '../lib/adventuringStat
 import { abilityModifier } from '../lib/abilityScores'
 import { characterHasEndowedTrait, getSheetEndowmentProfile } from '../lib/endowedTrait'
 import { ENDOWMENT_SIZE_RULE, formatEndowmentLines } from '../lib/endowment'
+import { resolveCharacterCreatureSize } from '../lib/phallusScale'
 import { formatHeightInches, formatWeightLbs } from '../lib/physique'
 import { BODY_TYPE_DESCRIPTIONS, isBodyType } from '../data/bodyTypes'
 import { CarnalClassTraitNotes } from '../components/CarnalClassTraitNotes'
@@ -81,7 +82,13 @@ export function CharacterSheetPage() {
   )
 
   const endowmentLines = useMemo(
-    () => (character ? formatEndowmentLines(getSheetEndowmentProfile(character)) : []),
+    () =>
+      character
+        ? formatEndowmentLines(
+            getSheetEndowmentProfile(character),
+            resolveCharacterCreatureSize(character),
+          )
+        : [],
     [character],
   )
   const endowedNote = useMemo(
@@ -200,6 +207,12 @@ export function CharacterSheetPage() {
               <span className="sheet-meta-value">{c.bodyType || '—'}</span>
             </div>
             <div className="sheet-meta-cell">
+              <span className="sheet-meta-label">Size</span>
+              <span className="sheet-meta-value">
+                {c.creatureSize ?? speciesRow?.size ?? '—'}
+              </span>
+            </div>
+            <div className="sheet-meta-cell">
               <span className="sheet-meta-label">Height / weight</span>
               <span className="sheet-meta-value">
                 {typeof c.heightInches === 'number' && typeof c.weightLbs === 'number'
@@ -271,7 +284,7 @@ export function CharacterSheetPage() {
                 <h3 className="sheet-block-title">Species — {speciesRow.name}</h3>
                 <p className="sheet-prose">{speciesRow.description}</p>
                 <p className="sheet-fine-print">
-                  Size {speciesRow.size}, speed {speciesRow.speed} ft.
+                  Size {c.creatureSize ?? speciesRow.size}, speed {speciesRow.speed} ft.
                   {speciesRow.eroticGrants.length > 0
                     ? ` · Erotic art grants: ${speciesRow.eroticGrants.join(', ')}`
                     : ''}

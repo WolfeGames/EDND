@@ -14,16 +14,16 @@ describe('portrait species fallbacks', () => {
     expect(pool.some((e) => e.speciesId === 'highelf')).toBe(true)
   })
 
-  it('aasimar resolves to portrait via highelf fallback', () => {
+  it('aasimar uses dedicated portrait art when available', () => {
     const pool = filterPortraitsForCharacter(ENTRIES, 'aasimar', 'Female')
     expect(pool.length).toBeGreaterThan(0)
-    expect(pool.every((e) => e.speciesId === 'highelf' || e.speciesId === 'human')).toBe(true)
+    expect(pool.every((e) => e.speciesId === 'aasimar')).toBe(true)
   })
 
-  it('duergar resolves to drow portrait fallback', () => {
+  it('duergar uses dedicated portrait art when available', () => {
     const pool = filterPortraitsForCharacter(ENTRIES, 'duergar', 'Male')
     expect(pool.length).toBeGreaterThan(0)
-    expect(pool.some((e) => e.speciesId === 'drow')).toBe(true)
+    expect(pool.every((e) => e.speciesId === 'duergar')).toBe(true)
   })
 
   it('wood elf female still prefers wood elf art', () => {

@@ -19,24 +19,11 @@ export const species: SpeciesRow[] = speciesData.species as SpeciesRow[]
 
 /**
  * Species shown in Character Creator and Random Generator rolls/filters.
- * Full `species` remains for sheets, imports, and legacy characters.
+ * Currently every row in species.json (full portrait coverage).
  */
-export const PLAYABLE_SPECIES_IDS: readonly string[] = [
-  'aasimar',
-  'dragonborn',
-  'mountaindwarf',
-  'hilldwarf',
-  'duergar',
-  'highelf',
-  'woodelf',
-  'drow',
-  'gnome',
-  'goliath',
-  'halfling',
-  'human',
-  'orc',
-  'tiefling',
-]
+export const PLAYABLE_SPECIES_IDS: readonly string[] = speciesData.species.map(
+  (s: { id: string }) => s.id,
+)
 
 export const sexualHistories: SexualHistoryRow[] = buildSexualHistories()
 

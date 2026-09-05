@@ -1,6 +1,10 @@
 import { getSexualHistory } from '../data/registry'
 import type { EdndCharacter, EndowmentProfile, EndowmentSize } from '../types/character'
 import { normalizedEndowment } from './endowment'
+import {
+  clampPhallusSizeForCreature,
+  resolveCharacterCreatureSize,
+} from './phallusScale'
 import { resolveCarnalTraitLabels } from './resolveCarnalTraitLabels'
 
 /** Carnal trait id from `carnal-traits.json` — +1 bust/genital size tier on the sheet. */
@@ -50,5 +54,16 @@ export function applyEndowedToEndowment(
 /** Biology-normalized endowment plus Endowed bumps for sheets and readouts. */
 export function getSheetEndowmentProfile(character: EdndCharacter): EndowmentProfile {
   const base = normalizedEndowment(character.endowment)
-  return applyEndowedToEndowment(base, characterHasEndowedTrait(character))
+  const withEndowed = applyEndowedToEndowment(base, characterHasEndowedTrait(character))
+  const creatureSize = resolveCharacterCreatureSize(character)
+  if (
+    (withEndowed.anatomy === 'phallus' || withEndowed.anatomy === 'both') &&
+    withEndowed.phallusSize
+  ) {
+    return {
+      ...withEndowed,
+      phallusSize: clampPhallusSizeForCreature(withEndowed.phallusSize, creatureSize),
+    }
+  }
+  return withEndowed
 }

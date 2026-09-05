@@ -29,6 +29,8 @@ import {
   getSexualHistoryTraitSlotCount,
   pickRandomTraitIds,
 } from './carnalTraitSelection'
+import { speciesAllowsCreatureSizeChoice } from '../data/creatureSize'
+import { resolveCharacterCreatureSize, rollPhallusSize } from './phallusScale'
 import { mergeTableProficiencies } from './mergeEroticProficiencies'
 import { resolveSpeciesTableId } from './speciesAliases'
 import { pickRandomPortraitSrc } from './speciesPortrait'
@@ -169,11 +171,23 @@ export function generateRandomCharacter(
   const abilityScores = rollAllAbilityScores()
   const genitalTrait = defaultGenitalTraitForGender(genderIdentity)
   const endowmentShape = endowmentShapeFromGenitalTrait(genitalTrait)
+  const speciesId = resolveSpeciesTableId(sp.id)
+  const creatureSize = speciesAllowsCreatureSizeChoice(speciesId)
+    ? Math.random() < 0.15
+      ? ('Small' as const)
+      : ('Medium' as const)
+    : undefined
+  const creatureSizeForPhallus = resolveCharacterCreatureSize({
+    species: speciesId,
+    creatureSize,
+  })
   const endowment = normalizedEndowment({
     anatomy: endowmentShape.anatomy,
     vaginaPresent: endowmentShape.vaginaPresent,
     breastsSize: endowmentShape.hasBreasts ? rollEndowmentSize() : undefined,
-    phallusSize: endowmentShape.hasPhallus ? rollEndowmentSize() : undefined,
+    phallusSize: endowmentShape.hasPhallus
+      ? rollPhallusSize(creatureSizeForPhallus)
+      : undefined,
     vaginaSize: endowmentShape.hasVagina ? rollEndowmentSize() : undefined,
   })
 
@@ -191,9 +205,8 @@ export function generateRandomCharacter(
     eroticToolProficiencies: randomToolProficiencies(),
   })
 
-  const speciesId = resolveSpeciesTableId(sp.id)
   const { bodyType } = rollRandomBodyType()
-  const physique = rollPhysiqueForSpecies(speciesId, bodyType)
+  const physique = rollPhysiqueForSpecies(speciesId, bodyType, abilityScores)
   const carnalClassId = carnalCl?.id
   const sexualHistoryId = hist.id
   const portraitSrc =
@@ -206,6 +219,7 @@ export function generateRandomCharacter(
     genderIdentity,
     genitalTrait,
     bodyType: physique.bodyType,
+    creatureSize,
     heightInches: physique.heightInches,
     weightLbs: physique.weightLbs,
     heightModifierRoll: physique.heightModifier,

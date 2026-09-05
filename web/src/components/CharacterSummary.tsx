@@ -5,6 +5,7 @@ import {
   getSheetEndowmentProfile,
 } from '../lib/endowedTrait'
 import { ENDOWMENT_SIZE_RULE, formatEndowmentLines } from '../lib/endowment'
+import { resolveCharacterCreatureSize } from '../lib/phallusScale'
 import { formatHeightInches, formatWeightLbs } from '../lib/physique'
 import { BODY_TYPE_DESCRIPTIONS, isBodyType } from '../data/bodyTypes'
 import { formatRuleKey } from '../lib/formatRuleKey'
@@ -205,7 +206,7 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
   )
   const endowmentReadout = useMemo(() => {
     const e = getSheetEndowmentProfile(character)
-    return formatEndowmentLines(e)
+    return formatEndowmentLines(e, resolveCharacterCreatureSize(character))
   }, [character])
 
   const endowedActive = useMemo(() => characterHasEndowedTrait(character), [character])
@@ -479,6 +480,9 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
           </li>
           {character.pronouns && <li>Pronouns: {character.pronouns}</li>}
           {character.genderIdentity && <li>Gender: {character.genderIdentity}</li>}
+          {character.creatureSize && (
+            <li>Size: {character.creatureSize}</li>
+          )}
           {isBodyType(character.bodyType ?? '') && (
             <li>
               Body type: {character.bodyType}
@@ -518,7 +522,7 @@ export function CharacterSummary({ character }: { character: EdndCharacter }) {
             <h4 className="immersive-subheading">Species — {speciesRow.name}</h4>
             <ul className="review-list">
               <li>
-                Size {speciesRow.size}, speed {speciesRow.speed} ft.
+                Size {character.creatureSize ?? speciesRow.size}, speed {speciesRow.speed} ft.
               </li>
               {speciesRow.eroticGrants.length > 0 && (
                 <li>Erotic art grants: {speciesRow.eroticGrants.join(', ')}</li>
